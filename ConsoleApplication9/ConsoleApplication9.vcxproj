@@ -146,12 +146,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\DroneTransferSimulator\CenterManager.cpp" />
     <ClCompile Include="Center.cpp" />
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Simulator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Center.h" />
+    <ClInclude Include="CenterManager.h" />
+    <ClInclude Include="Drone.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="Simulator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

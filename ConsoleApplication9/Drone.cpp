@@ -9,21 +9,12 @@
 #include <algorithm>
 using namespace std;
 
-/**
-@brief drone class
-@details
-@author Minji
-@date 2017-07-19
-@version
-*/
-class Drone {
-private:
-	int num;
-	int drivable_dist;
-	int chargingTime;
-	int battery;
+#include <Drone.h>
 
-public:
-	void upgradeDroneBattery();
 
-};
+
+Drone::upgradeDroneBattery()
+{
+
+
+}

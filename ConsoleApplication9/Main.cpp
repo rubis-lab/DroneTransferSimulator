@@ -7,13 +7,15 @@
 
 #include <vector>
 #include <algorithm>
+#include <stdio.h>
 using namespace std;
 
-void main() {
+FILE *fr;
 
-	sort(event_);
-	startTime = [];
-	endTime = [];
+void main() {
+	int startTime[2], endTime[2];
+
+	
 	simulation(startTime, endTime);
 
 }
