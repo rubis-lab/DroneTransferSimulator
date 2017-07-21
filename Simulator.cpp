@@ -7,6 +7,17 @@
 #include "Simulator.h"
 #include <algorithm>
 
+/**
+@brief get events from CSV file
+@details
+@param fname
+@return
+*/
+void Simulator::getEventsFromCSV(char* fname)
+{
+	
+}
+
 std::vector<Event> Simulator::getEvents()
 {
 	return events;
@@ -16,7 +27,7 @@ std::vector<Event> Simulator::getEvents()
 @brief find the range of event from start time to end time
 @details
 @param starttime, endtime, event vector
-@return list of number of events
+@return
 */
 void Simulator::updateEventsBtwRange(time_t start, time_t end)
 {
@@ -27,7 +38,7 @@ void Simulator::updateEventsBtwRange(time_t start, time_t end)
 @brief simulating
 @details simulate each events
 @param event
-@return time
+@return
 */
 void Simulator::simulation()
 {

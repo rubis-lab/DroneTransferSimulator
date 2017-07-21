@@ -11,6 +11,7 @@ private:
 	std::vector<Event> events;
 
 public:
+	void getEventsFromCSV(char* fname);
 	std::vector<Event> getEvents();
 	void updateEventsBtwRange(time_t start, time_t end);
 	void simulation();
