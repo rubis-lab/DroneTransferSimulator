@@ -1,9 +1,13 @@
-
-// Block consisting path
+/**
+ * brief	block consisting path
+ * details	fundamental block which inputs direction and speed and outputs time
+ * author	lucetre
+ * date		20170721
+ */
 class Block {
 private:
 	char inFace, outFace;
-	int velocity;
+	int inVelocity, outVelocity;
 	double time;
 
 public:

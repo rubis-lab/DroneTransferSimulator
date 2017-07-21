@@ -8,6 +8,12 @@
 using namespace std;
 typedef pair<double, double> COORDS;
 
+/**
+ * brief	path planning module
+ * details	plans U route by determining the maximum height on the way to destination
+ * author	lucetre
+ * date		20170721
+ */
 class Path {
 private:
 	COORDS srtWGS, endWGS;
@@ -17,13 +23,29 @@ private:
 public:
 	Path() = default;
 	Path(COORDS _srtWGS, COORDS _endWGS) : srtWGS(_srtWGS), endWGS(_endWGS) {
-	//	DBMS dbms("select * from Seoul_40x40_500x500 where LAT >= 37.578942 and LAT <= 37.584839 and LNG >= 126.997512 and LNG <= 126.998668");
+		pathPlan();
+	}
+
+	double maxHeight() {
+		double height = 0.0;
+		DBMS dbms("select * from Seoul_40x40_500x500 where ROW = 20000-1 and COL = 20000-1");
+
 		COORDS SW = make_pair(min(srtWGS.first, endWGS.first), min(srtWGS.second, endWGS.second));
 		COORDS NE = make_pair(max(srtWGS.first, endWGS.first), max(srtWGS.second, endWGS.second));
 
 		cout << SW.first << ", " << SW.second << endl;
 		cout << NE.first << ", " << NE.second << endl;
+
 	}
+
+	void pathPlan() {
+
+		DBMS dbms("select * from Seoul_40x40_500x500 where ROW = 20000-1 and COL = 20000-1");
+
+	}
+
+
+
 
 	/*
 		COORD srtKM = kmConversion(srtWGS);

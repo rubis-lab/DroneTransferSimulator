@@ -11,6 +11,12 @@ using namespace std;
 #define DB_PASS "4542rubis"
 #define DB_NAME "WonseokMap"
 
+/**
+ * brief	struct data type for output from WonseokMap
+ * details	lattiude, longitude, land elevation, building height
+ * author	lucetre
+ * date		20170721
+ */
 struct Data {
 	double lat;
 	double lng;
@@ -20,6 +26,13 @@ struct Data {
 		: lat(_lat), lng(_lng), landElevation(_landElevation), buildingHeight(_buildingHeight) {};
 };
 
+
+/**
+ * brief	mysql database management system class
+ * details	allow access to QuantizedSeoul DB, constructor makes connection and perform commands
+ * author	lucetre
+ * date		20170721
+ */
 class DBMS {
 private:
 	vector<Data> resultSet;
