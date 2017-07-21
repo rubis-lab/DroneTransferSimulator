@@ -1,4 +1,3 @@
-#include <string>
 #include <vector>
 
 #define CUBE_SIZE	10
