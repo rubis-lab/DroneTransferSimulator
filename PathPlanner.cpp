@@ -1,6 +1,7 @@
 #include "PathPlanner.h"
 
-PathPlanner::Cube::Cube(char _inFace, char _outFace) : inFace(_inFace), outFace(_outFace)
+PathPlanner::Cube::Cube(char _inFace, char _outFace)
+	: inFace(_inFace), outFace(_outFace)
 {
 }
 

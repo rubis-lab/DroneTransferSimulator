@@ -31,7 +31,9 @@ std::vector<Event> Simulator::getEvents()
 */
 void Simulator::updateEventsBtwRange(time_t start, time_t end)
 {
-	std::sort(events.begin(), events.end());
+	/* it does not work because Event is not std class.
+		add Comparator to sort or make new sorting */
+	//std::sort(events.begin(), events.end());
 }
 
 /**
