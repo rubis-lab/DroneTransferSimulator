@@ -144,11 +144,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DroneMap.cpp" />
+    <ClCompile Include="DroneStation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PathPlanner.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Drone.h" />
     <ClInclude Include="DroneMap.h" />
+    <ClInclude Include="DroneStation.h" />
     <ClInclude Include="PathPlanner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

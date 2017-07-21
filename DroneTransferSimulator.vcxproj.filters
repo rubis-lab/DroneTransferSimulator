@@ -24,12 +24,21 @@
     <ClCompile Include="DroneMap.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DroneStation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PathPlanner.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DroneMap.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DroneStation.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Drone.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
