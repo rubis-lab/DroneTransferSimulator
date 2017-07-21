@@ -2,6 +2,9 @@
 
 #define CUBE_SIZE	10
 
+#ifndef _H_PATH_PLANNER_
+#define _H_PATH_PLANNER_
+
 class PathPlanner
 {
 private:
@@ -34,3 +37,5 @@ public:
  	double getLandElevation(double x, double y, double theta);
  	double getBuildingHeight(double x, double y, double theta);
 };
+
+#endif

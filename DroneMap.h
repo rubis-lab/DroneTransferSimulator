@@ -9,6 +9,9 @@
 #define DB_PASS	"4542rubis"
 #define DB_NAME	"WonseokMap"
 
+#ifndef _H_DRONE_MAP_
+#define _H_DRONE_MAP_
+
 struct DroneMapData
 {
 	double lat, lng;
@@ -42,3 +45,5 @@ public:
 
 	std::vector<DroneMapData> getData();
 };
+
+#endif
