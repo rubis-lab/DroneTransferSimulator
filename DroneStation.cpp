@@ -1,12 +1,9 @@
 /**
 @file
-@date 2017/07/19
+@date 2017/07/21
 @author Minji and hexoul
 @brief
 */
- 
-#include <vector>
-#include <algorithm>
  
 #include "DroneStation.h"
 
@@ -21,8 +18,10 @@ DroneStation::DroneStation(int _nMaxDrone)
 @param
 @return
 */
-void DroneStation::upgradeDroneNum(int n)
+void DroneStation::setDroneNum(int n)
 {
+	if(n < 0 || n > nMaxDrone) return;
+
 	nDrone = n;
 }
 

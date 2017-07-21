@@ -6,7 +6,7 @@ class DroneStation
 private:
 	int nDrone, nMaxDrone;
 
-	void upgradeDroneNum(int n);
+	void setDroneNum(int n);
 
 public:
 	DroneStation(int _nMaxDrone);
