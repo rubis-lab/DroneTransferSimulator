@@ -6,7 +6,18 @@
 */
 #include "Event.h"
 
-Event::Event(double _lat, double _lng, time_t _oDate, time_t _ambulDate)
-	: lat(_lat), lng(_lng), occuredDate(_oDate), ambulDate(_ambulDate)
+Event::Event(double _lat, double _lng, int _oDate, int ambulDate)
 {
+}
+
+/**
+@brief compare occured time of two events
+@details
+@param
+@return
+*/
+bool Event:: myCompare(Event &x, Event &y)
+{
+	return (x.occuredDate > y.occuredDate);
+
 }

@@ -11,10 +11,10 @@ private:
 	std::vector<Event> events;
 
 public:
-	void getEventsFromCSV(char* fname);
+	void getEventsFromCSV(char* fname, std :: vector < std:: vector <double> > *data);
 	std::vector<Event> getEvents();
-	void updateEventsBtwRange(time_t start, time_t end);
-	void simulation();
+	void updateEventsBtwRange(int start, int end, std::vector < std::vector <double> > data);
+	void simulation(int start, int end);
 };
 
 #endif
