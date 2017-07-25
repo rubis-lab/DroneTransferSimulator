@@ -6,10 +6,6 @@ int main()
 {
 	DroneMap *droneMap = DroneMap::getInstance();
 	PathPlanner pathPlanner;
-	double x, y;
-	pathPlanner.convertWGStoKm(37.578908, 126.997501, x, y);
-	std::cout.precision(15);
-	std::cout << x << ", " << y << std::endl;
-
+	pathPlanner.calcTravelTime(37.578908, 126.997501, 37.579017, 126.994870);
 	return 0;
 }
