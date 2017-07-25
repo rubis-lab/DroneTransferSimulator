@@ -28,3 +28,12 @@ std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double 
 	std::vector<PathPlanner::Cube> cubes;
 	return cubes;
 }
+
+void PathPlanner::convertWGStoKm(double wgsLat, double wgsLng, double &kmLat, double &kmLng) {
+	kmLat = -wgsLat * 0.031 * 60 * 60;
+	kmLng = wgsLng * 0.025 * 60 * 60;
+}
+
+void PathPlanner::convertWGStoRC(double wgsLat, double wgsLng, int &row, int &col) {
+	
+}
