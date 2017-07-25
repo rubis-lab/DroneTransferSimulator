@@ -7,10 +7,11 @@ class Event
 {
 private:
 	double lat, lng;
-	time_t occuredDate, ambulDate;
+	int occuredDate, ambulDate;
 
 public:
-	Event(double _lat, double _lng, time_t _oDate, time_t ambulDate);
+	Event(double _lat, double _lng, int _oDate, int ambulDate);
+	bool myCompare(Event &x, Event &y);
 };
 
 #endif
