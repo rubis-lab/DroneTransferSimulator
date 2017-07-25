@@ -9,8 +9,8 @@
 #define UB_LNG		126.783400	/* Upper bound of longitude for Seoul_40x40_500x500 table */
 #define LB_LAT		37.432499	/* Lower bound of latitute for Seoul_40x40_500x500 table */
 #define LB_LNG		127.197999	/* Lower bound of longitude for Seoul_40x40_500x500 table */
-#define D_LAT		((UL_LAT - LR_LAT) / 20000)
-#define D_LNG		((LR_LNG - UL_LNG) / 20000)
+#define DIST_LAT	((UL_LAT - LR_LAT) / 20000)	/* Distance between UB_LAT and LB_LAT */
+#define DIST_LNG	((LR_LNG - UL_LNG) / 20000)	/* Distance between UB_LNG and LB_LNG */
 
 class PathPlanner
 {
