@@ -18,7 +18,6 @@ double PathPlanner::Cube::getRequiredTime()
 
 PathPlanner::PathPlanner()
 {
-	std::vector <std::vector <std::string> > data;
 	std::ifstream infile("VrepDroneSim.csv");
 
 	while (infile)
@@ -36,7 +35,8 @@ PathPlanner::PathPlanner()
 			record.push_back(s);
 		}
 		if (record.size() != 5) break;
-		if (record[4] != "-" && record[4] != "time (s)") {
+		if (record[4] != "-" && record[4] != "time (s)") 
+		{
 			char inFace = record[0].at(0);
 			char outFace = record[1].at(0);
 			int inVelocity = std::stoi(record[2], nullptr);
@@ -44,24 +44,27 @@ PathPlanner::PathPlanner()
 			double time = std::stod(record[4], nullptr);
 
 			auto it = cubeTime.find(std::make_pair(inFace, outFace));
-			if (it != cubeTime.end()) {
+			if (it != cubeTime.end()) 
+			{
 				std::map<std::pair<int, int>, double> key = it->second;
 				auto it2 = key.find(std::make_pair(inVelocity, outVelocity));
-				if (it2 != key.end()) {
+				if (it2 != key.end()) 
+				{
 					it2->second = time;
 				}
-				else {
+				else 
+				{
 					key.insert(std::make_pair(std::make_pair(inVelocity, outVelocity), time));
 				}
 
 			}
-			else {
+			else
+			{
 				std::map<std::pair<int, int>, double> key;
 				key.insert(std::make_pair(std::make_pair(inVelocity, outVelocity), time));
 				cubeTime.insert(std::make_pair(std::make_pair(inFace, outFace), key));
 			}
-			std::cout << inFace << outFace << inVelocity << outVelocity << time << std::endl;
-			data.push_back(record);
+			std::cout << inFace << " " << outFace << " " << inVelocity << " " << outVelocity << " " << time << std::endl;
 		}
 	}
 	if (!infile.eof())

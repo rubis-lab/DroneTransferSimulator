@@ -1,15 +1,17 @@
-#ifndef _H_DRONE_MAP_
-#define _H_DRONE_MAP_
-
 #include <vector>
+
 #include <my_global.h>
 #include <WinSock2.h>
 #include <mysql.h>
 
-#define DB_HOST	"prism.snu.ac.kr"
-#define DB_USER	"root"
-#define DB_PASS	"4542rubis"
-#define DB_NAME	"WonseokMap"
+#ifndef _H_DRONE_MAP_
+#define _H_DRONE_MAP_
+
+#define DB_HOST		"prism.snu.ac.kr"
+#define DB_USER		"root"
+#define DB_PASS		"4542rubis"
+#define DB_NAME		"WonseokMap"
+#define TBL_NAME	"Seoul_40x40_500x500"
 
 struct DroneMapData
 {
@@ -23,28 +25,26 @@ struct DroneMapData
 class DroneMap
 {
 private:
-
 	static DroneMap* instance;
 
 	MYSQL* dbConn;
-	MYSQL conn;
 	std::vector<DroneMapData> resultSet;
 	bool hasConnection;
 
-	bool doQuery(char* command);
+	bool doQuery(std::string command);
 	void connectDB();
 	void closeDB();
 
 public:
 	static DroneMap* getInstance()
 	{
-		if(instance == NULL) instance = new DroneMap;
+		if (instance == NULL) instance = new DroneMap;
 		return instance;
 	}
 
 	DroneMap();
 
-	std::vector<DroneMapData> getData(char* command);
+	const std::vector<DroneMapData> getData(int srcRowIdx, int srcColIdx, int dstRowIdx, int dstColIdx);
 };
 
 #endif

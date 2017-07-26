@@ -1,66 +1,79 @@
 #include <iostream>
+#include <string>
 #include "DroneMap.h"
 
 #pragma comment(lib, "libmysql.lib")
+
+#define BUF_SIZE	1024
 
 DroneMap* DroneMap::instance = NULL;
 
 DroneMap::DroneMap()
 {
 	connectDB();
-	if(!hasConnection) return;
-	getData("select * from Seoul_40x40_500x500 where ROW >= 1 and ROW <= 10 and COL >= 1 and COL <= 10");
-	getData("select * from Seoul_40x40_500x500 where ROW >= 119 and ROW <= 10 and COL >= 1 and COL <= 10");
-	getData("select * from Seoul_40x40_500x500 where ROW >= 1 and ROW <= 10 and COL >= 10 and COL <= 10");
-	std::cout.precision(15);
-	for (auto e : resultSet) {
-		std::cout << e.lat << ", " << e.lng << std::endl;
-	}
+	if (!hasConnection) return;
 }
 
 void DroneMap::connectDB()
 {
 	hasConnection = false;
-	
-	mysql_init(&conn);
- 	dbConn = mysql_real_connect(&conn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, (char *)NULL, 0);
-	if(dbConn != NULL) hasConnection = true;
+
+	dbConn = mysql_init(NULL);
+	if (dbConn == NULL) return;
+
+	mysql_real_connect(dbConn, DB_HOST, DB_USER, DB_PASS, DB_NAME, 3306, (char *)NULL, 0);
+
+	if (dbConn != NULL) hasConnection = true;
 }
 
 void DroneMap::closeDB()
 {
-	if(dbConn != NULL) mysql_close(dbConn);
+	if (!hasConnection) return;
+	else if (dbConn != NULL) mysql_close(dbConn);
 }
 
-bool DroneMap::doQuery(char* command)
+bool DroneMap::doQuery(std::string command)
 {
-	if(!hasConnection) return false;
-	
+	if (!hasConnection) return false;
+
 	int queryStat = 0;
-	queryStat = mysql_query(dbConn, command);
-	if(queryStat != 0) return false;
-	
+	queryStat = mysql_query(dbConn, command.c_str());
+	if (queryStat != 0) return false;
+
 	return true;
 }
 
-std::vector<DroneMapData> DroneMap::getData(char* command)
+const std::vector<DroneMapData> DroneMap::getData(int srcRowIdx, int srcColIdx, int dstRowIdx, int dstColIdx)
 {
 	MYSQL_RES   *res;
- 	MYSQL_ROW   sqlRow;
-	
-	resultSet.erase(resultSet.begin(), resultSet.end());
-	if(doQuery(command))
+	MYSQL_ROW   sqlRow;
+	std::string queryStr = "select * from ";
+	queryStr += TBL_NAME;
+
+	/* Do ascending order for query */
+	if (dstRowIdx > srcRowIdx) std::swap(srcRowIdx, dstRowIdx);
+	if (dstColIdx > srcColIdx) std::swap(srcColIdx, dstColIdx);
+
+	/* Add where statement to query */
+	char queryWhere[BUF_SIZE] = { 0, };
+	sprintf(queryWhere, " where ROW >= %d and ROW <= %d and COL >= %d and COL <= %d", srcRowIdx, srcColIdx, dstRowIdx, dstColIdx);
+	queryStr += queryWhere;
+
+	/* Clear the vector for result */
+	if (!resultSet.empty()) resultSet.clear();
+
+	if (doQuery(queryStr))
 	{
 		res = mysql_store_result(dbConn);
- 
- 		while ((sqlRow = mysql_fetch_row(res)) != NULL)
+
+		while ((sqlRow = mysql_fetch_row(res)) != NULL)
 		{
- 			DroneMapData data(atof(sqlRow[2]), atof(sqlRow[3]), atof(sqlRow[4]), atof(sqlRow[5]));
- 			resultSet.push_back(data);
- 		}
+			DroneMapData data(atof(sqlRow[2]), atof(sqlRow[3]), atof(sqlRow[4]), atof(sqlRow[5]));
+			resultSet.push_back(data);
+		}
 
 		mysql_free_result(res);
-	}	
+	}
 
 	return resultSet;
 }
