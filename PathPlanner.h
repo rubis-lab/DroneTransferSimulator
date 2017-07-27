@@ -31,15 +31,19 @@ private:
 	class Cube
 	{
 	private:
+		char inFace, outFace;
 		int inVelocity, outVelocity;
 
 	public:
-		char inFace, outFace;
 		Cube(char _inFace, char _outFace);
+		Cube(char _inFace, char _outFace, int _inVelocity, int _outVelocity);
 
 		int getType();
-		double getRequiredTime();
 	};
+
+	void inputSimData();
+	void storeSimData(char inFace, char outFace, int inVelocity, int outVelocity, double time);
+	double getRequiredTime(int cubeType);
 
 	// Traversal Path from start (Latitude, Longitude) to end (Latitude, Longitude)
 	std::vector<Cube> makeNaivePath(double srcLat, double srcLng, double dstLat, double dstLng);
