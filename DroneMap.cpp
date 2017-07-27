@@ -51,12 +51,12 @@ const std::vector<DroneMapData> DroneMap::getData(int srcRowIdx, int srcColIdx, 
 	queryStr += TBL_NAME;
 
 	/* Do ascending order for query */
-	if (dstRowIdx > srcRowIdx) std::swap(srcRowIdx, dstRowIdx);
-	if (dstColIdx > srcColIdx) std::swap(srcColIdx, dstColIdx);
+	if (dstRowIdx < srcRowIdx) std::swap(srcRowIdx, dstRowIdx);
+	if (dstColIdx < srcColIdx) std::swap(srcColIdx, dstColIdx);
 
 	/* Add where statement to query */
 	char queryWhere[BUF_SIZE] = { 0, };
-	sprintf(queryWhere, " where ROW >= %d and ROW <= %d and COL >= %d and COL <= %d", srcRowIdx, srcColIdx, dstRowIdx, dstColIdx);
+	sprintf(queryWhere, " where ROW >= %d and ROW <= %d and COL >= %d and COL <= %d", srcRowIdx, dstRowIdx, srcColIdx, dstColIdx);
 	queryStr += queryWhere;
 
 	/* Clear the vector for result */
