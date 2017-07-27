@@ -1,20 +1,54 @@
 #include "PathPlanner.h"
 
+/**
+@brief		Cube constructor
+@details	Inputs face, velocity
+@param
+_inFace : input face character
+_outFace : output face character
+_inVelocity : input velocity in m/s (multiples of 10)
+_outVelocity : output velocity in m/s (multiples of 10)
+@return
+*/
 PathPlanner::Cube::Cube(char _inFace, char _outFace, int _inVelocity, int _outVelocity)
 	: inFace(_inFace), outFace(_outFace), inVelocity(_inVelocity), outVelocity(_outVelocity)
 {
 }
 
+/**
+@brief		Cube constructor
+@details	Inputs only face, call 4-input cube constructor
+@param
+_inFace : input face character
+_outFace : output face character
+@return
+*/
 PathPlanner::Cube::Cube(char _inFace, char _outFace)
 	: Cube(_inFace, _outFace, 0, 0)
 {
 }
 
+/**
+@brief		Getter of cube type integer
+@details
+Encode as 8 digits integer to access the cube parameters
+inFace(char, 3 digits in ASCII), outFace(char, 3 digits in ASCII)
+inVelocity(int, 1 digit divided by 10), outVelocity(int, 1 digit divided by 10)
+@param
+@return		
+*/
 int PathPlanner::Cube::getType()
 {
 	return inFace*100000 + outFace*100 + inVelocity + outVelocity/10;
 }
 
+/**
+@brief		Getter of required time by cubeType
+@details	Calculate direction and velocity from cubeType and access the simulation time map
+@param
+cubeType : cube type integer that express direction and velocity of the cube
+@return		Time duration in sec
+*/
 double PathPlanner::getRequiredTime(int cubeType)
 {
 	char inFace = cubeType / 100000;
@@ -28,11 +62,26 @@ double PathPlanner::getRequiredTime(int cubeType)
 	return cubeTime[face][velocity];
 }
 
+/**
+@brief		Path planner constructor
+@details	Construct and input simulation time from VrepDroneSim.csv before path planning
+@param		
+@return		
+*/
 PathPlanner::PathPlanner()
 {
 	inputSimData();
 }
 
+/**
+@brief		Input simulation time from file
+@details
+File input from csv and store in temporary record vector
+Typecast parameter as inFace(char), outFace(char), inVelocity(int), outVelocity(out), time(double)
+Make a command to store in cubeTime map
+@param
+@return
+*/
 void PathPlanner::inputSimData()
 {
 	std::ifstream infile("VrepDroneSim.csv");
@@ -65,6 +114,21 @@ void PathPlanner::inputSimData()
 	if (!infile.eof()) std::cerr << "[Error] File reading cannot be done!\n";
 }
 
+/**
+@brief		Store simulation data
+@details
+Store cube record(face, velocity, time) in
+cubeTime : map <face, map <velocity, time> >
+face : pair <char, char>
+velocity : pair <int, int>
+@param
+inFace : input face
+outFace : output face
+inVelocity : input velocity
+outVelocity : output velocity
+time : time duration in cube
+@return
+*/
 void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int outVelocity, double time)
 {
 	std::pair<char, char> face = std::make_pair(inFace, outFace);
