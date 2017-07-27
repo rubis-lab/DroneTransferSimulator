@@ -1,6 +1,8 @@
 #include <vector>
 #include <ctime>
 #include "Event.h"
+#include "Time.h"
+#include "DroneStationFinder.h"
 
 #ifndef _H_SIMULATOR_
 #define _H_SIMULATOR_
@@ -11,10 +13,10 @@ private:
 	std::vector<Event> events;
 
 public:
-	void getEventsFromCSV(char* fname, std :: vector < std:: vector <double> > *data);
+	void getEventsFromCSV(char* fname);
 	std::vector<Event> getEvents();
-	void updateEventsBtwRange(int start, int end, std::vector < std::vector <double> > data);
-	void simulation(int start, int end);
+	void updateEventsBtwRange(Time start, Time end, std::vector <Event> &_events);
+	void simulation(Time start, Time end);
 };
 
 #endif

@@ -19,7 +19,7 @@ using namespace std;
 @param fname
 @return data
 */
-void Simulator::getEventsFromCSV(char* fname, std ::vector < std::vector <double> > *data)
+void Simulator::getEventsFromCSV(char* fname)
 {
 	FILE *fr;
 
@@ -30,21 +30,23 @@ void Simulator::getEventsFromCSV(char* fname, std ::vector < std::vector <double
 
 	while (getline(file,line))
 	{
-		double _lng, _lat, _oDate, _oTime, ambulDate, ambulTime;
+		double _lng, _lat, _oDate, _oTime, _aDate, _aTime;
 		vector <double> newline;
-		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &_lng, &_lat, &_oDate, &_oTime, &ambulDate, &ambulTime);
-
-		newline.push_back(_lng);
-		newline.push_back(_lat);
-		newline.push_back(_oDate);
-		newline.push_back(_oTime);
-		newline.push_back(ambulDate);
-		newline.push_back(ambulTime);
-		_data.push_back(newline);
+		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &_lng, &_lat, &_oDate, &_oTime, &_aDate, &_aTime);
+		
+		Time oDate, aDate;
+		oDate.year = int(_oDate / 100);
+		oDate.month = int(_oDate) % 100;
+		oDate.hour = int(_oTime / 100);
+		oDate.min = int(_oTime) % 100;
+		aDate.year = int(_aDate / 100);
+		aDate.month = int(_aDate) % 100;
+		aDate.hour = int(_aTime / 100);
+		aDate.min = int(_aTime) % 100;
+		Event(_lat, _lng, oDate, aDate);
 
 	}
 	fclose(fr);
-	*data = _data;
 }
 
 std::vector<Event> Simulator::getEvents()
@@ -59,26 +61,24 @@ std::vector<Event> Simulator::getEvents()
 @param starttime, endtime, event vector
 @return
 */
-void Simulator::updateEventsBtwRange(int start, int end, std::vector < std::vector <double> > data)
+void Simulator::updateEventsBtwRange(Time start, Time end, std::vector <Event> &_events)
 {
-	std::vector < std::vector <double> > newdata;
-	std::sort(events.begin(), events.end(), Event :: myCompare);
+	std::vector <Event> events;
+	events = getEvents();
+	std::sort(events.begin(), events.end(), Event :: occuredDateComparator);
 	int i = 0, start_index = 0, end_index = 0;
-	int date;
-	while (true) {
-		date = int(data[i][2]) * 10000 + int(data[i][3]);
-		if (date < start) {
+	for (std :: vector <Event> ::iterator it = events.begin(); it!= events.end(); ++it)
+	{
+		if (Time :: timeComparator(it->getOccuredDate(), start)) 
+		{
 			start_index++;
 			end_index++;
-			i++;
 		}
-		else if (date < end) {
-			end_index++;
-			i++;
-		}
+		else if (Time :: timeComparator(it->getOccuredDate(), end)) end_index++;
 	}
-	data.erase(data.begin(), data.begin() + start_index);
-	data.erase(data.begin() + end_index, data.end());
+	events.erase(events.begin(), events.begin() + start_index);
+	events.erase(events.begin() + end_index, events.end());
+	_events = events;
 }
 
 /**
@@ -87,13 +87,12 @@ void Simulator::updateEventsBtwRange(int start, int end, std::vector < std::vect
 @param event
 @return
 */
-void Simulator::simulation(int start, int end)
+void Simulator::simulation(Time start, Time end)
 {
-	std::vector < std::vector <double> > data;
-	getEventsFromCSV("data.csv", &data);
-	updateEventsBtwRange(start, end, data);
-	int i;
-	for (i = 0; data.size(); i++) {
-		events.push_back(Event(data[i][0], data[i][1], int(data[i][2])*10000 +int(data[i][3]), int(data[i][4])*10000 +int(data[i][5])));
+	getEventsFromCSV("data.csv");
+	std::vector <Event> eventsInRange;
+	updateEventsBtwRange(start, end, eventsInRange);
+	for (std::vector <Event> ::iterator it = eventsInRange.begin(); it != eventsInRange.end(); ++it)
+	{
 	}
 }
