@@ -5,12 +5,12 @@ class DroneStation
 {
 private:
 	int nDrone, nMaxDrone;
-
 	void setDroneNum(int n);
 
 public:
-	DroneStation(int _nMaxDrone);
-	
+	double coverRange;
+	double stationLng, stationLat;
+	DroneStation(int _nMaxDrone);	
 };
 
 #endif
