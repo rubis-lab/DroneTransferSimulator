@@ -4,13 +4,14 @@
 #include <WinSock2.h>
 #include <mysql.h>
 
-#define DB_HOST	"prism.snu.ac.kr"
-#define DB_USER	"root"
-#define DB_PASS	"4542rubis"
-#define DB_NAME	"WonseokMap"
-
 #ifndef _H_DRONE_MAP_
 #define _H_DRONE_MAP_
+
+#define DB_HOST		"prism.snu.ac.kr"
+#define DB_USER		"root"
+#define DB_PASS		"4542rubis"
+#define DB_NAME		"WonseokMap"
+#define TBL_NAME	"Seoul_40x40_500x500"
 
 struct DroneMapData
 {
@@ -30,7 +31,7 @@ private:
 	std::vector<DroneMapData> resultSet;
 	bool hasConnection;
 
-	bool doQuery(char* command);
+	bool doQuery(std::string command);
 	void connectDB();
 	void closeDB();
 
@@ -43,7 +44,7 @@ public:
 
 	DroneMap();
 
-	std::vector<DroneMapData> getData();
+	const std::vector<DroneMapData> getData(int srcRowIdx, int srcColIdx, int dstRowIdx, int dstColIdx);
 };
 
 #endif
