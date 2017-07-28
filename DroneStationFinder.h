@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 #include "DroneStation.h"
 #include "PathPlanner.h"
 
@@ -13,6 +14,6 @@ private:
 	std::vector <DroneStation> stations;
 
 public:
-	DroneStationFinder(double _lat, double _lng);
-	DroneStation StationFinder();
+	DroneStationFinder(std::pair<double, double>);
+	int stationFinder();
 };

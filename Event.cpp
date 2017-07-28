@@ -24,20 +24,18 @@ Time Event::getOccuredDate()
 }
 
 
-bool Event::occuredDateComparator(Event &x, Event &y)
+std::pair<double, double> Event::getCoordinates()
 {
-	return(Time::timeComparator(x.occuredDate, y.occuredDate));
-} 
-
-/*
-bool Event:: operator> (const Event& event2)
-{
-	return (Time::timeComparator(occuredDate, event2.occuredDate));
+	return std::make_pair(lat, lng);
 }
-*/
 
 
+bool Event::operator<(const Event& event)
+{
+	return (Time::timeComparator(occuredDate, event.occuredDate));
+}
 
 void Event::timeConsumed()
 {
 }
+

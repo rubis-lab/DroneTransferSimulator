@@ -6,7 +6,7 @@
 @param t1, t2
 @return true if t1 happened earlier than t2
 */
-bool Time ::timeComparator(Time t1, Time t2)
+bool Time::timeComparator(Time t1, Time t2)
 {
 	if (t1.year != t2.year) return (t1.year > t2.year);
 	else if (t1.month != t2.month) return (t1.month > t2.month);

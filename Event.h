@@ -1,4 +1,5 @@
 #include <ctime>
+#include <utility>
 #include "Time.h"
 
 #ifndef _H_EVENT_
@@ -13,8 +14,8 @@ private:
 public:
 	Event(double _lat, double _lng, Time _oDate, Time ambulDate);
 	Time getOccuredDate();
-	bool occuredDateComparator(Event &x, Event &y);
-	//bool operator> (const Event& event2) ;
+	std::pair<double, double> getCoordinates();
+	bool operator<(const Event& event);
 	void timeConsumed();
 };
 

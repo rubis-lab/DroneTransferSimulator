@@ -17,7 +17,7 @@ using namespace std;
 @brief get events from CSV file
 @details
 @param fname
-@return data
+@return 2-D vector of longitude, latitude, time of events
 */
 void Simulator::getEventsFromCSV(char* fname)
 {
@@ -30,20 +30,20 @@ void Simulator::getEventsFromCSV(char* fname)
 
 	while (getline(file,line))
 	{
-		double _lng, _lat, _oDate, _oTime, _aDate, _aTime;
+		double lng, lat, oDate, oTime, aDate, aTime;
 		vector <double> newline;
-		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &_lng, &_lat, &_oDate, &_oTime, &_aDate, &_aTime);
+		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &lng, &lat, &oDate, &oTime, &aDate, &aTime);
 		
-		Time oDate, aDate;
-		oDate.year = int(_oDate / 100);
-		oDate.month = int(_oDate) % 100;
-		oDate.hour = int(_oTime / 100);
-		oDate.min = int(_oTime) % 100;
-		aDate.year = int(_aDate / 100);
-		aDate.month = int(_aDate) % 100;
-		aDate.hour = int(_aTime / 100);
-		aDate.min = int(_aTime) % 100;
-		Event(_lat, _lng, oDate, aDate);
+		Time occuredDate, ambulDate;
+		occuredDate.year = int(oDate / 100);
+		occuredDate.month = int(oDate) % 100;
+		occuredDate.hour = int(oTime / 100);
+		occuredDate.min = int(oTime) % 100;
+		ambulDate.year = int(aDate / 100);
+		ambulDate.month = int(aDate) % 100;
+		ambulDate.hour = int(aTime / 100);
+		ambulDate.min = int(aTime) % 100;
+		Event(lat, lng, occuredDate, ambulDate);
 
 	}
 	fclose(fr);
@@ -65,7 +65,8 @@ void Simulator::updateEventsBtwRange(Time start, Time end, std::vector <Event> &
 {
 	std::vector <Event> events;
 	events = getEvents();
-	std::sort(events.begin(), events.end(), Event :: occuredDateComparator);
+	//std::sort(events.begin(), events.end(), Event :: occuredDateComparator);
+	std::sort(events.begin(), events.end());
 	int i = 0, start_index = 0, end_index = 0;
 	for (std :: vector <Event> ::iterator it = events.begin(); it!= events.end(); ++it)
 	{
@@ -90,9 +91,16 @@ void Simulator::updateEventsBtwRange(Time start, Time end, std::vector <Event> &
 void Simulator::simulation(Time start, Time end)
 {
 	getEventsFromCSV("data.csv");
+	std::vector <DroneStation> stations;
 	std::vector <Event> eventsInRange;
 	updateEventsBtwRange(start, end, eventsInRange);
-	for (std::vector <Event> ::iterator it = eventsInRange.begin(); it != eventsInRange.end(); ++it)
+	for (auto it = eventsInRange.begin(); it != eventsInRange.end(); ++it)
 	{
+		std::pair<double, double> p = it->getCoordinates();
+		DroneStationFinder finder(p);
+		int stationNum = finder.stationFinder();
+		PathPlanner pathPlanner;
+		pathPlanner.calcTravelTime(stations[stationNum].stationLat, stations[stationNum].stationLng, p.first, p.second);
+
 	}
 }

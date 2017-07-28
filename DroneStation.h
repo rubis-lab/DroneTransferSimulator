@@ -10,7 +10,7 @@ private:
 public:
 	double coverRange;
 	double stationLng, stationLat;
-	DroneStation(int _nMaxDrone);	
+	DroneStation(int _nMaxDrone);
 };
 
 #endif

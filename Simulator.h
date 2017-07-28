@@ -2,6 +2,8 @@
 #include <ctime>
 #include "Event.h"
 #include "Time.h"
+#include "PathPlanner.h"
+#include "DroneStation.h"
 #include "DroneStationFinder.h"
 
 #ifndef _H_SIMULATOR_
