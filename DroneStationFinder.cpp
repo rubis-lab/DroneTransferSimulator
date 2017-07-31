@@ -9,7 +9,7 @@
 @param latitude, longitude of two points
 @return distance (km)
 */
-double DroneStationFinder::distanceFromEvent(double wgsLng, double wgsLat)
+double DroneStationFinder::getDistanceFromRecentEvent(double wgsLng, double wgsLat)
 {
 	double kmLat, kmLng;
 	kmLat = -(eventLat-wgsLat) * 0.030828 * 60 * 60;
@@ -25,7 +25,7 @@ double DroneStationFinder::distanceFromEvent(double wgsLng, double wgsLat)
 */
 bool DroneStationFinder::distanceComparator(DroneStation x, DroneStation y)
 {
-	return (distanceFromEvent(x.stationLng, x.stationLat)>distanceFromEvent(y.stationLng, y.stationLat));
+	return (getDistanceFromRecentEvent(x.stationLng, x.stationLat)>getDistanceFromRecentEvent(y.stationLng, y.stationLat));
 }
 
 /**
@@ -34,17 +34,17 @@ bool DroneStationFinder::distanceComparator(DroneStation x, DroneStation y)
 @param 
 @return
 */
-int DroneStationFinder::stationFinder()
+int DroneStationFinder::findCloestStation()
 {
-	std::vector<DroneStation> stations;
+	stations = StationManager::getStations();
 	double minValue = -1;
 	int minIndex;
-	for (auto it= stations.begin(); it!=stations.end(); ++it) 
+	for(auto it= stations.begin(); it!=stations.end(); ++it)
 	{
-		double distance = distanceFromEvent(it->stationLng, it->stationLat);
-		if (it->coverRange > distance) 
+		double distance = getDistanceFromRecentEvent(it->stationLng, it->stationLat);
+		if(it->coverRange > distance) 
 		{
-			if (distance < minValue || minValue == -1)
+			if(distance < minValue || minValue == -1)
 			{
 				minValue = distance;
 				minIndex = std::distance(stations.begin(), it);
@@ -52,12 +52,12 @@ int DroneStationFinder::stationFinder()
 		}
 		
 	}
-	if (minValue==-1) std::cout << "rescue failed" << std::endl;
+	if(minValue==-1) std::cout << "rescue failed" << std::endl;
 	return minIndex;
 }
 
 DroneStationFinder::DroneStationFinder(std::pair<double, double> coordinate)
 {
-	eventLat = coordinate.first;
-	eventLng = coordinate.second;
+	eventLng = coordinate.first;
+	eventLat = coordinate.second;
 }

@@ -7,10 +7,9 @@ private:
 	double battery;					/* unit: percent */
 	double availDist, maxAvailDist; /* available distance of Drone */
 
-	void fly(double distance);
-
 public:
-
+	Drone(double _maxAvilDist);
+	void fly(double distance);
 };
 
 #endif

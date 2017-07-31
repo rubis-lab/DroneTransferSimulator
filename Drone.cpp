@@ -17,3 +17,9 @@ void Drone::fly(double distance)
 
 	battery -= consumedBattery;
 }
+
+Drone::Drone(double _maxAvailDist)
+{
+	maxAvailDist = _maxAvailDist;
+	battery = 100;
+}

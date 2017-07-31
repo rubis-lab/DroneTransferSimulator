@@ -16,7 +16,6 @@ public:
 	Time getOccuredDate();
 	std::pair<double, double> getCoordinates();
 	bool operator<(const Event& event);
-	void timeConsumed();
 };
 
 #endif

@@ -34,8 +34,3 @@ bool Event::operator<(const Event& event)
 {
 	return (Time::timeComparator(occuredDate, event.occuredDate));
 }
-
-void Event::timeConsumed()
-{
-}
-

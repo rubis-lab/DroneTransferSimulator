@@ -3,17 +3,17 @@
 #include <vector>
 #include <utility>
 #include "DroneStation.h"
-#include "PathPlanner.h"
+#include "StationManager.h"
 
 class DroneStationFinder
 {
 private:
-	double distanceFromEvent(double wgsLat, double wgsLng);
+	double getDistanceFromRecentEvent(double wgsLat, double wgsLng);
 	double eventLng, eventLat;
 	bool distanceComparator(DroneStation x, DroneStation y);
 	std::vector <DroneStation> stations;
 
 public:
 	DroneStationFinder(std::pair<double, double>);
-	int stationFinder();
+	int findCloestStation();
 };

@@ -28,7 +28,7 @@ void Simulator::getEventsFromCSV(char* fname)
 	string line;
 	fopen_s(&fr, fname, "r");
 
-	while (getline(file,line))
+	while(getline(file,line))
 	{
 		double lng, lat, oDate, oTime, aDate, aTime;
 		vector <double> newline;
@@ -43,8 +43,9 @@ void Simulator::getEventsFromCSV(char* fname)
 		ambulDate.month = int(aDate) % 100;
 		ambulDate.hour = int(aTime / 100);
 		ambulDate.min = int(aTime) % 100;
-		Event(lat, lng, occuredDate, ambulDate);
 
+		Event event(lat, lng, occuredDate, ambulDate);
+		events.push_back(event);
 	}
 	fclose(fr);
 }
@@ -61,25 +62,22 @@ std::vector<Event> Simulator::getEvents()
 @param starttime, endtime, event vector
 @return
 */
-void Simulator::updateEventsBtwRange(Time start, Time end, std::vector <Event> &_events)
+void Simulator::updateEventsBtwRange(Time start, Time end)
 {
-	std::vector <Event> events;
-	events = getEvents();
-	//std::sort(events.begin(), events.end(), Event :: occuredDateComparator);
 	std::sort(events.begin(), events.end());
 	int i = 0, start_index = 0, end_index = 0;
-	for (std :: vector <Event> ::iterator it = events.begin(); it!= events.end(); ++it)
+	for(std :: vector <Event> ::iterator it = events.begin(); it!= events.end(); ++it)
 	{
-		if (Time :: timeComparator(it->getOccuredDate(), start)) 
+		if(Time :: timeComparator(it->getOccuredDate(), start)) 
 		{
 			start_index++;
 			end_index++;
 		}
-		else if (Time :: timeComparator(it->getOccuredDate(), end)) end_index++;
+		else if(Time :: timeComparator(it->getOccuredDate(), end)) end_index++;
 	}
 	events.erase(events.begin(), events.begin() + start_index);
 	events.erase(events.begin() + end_index, events.end());
-	_events = events;
+	sortedEvents = events;
 }
 
 /**
@@ -88,19 +86,17 @@ void Simulator::updateEventsBtwRange(Time start, Time end, std::vector <Event> &
 @param event
 @return
 */
-void Simulator::simulation(Time start, Time end)
+void Simulator::start(Time start, Time end)
 {
 	getEventsFromCSV("data.csv");
-	std::vector <DroneStation> stations;
-	std::vector <Event> eventsInRange;
-	updateEventsBtwRange(start, end, eventsInRange);
-	for (auto it = eventsInRange.begin(); it != eventsInRange.end(); ++it)
+	updateEventsBtwRange(start, end);
+	for(auto it = sortedEvents.begin(); it != sortedEvents.end(); ++it)
 	{
 		std::pair<double, double> p = it->getCoordinates();
 		DroneStationFinder finder(p);
-		int stationNum = finder.stationFinder();
+		int stationNum = finder.findCloestStation();
 		PathPlanner pathPlanner;
-		pathPlanner.calcTravelTime(stations[stationNum].stationLat, stations[stationNum].stationLng, p.first, p.second);
-
+		double time;
+		pathPlanner.calcTravelTime(stations[stationNum].stationLat, stations[stationNum].stationLng, p.second, p.first, time);
 	}
 }
