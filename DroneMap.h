@@ -38,7 +38,7 @@ private:
 public:
 	static DroneMap* getInstance()
 	{
-		if(instance == NULL) instance = new DroneMap;
+		if (instance == NULL) instance = new DroneMap;
 		return instance;
 	}
 
