@@ -86,22 +86,22 @@ void PathPlanner::inputSimData()
 {
 	std::ifstream infile("VrepDroneSim.csv");
 
-	while (infile)
+	while(infile)
 	{
 		std::string s;
-		if (!getline(infile, s)) break;
+		if(!getline(infile, s)) break;
 
 		std::istringstream ss(s);
 		std::vector <std::string> record;
 
-		while (ss)
+		while(ss)
 		{
 			std::string s;
-			if (!getline(ss, s, ',')) break;
+			if(!getline(ss, s, ',')) break;
 			record.push_back(s);
 		}
-		if (record.size() != 5) break;
-		if (record[4] != "-" && record[4] != "time (s)")
+		if(record.size() != 5) break;
+		if(record[4] != "-" && record[4] != "time (s)")
 		{
 			char inFace = record[0].at(0);
 			char outFace = record[1].at(0);
@@ -111,7 +111,7 @@ void PathPlanner::inputSimData()
 			storeSimData(inFace, outFace, inVelocity, outVelocity, time);
 		}
 	}
-	if (!infile.eof()) std::cerr << "[Error] File reading cannot be done!\n";
+	if(!infile.eof()) std::cerr << "[Error] File reading cannot be done!\n";
 }
 
 /**
@@ -135,10 +135,10 @@ void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int ou
 	std::pair<int, int> velocity = std::make_pair(inVelocity, outVelocity);
 
 	auto it = cubeTime.find(face);
-	if (it != cubeTime.end())
+	if(it != cubeTime.end())
 	{
 		auto it2 = it->second.find(velocity);
-		if (it2 != it->second.end()) it2->second = time;
+		if(it2 != it->second.end()) it2->second = time;
 		else it->second.insert(std::make_pair(velocity, time));
 	}
 	else
@@ -150,6 +150,49 @@ void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int ou
 
 double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, double dstLng)
 {
+	if(srcLng > dstLng)
+	{
+		std::swap(srcLat, dstLat);
+		std::swap(srcLng, dstLng);
+	}
+
+	convertWGStoKm(srcLat, srcLng, &srcLat, &srcLng);
+	convertWGStoKm(dstLat, dstLng, &dstLat, &dstLng);
+	double theta = std::atan2(dstLat - srcLat, dstLng - srcLng);
+	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng));
+	
+	double srcX = srcLng + std::min(std::cos(theta + M_PI_4 * 3), std::cos(theta - M_PI_4 * 3)) * CUBE_SIZE / 2 / 1000.0;
+	double dstX = dstLng + std::max(std::cos(theta + M_PI_4 * 1), std::cos(theta - M_PI_4 * 1)) * CUBE_SIZE / 2 / 1000.0;
+
+	int srcCol, dstCol;
+	convertKmtoRC(0, srcX, nullptr, &srcCol);
+	convertKmtoRC(0, dstX, nullptr, &dstCol);
+
+	for(int col = srcCol; col <= dstCol; col++)
+	{
+		double x;
+		convertRCtoKm(0, col, nullptr, &x);
+
+		double y1 = (-CUBE_SIZE / 2000.0 - (x - srcLng) * std::cos(theta)) / std::sin(theta) + srcLat;
+		double y2 = ((distance + CUBE_SIZE / 2000.0) - (x - srcLng) * std::cos(theta)) / std::sin(theta) + srcLat;
+		double y3 = (-CUBE_SIZE / 2000.0 + (x - srcLng) * std::sin(theta)) / std::cos(theta) + srcLat;
+		double y4 = (CUBE_SIZE / 2000.0 + (x - srcLng) * std::sin(theta)) / std::cos(theta) + srcLat;
+
+		if(y1 > y2) std::swap(y1, y2);
+		if(y3 > y4) std::swap(y3, y4);
+
+		int srcRow, dstRow;
+		convertKmtoRC(std::max(y1, y3), 0, &srcRow, nullptr);
+		convertKmtoRC(std::min(y2, y4), 0, &dstRow, nullptr);
+		
+		/*
+		// access WonseokMap from srcRow to dstRow at col
+		// calculate maximum height
+
+		std::cout << srcRow << ", " << dstRow << ", " << dstRow-srcRow << std::endl;
+		*/
+	}
+	
 	return 100.0;
 }
 
@@ -165,38 +208,65 @@ double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, 
 
 std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double srcLng, double dstLat, double dstLng)
 {
+	/*
+	std::cout << ">> From : " << srcLat << ", " << srcLng << std::endl;
+	std::cout << ">> To : " << dstLat << ", " << dstLng << std::endl;
+	*/
+
 	std::vector<PathPlanner::Cube> cubes;
 	double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
-	convertWGStoKm(srcLat, srcLng, srcLat, srcLng);
-	convertWGStoKm(dstLat, dstLng, dstLat, dstLng);
+	convertWGStoKm(srcLat, srcLng, &srcLat, &srcLng);
+	convertWGStoKm(dstLat, dstLng, &dstLat, &dstLng);
 	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng)) * 1000;
+
+	/*
+	std::cout << ">> Height : " << height << std::endl;
+	std::cout << ">> Distance : " << distance << std::endl;
+	*/
 
 	cubes.push_back(Cube('d', 'u', 0, 10));
 
-	for (double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('d', 'u', 10, 10));
+	for(double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('d', 'u', 10, 10));
 	cubes.push_back(Cube('d', 'r', 10, 10));
 
-	for (double d = 0.0; d <= distance; d += 10.0) cubes.push_back(Cube('l', 'r', 10, 10));
+	for(double d = 0.0; d <= distance; d += 10.0) cubes.push_back(Cube('l', 'r', 10, 10));
 	cubes.push_back(Cube('l', 'd', 10, 10));
 
-	for (double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('u', 'd', 10, 10));
+	for(double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('u', 'd', 10, 10));
 	cubes.push_back(Cube('u', 'd', 10, 0));
 
 	return cubes;
 }
 
 /* latitude 1 sec = 30.828 m, longitude 1 sec = 24.697 m */
-void PathPlanner::convertWGStoKm(double wgsLat, double wgsLng, double &kmLat, double &kmLng) {
-	kmLat = -wgsLat * 0.030828 * 60 * 60;
-	kmLng = wgsLng * 0.024697 * 60 * 60;
+void PathPlanner::convertWGStoKm(double wgsLat, double wgsLng, double *kmLat, double *kmLng) {
+	if(kmLat != nullptr) *kmLat = -wgsLat * 0.030828 * 60 * 60;
+	if(kmLng != nullptr) *kmLng = wgsLng * 0.024697 * 60 * 60;
 }
 
-void PathPlanner::convertWGStoRC(double wgsLat, double wgsLng, int &row, int &col) {
-	row = int((UL_LAT - wgsLat) / D_LAT);
-	col = int((wgsLng - UL_LNG) / D_LNG);	
+void PathPlanner::convertKmtoWGS(double kmLat, double kmLng, double *wgsLat, double *wgsLng) {
+	if(wgsLat != nullptr) *wgsLat = -kmLat / 0.030828 / 60 / 60;
+	if(wgsLng != nullptr) *wgsLng = kmLng / 0.024697 / 60 / 60;
 }
 
-void PathPlanner::convertRCtoWGS(int row, int col, double &wgsLat, double &wgsLng) {
-	wgsLat = UL_LAT - row * D_LAT;
-	wgsLng = UL_LNG + col * D_LNG;
+void PathPlanner::convertWGStoRC(double wgsLat, double wgsLng, int *row, int *col) {
+	if(row != nullptr) *row = int((UL_LAT - wgsLat) * 20000 / DIST_LAT);
+	if(col != nullptr) *col = int((wgsLng - UL_LNG) * 20000 / DIST_LNG);	
+}
+
+void PathPlanner::convertRCtoWGS(int row, int col, double *wgsLat, double *wgsLng) {
+	if(wgsLat != nullptr) *wgsLat = UL_LAT - row * DIST_LAT / 20000;
+	if(wgsLng != nullptr) *wgsLng = UL_LNG + col * DIST_LNG / 20000;
+}
+
+void PathPlanner::convertRCtoKm(int row, int col, double *kmLat, double *kmLng) {
+	convertRCtoWGS(row, col, kmLat, kmLng);
+	double wgsLat = kmLat != nullptr ? *kmLat : 0;
+	double wgsLng = kmLng != nullptr ? *kmLng : 0;
+	convertWGStoKm(wgsLat, wgsLng, kmLat, kmLng);
+}
+
+void PathPlanner::convertKmtoRC(double kmLat, double kmLng, int *row, int *col) {
+	convertKmtoWGS(kmLat, kmLng, &kmLat, &kmLng);
+	convertWGStoRC(kmLat, kmLng, row, col);
 }

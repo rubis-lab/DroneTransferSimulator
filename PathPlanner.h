@@ -1,6 +1,8 @@
 #ifndef _H_PATH_PLANNER_
 #define _H_PATH_PLANNER_
 
+#define _USE_MATH_DEFINES
+
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -8,6 +10,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <map>
+#include <algorithm>
+#include <cmath>
 
 #define CUBE_SIZE	10
 
@@ -15,8 +19,8 @@
 #define UL_LNG		126.783400	/* Upper Left bound of longitude for Seoul_40x40_500x500 table */
 #define LR_LAT		37.432499	/* Lower Right bound of latitute for Seoul_40x40_500x500 table */
 #define LR_LNG		127.197999	/* Lower Right bound of longitude for Seoul_40x40_500x500 table */
-#define D_LAT		((UL_LAT - LR_LAT) / 20000)	/* Delta between latitude */
-#define D_LNG		((LR_LNG - UL_LNG) / 20000)	/* Delta between longitude */
+#define DIST_LAT	(UL_LAT - LR_LAT)	/* Distance between UB_LAT and LB_LAT */
+#define DIST_LNG	(LR_LNG - UL_LNG)	/* Distance between UB_LNG and LB_LNG */
 
 class PathPlanner
 {
@@ -53,10 +57,13 @@ public:
 	PathPlanner();
 	double calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng);
 
-	// WGS84 Coordinates into km Coordinates
-	void convertWGStoKm(double wgsLat, double wgsLng, double &kmLat, double &kmLng);
-	void convertWGStoRC(double wgsLat, double wgsLng, int &row, int &col);
-	void convertRCtoWGS(int row, int col, double &wgsLat, double &wgsLng);
+	// Convert Coordinates among km, wgs84, row/col
+	void convertKmtoWGS(double kmLat, double kmLng, double *wgsLat, double *wgsLng);
+	void convertKmtoRC(double kmLat, double kmLng, int *row, int *col);
+	void convertWGStoKm(double wgsLat, double wgsLng, double *kmLat, double *kmLng);
+	void convertWGStoRC(double wgsLat, double wgsLng, int *row, int *col);
+	void convertRCtoKm(int row, int col, double *kmLat, double *kmLng);
+	void convertRCtoWGS(int row, int col, double *wgsLat, double *wgsLng);
 };
 
 #endif
