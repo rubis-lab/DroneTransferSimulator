@@ -8,12 +8,13 @@
 class DroneStationFinder
 {
 private:
-	double getDistanceFromRecentEvent(double wgsLat, double wgsLng);
 	double eventLng, eventLat;
 	bool distanceComparator(DroneStation x, DroneStation y);
 	std::vector <DroneStation> stations;
 
 public:
+	double getDistanceFromRecentEvent(double wgsLat, double wgsLng);
 	DroneStationFinder(std::pair<double, double>);
 	int findCloestStation();
+	int findAvailableDrone(int stationIndex);
 };

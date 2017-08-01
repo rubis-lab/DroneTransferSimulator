@@ -24,7 +24,6 @@ void Simulator::getEventsFromCSV(char* fname)
 	FILE *fr;
 
 	ifstream file(fname);
-	vector< vector<double> > _data;
 	string line;
 	fopen_s(&fr, fname, "r");
 
@@ -35,17 +34,18 @@ void Simulator::getEventsFromCSV(char* fname)
 		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &lng, &lat, &oDate, &oTime, &aDate, &aTime);
 		
 		Time occuredDate, ambulDate;
-		occuredDate.year = int(oDate / 100);
-		occuredDate.month = int(oDate) % 100;
+		occuredDate.year = int(oDate / 10000);
+		occuredDate.month = int(oDate / 100000) /100;
+		occuredDate.date = int(oDate) % 100;
 		occuredDate.hour = int(oTime / 100);
 		occuredDate.min = int(oTime) % 100;
-		ambulDate.year = int(aDate / 100);
-		ambulDate.month = int(aDate) % 100;
+		ambulDate.year = int(aDate / 10000);
+		ambulDate.month = int(aDate/ 10000) / 100;
+		ambulDate.date = int(aDate) % 100; 
 		ambulDate.hour = int(aTime / 100);
 		ambulDate.min = int(aTime) % 100;
 
-		Event event(lat, lng, occuredDate, ambulDate);
-		events.push_back(event);
+		events.push_back(new Event(lat, lng, occuredDate, ambulDate));
 	}
 	fclose(fr);
 }
@@ -64,19 +64,25 @@ std::vector<Event> Simulator::getEvents()
 */
 void Simulator::updateEventsBtwRange(Time start, Time end)
 {
+	if(Time::timeComparator(end, start)) return;
+
 	std::sort(events.begin(), events.end());
-	int i = 0, start_index = 0, end_index = 0;
-	for(std :: vector <Event> ::iterator it = events.begin(); it!= events.end(); ++it)
+	int i = 0, startIndex = 0, endIndex = 0;
+	for(auto it = events.begin(); it!= events.end(); ++it)
 	{
-		if(Time :: timeComparator(it->getOccuredDate(), start)) 
+		if(Time::timeComparator(start, it->getOccuredDate()))
 		{
-			start_index++;
-			end_index++;
+			startIndex++;
+			endIndex++;
 		}
-		else if(Time :: timeComparator(it->getOccuredDate(), end)) end_index++;
+		else if(Time::timeComparator(it->getOccuredDate(), end)) endIndex++;
 	}
-	events.erase(events.begin(), events.begin() + start_index);
-	events.erase(events.begin() + end_index, events.end());
+
+	if(endIndex <= startIndex) return;
+	if(endIndex == startIndex + 1) std::cout << "No events" << std::endl;
+
+	events.erase(events.begin(), events.begin() + startIndex);
+	events.erase(events.begin() + endIndex, events.end());
 	sortedEvents = events;
 }
 
@@ -92,11 +98,15 @@ void Simulator::start(Time start, Time end)
 	updateEventsBtwRange(start, end);
 	for(auto it = sortedEvents.begin(); it != sortedEvents.end(); ++it)
 	{
-		std::pair<double, double> p = it->getCoordinates();
-		DroneStationFinder finder(p);
-		int stationNum = finder.findCloestStation();
+		std::pair<double, double> occuredCoordinates = it->getCoordinates();
+		DroneStationFinder finder(occuredCoordinates);
+		int stationIndex = finder.findCloestStation();
+		int droneIndex = finder.findAvailableDrone(stationIndex);
+		double distance = finder.getDistanceFromRecentEvent(stations[stationIndex].stationLng,stations[stationIndex].stationLat);
 		PathPlanner pathPlanner;
-		double time;
-		pathPlanner.calcTravelTime(stations[stationNum].stationLat, stations[stationNum].stationLng, p.second, p.first, time);
+		double calculatedTime;
+		pathPlanner.calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, occuredCoordinates.second, occuredCoordinates.first, calculatedTime);
+
+		stations[stationIndex].transfer(droneIndex,distance, it->getOccuredDate(), calculatedTime);
 	}
 }

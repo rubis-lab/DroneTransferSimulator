@@ -30,9 +30,9 @@ bool DroneStationFinder::distanceComparator(DroneStation x, DroneStation y)
 
 /**
 @brief finding drone station
-@details 
+@details finding cloest drone station of which coverage is bigger than distance
 @param 
-@return
+@return index of closest station in stations vector
 */
 int DroneStationFinder::findCloestStation()
 {
@@ -49,8 +49,7 @@ int DroneStationFinder::findCloestStation()
 				minValue = distance;
 				minIndex = std::distance(stations.begin(), it);
 			}
-		}
-		
+		}		
 	}
 	if(minValue==-1) std::cout << "rescue failed" << std::endl;
 	return minIndex;
@@ -60,4 +59,14 @@ DroneStationFinder::DroneStationFinder(std::pair<double, double> coordinate)
 {
 	eventLng = coordinate.first;
 	eventLat = coordinate.second;
+}
+
+int DroneStationFinder::findAvailableDrone(int stationIndex)
+{
+	if(stations[stationIndex].drones.empty()) return -1;
+	for(auto it = stations[stationIndex].drones.begin(); it != stations[stationIndex].drones.end(); it++)
+	{
+		double distance = getDistanceFromRecentEvent(stations[stationIndex].stationLng, stations[stationIndex].stationLat);
+		if(it->returnAvailDist() > distance) return std::distance(stations[stationIndex].drones.begin(), it);
+	}
 }

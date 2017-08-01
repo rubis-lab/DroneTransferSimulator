@@ -10,14 +10,14 @@ class DroneStation
 private:
 	int nDrone, nMaxDrone;
 	void setDroneNum(int n);
-	std::vector<Drone> drones;
-	std::vector<std::tuple<int, double, Time>> flyingDrone;
+	std::vector<std::tuple<int , double, Time, bool>> flyingDrone;
 
 public:
+	std::vector<Drone> drones;
 	double coverRange;
 	double stationLng, stationLat;
 	DroneStation(int _nMaxDrone, double _coverRange, double _stationLng, double _stationLat);
-	void droneFly(int droneIndex, double distance, Time dispatchTime, int timeCalculated);
+	void transfer(int droneIndex, double distance, Time occuredTime, double calculatedTime);
 	void updateFlyingDrones(Time currentTime, int calculatedTime);
 };
 
