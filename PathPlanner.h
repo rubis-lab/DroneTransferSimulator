@@ -1,8 +1,4 @@
-#ifndef _H_PATH_PLANNER_
-#define _H_PATH_PLANNER_
-
 #define _USE_MATH_DEFINES
-
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -12,6 +8,9 @@
 #include <map>
 #include <algorithm>
 #include <cmath>
+
+#ifndef _H_PATH_PLANNER_
+#define _H_PATH_PLANNER_
 
 #define CUBE_SIZE	10
 
@@ -45,7 +44,7 @@ private:
 		int getType();
 	};
 
-	void inputSimData();
+	void getDroneDynamicDBFromVREP();
 	void storeSimData(char inFace, char outFace, int inVelocity, int outVelocity, double time);
 	double getRequiredTime(int cubeType);
 

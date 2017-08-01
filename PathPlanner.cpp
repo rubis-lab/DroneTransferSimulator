@@ -1,4 +1,5 @@
 #include "PathPlanner.h"
+#include "DroneMap.h"
 
 /**
 @brief		Cube constructor
@@ -70,19 +71,20 @@ double PathPlanner::getRequiredTime(int cubeType)
 */
 PathPlanner::PathPlanner()
 {
-	inputSimData();
+	getDroneDynamicDBFromVREP();
 }
 
 /**
-@brief		Input simulation time from file
+@brief		Get drone dynamic DB from VREP
 @details
 File input from csv and store in temporary record vector
+Input simulation time from file
 Typecast parameter as inFace(char), outFace(char), inVelocity(int), outVelocity(out), time(double)
 Make a command to store in cubeTime map
 @param
 @return
 */
-void PathPlanner::inputSimData()
+void PathPlanner::getDroneDynamicDBFromVREP()
 {
 	std::ifstream infile("VrepDroneSim.csv");
 
@@ -134,12 +136,12 @@ void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int ou
 	std::pair<char, char> face = std::make_pair(inFace, outFace);
 	std::pair<int, int> velocity = std::make_pair(inVelocity, outVelocity);
 
-	auto it = cubeTime.find(face);
-	if(it != cubeTime.end())
+	auto itFace = cubeTime.find(face);
+	if(itFace != cubeTime.end())
 	{
-		auto it2 = it->second.find(velocity);
-		if(it2 != it->second.end()) it2->second = time;
-		else it->second.insert(std::make_pair(velocity, time));
+		auto itVelocity = itFace->second.find(velocity);
+		if(itVelocity != itFace->second.end()) itVelocity->second = time;
+		else itFace->second.insert(std::make_pair(velocity, time));
 	}
 	else
 	{
@@ -150,6 +152,9 @@ void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int ou
 
 double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, double dstLng)
 {
+	double maxHeight = 0.0;
+	DroneMap *droneMap = DroneMap::getInstance();
+
 	if(srcLng > dstLng)
 	{
 		std::swap(srcLat, dstLat);
@@ -161,8 +166,8 @@ double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, d
 	double theta = std::atan2(dstLat - srcLat, dstLng - srcLng);
 	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng));
 	
-	double srcX = srcLng + std::min(std::cos(theta + M_PI_4 * 3), std::cos(theta - M_PI_4 * 3)) * CUBE_SIZE / 2 / 1000.0;
-	double dstX = dstLng + std::max(std::cos(theta + M_PI_4 * 1), std::cos(theta - M_PI_4 * 1)) * CUBE_SIZE / 2 / 1000.0;
+	double srcX = srcLng + min(std::cos(theta + M_PI_4 * 3), std::cos(theta - M_PI_4 * 3)) * CUBE_SIZE / 2 / 1000.0;
+	double dstX = dstLng + max(std::cos(theta + M_PI_4 * 1), std::cos(theta - M_PI_4 * 1)) * CUBE_SIZE / 2 / 1000.0;
 
 	int srcCol, dstCol;
 	convertKmtoRC(0, srcX, nullptr, &srcCol);
@@ -182,58 +187,78 @@ double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, d
 		if(y3 > y4) std::swap(y3, y4);
 
 		int srcRow, dstRow;
-		convertKmtoRC(std::max(y1, y3), 0, &srcRow, nullptr);
-		convertKmtoRC(std::min(y2, y4), 0, &dstRow, nullptr);
-		
-		/*
-		// access WonseokMap from srcRow to dstRow at col
-		// calculate maximum height
+		convertKmtoRC(max(y1, y3), 0, &srcRow, nullptr);
+		convertKmtoRC(min(y2, y4), 0, &dstRow, nullptr);
 
-		std::cout << srcRow << ", " << dstRow << ", " << dstRow-srcRow << std::endl;
-		*/
+		const std::vector<DroneMapData> resultSet = droneMap->getData(srcRow, col, dstRow, col);
+		for(auto e : resultSet) maxHeight = max(maxHeight, e.buildingHeight + e.landElevation);
+		
 	}
-	
-	return 100.0;
+	return maxHeight;
 }
 
 double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng)
 {
 	std::vector<PathPlanner::Cube> cubes = makeNaivePath(srcLat, srcLng, dstLat, dstLng);
 	// Calculate travel time from sequential cubes
-	
-	double totalTime = 0.0;
-	for(auto e : cubes) totalTime += getRequiredTime(e.getType());
+
+	std::map<int, double> minTime;
+	minTime.insert(std::make_pair(0, 0.0));
+
+	for(auto e : cubes)
+	{
+		int cubeType = e.getType();
+		char inFace = cubeType / 100000;
+		char outFace = (cubeType % 100000) / 100;
+		std::pair<char, char> face = std::make_pair(inFace, outFace);
+		auto velMap = cubeTime[face];
+
+		std::map<int, double> tmp;
+		for(auto f : minTime)
+		{
+			int inVelocity = f.first;
+			for(int outVelocity = 0; outVelocity <= 60; outVelocity += 10)
+			{
+				std::pair<int, int> velocity = std::make_pair(inVelocity, outVelocity);
+				if(velMap.find(velocity) != velMap.end())
+				{
+					double time = f.second + velMap[velocity];
+					if(tmp.find(outVelocity) == tmp.end()) tmp.insert(std::make_pair(outVelocity, time));
+					else tmp[outVelocity] = min(tmp[outVelocity], time);
+				}
+			}
+		}
+		minTime = tmp;
+	}
+
+//	for(auto e : cubes) totalTime += getRequiredTime(e.getType());
+
+	double totalTime = minTime[0];
 	return totalTime;
 }
 
 std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double srcLng, double dstLat, double dstLng)
 {
-	/*
-	std::cout << ">> From : " << srcLat << ", " << srcLng << std::endl;
-	std::cout << ">> To : " << dstLat << ", " << dstLng << std::endl;
-	*/
-
 	std::vector<PathPlanner::Cube> cubes;
 	double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
 	convertWGStoKm(srcLat, srcLng, &srcLat, &srcLng);
 	convertWGStoKm(dstLat, dstLng, &dstLat, &dstLng);
 	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng)) * 1000;
 
-	/*
-	std::cout << ">> Height : " << height << std::endl;
-	std::cout << ">> Distance : " << distance << std::endl;
-	*/
+	DroneMap *droneMap = DroneMap::getInstance();
+	int srcRow, srcCol, dstRow, dstCol;
+	convertKmtoRC(srcLat, srcLng, &srcRow, &srcCol);
+	convertKmtoRC(dstLat, dstLng, &dstRow, &dstCol);
+	const std::vector<DroneMapData> srcSet = droneMap->getData(srcRow, srcCol, srcRow, srcCol);
+	double srcHeight = srcSet[0].landElevation;
+	const std::vector<DroneMapData> dstSet = droneMap->getData(dstRow, dstCol, dstRow, dstCol);
+	double dstHeight = dstSet[0].landElevation;
 
-	cubes.push_back(Cube('d', 'u', 0, 10));
-
-	for(double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('d', 'u', 10, 10));
-	cubes.push_back(Cube('d', 'r', 10, 10));
-
-	for(double d = 0.0; d <= distance; d += 10.0) cubes.push_back(Cube('l', 'r', 10, 10));
-	cubes.push_back(Cube('l', 'd', 10, 10));
-
-	for(double h = 10.0; h <= height; h += 10.0) cubes.push_back(Cube('u', 'd', 10, 10));
-	cubes.push_back(Cube('u', 'd', 10, 0));
+	for(double h = srcHeight; h <= height; h += 10.0) cubes.push_back(Cube('d', 'u'));
+	cubes.push_back(Cube('d', 'r'));
+	for(double d = 0.0; d <= distance; d += 10.0) cubes.push_back(Cube('l', 'r'));
+	cubes.push_back(Cube('l', 'd'));
+	for(double h = dstHeight; h <= height; h += 10.0) cubes.push_back(Cube('u', 'd'));
 
 	return cubes;
 }
