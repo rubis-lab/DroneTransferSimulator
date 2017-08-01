@@ -38,12 +38,11 @@ private:
 public:
 	static DroneMap* getInstance()
 	{
-		if (instance == NULL) instance = new DroneMap;
+		if(instance == NULL) instance = new DroneMap;
 		return instance;
 	}
 
 	DroneMap();
-
 	const std::vector<DroneMapData> getData(int srcRowIdx, int srcColIdx, int dstRowIdx, int dstColIdx);
 };
 
