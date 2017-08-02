@@ -1,6 +1,8 @@
 #include "PathPlanner.h"
 #include "DroneMap.h"
 
+PathPlanner* PathPlanner::instance = NULL;
+
 /**
 @brief		Cube constructor
 @details	Inputs face, velocity
@@ -150,6 +152,16 @@ void PathPlanner::storeSimData(char inFace, char outFace, int inVelocity, int ou
 	}
 }
 
+/**
+@brief		Calculate the maximum height
+@details	Access every building height and land elevation within 5 m from the path
+@param
+srcLat : source latitude in wgs84
+srcLng : source longitude in wgs84 
+dstLat : destination latitude in wgs84
+dstLng : destination longitude in wgs84
+@return		Maximum height(land elevation + building height) of every block in meters
+*/
 double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, double dstLng)
 {
 	double maxHeight = 0.0;
@@ -197,6 +209,16 @@ double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, d
 	return maxHeight;
 }
 
+/**
+@brief		Calculate the time by speed determination minimizing time 
+@details	From the naive path, give available speed and sum up individual time
+@param
+srcLat : source latitude in wgs84
+srcLng : source longitude in wgs84
+dstLat : destination latitude in wgs84
+dstLng : destination longitude in wgs84
+@return		Minimized time duration in seconds
+*/
 double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng)
 {
 	std::vector<PathPlanner::Cube> cubes = makeNaivePath(srcLat, srcLng, dstLat, dstLng);
@@ -205,9 +227,9 @@ double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, 
 	std::map<int, double> minTime;
 	minTime.insert(std::make_pair(0, 0.0));
 
-	for(auto e : cubes)
+	for(int i = 0; i < cubes.size(); i++)
 	{
-		int cubeType = e.getType();
+		int cubeType = cubes[i].getType();
 		char inFace = cubeType / 100000;
 		char outFace = (cubeType % 100000) / 100;
 		std::pair<char, char> face = std::make_pair(inFace, outFace);
@@ -234,9 +256,20 @@ double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, 
 //	for(auto e : cubes) totalTime += getRequiredTime(e.getType());
 
 	double totalTime = minTime[0];
+
 	return totalTime;
 }
 
+/**
+@brief		Make naive U-path 
+@details	With calculated maximum height, plan a U-path which rises, cruises, falls
+@param
+srcLat : source latitude in wgs84
+srcLng : source longitude in wgs84
+dstLat : destination latitude in wgs84
+dstLng : destination longitude in wgs84
+@return		U-path cube vector
+*/
 std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double srcLng, double dstLat, double dstLng)
 {
 	std::vector<PathPlanner::Cube> cubes;
@@ -249,6 +282,7 @@ std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double 
 	int srcRow, srcCol, dstRow, dstCol;
 	convertKmtoRC(srcLat, srcLng, &srcRow, &srcCol);
 	convertKmtoRC(dstLat, dstLng, &dstRow, &dstCol);
+
 	const std::vector<DroneMapData> srcSet = droneMap->getData(srcRow, srcCol, srcRow, srcCol);
 	double srcHeight = srcSet[0].landElevation;
 	const std::vector<DroneMapData> dstSet = droneMap->getData(dstRow, dstCol, dstRow, dstCol);

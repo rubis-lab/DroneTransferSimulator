@@ -24,6 +24,8 @@
 class PathPlanner
 {
 private:
+	static PathPlanner* instance;
+
 	/* Latitude and longitude of Source and Destination */
 	double srcLat, srcLng;
 	double dstLat, dstLng;
@@ -53,6 +55,12 @@ private:
 	double calcMaxHeight(double srcLat, double srcLng, double dstLat, double dstLng);
 
 public:
+	static PathPlanner* getInstance()
+	{
+		if(instance == NULL) instance = new PathPlanner;
+		return instance;
+	}
+
 	PathPlanner();
 	double calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng);
 
