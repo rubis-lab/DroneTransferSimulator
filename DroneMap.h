@@ -43,7 +43,6 @@ public:
 	}
 
 	DroneMap();
-
 	const std::vector<DroneMapData> getData(int srcRowIdx, int srcColIdx, int dstRowIdx, int dstColIdx);
 };
 
