@@ -162,27 +162,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Drone.cpp" />
     <ClCompile Include="DroneMap.cpp" />
-    <ClCompile Include="DroneStation.cpp" />
-    <ClCompile Include="Event.cpp" />
-    <ClCompile Include="DroneStationFinder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PathPlanner.cpp" />
-    <ClCompile Include="Simulator.cpp" />
-    <ClCompile Include="StationManager.cpp" />
-    <ClCompile Include="Time.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Drone.h" />
     <ClInclude Include="DroneMap.h" />
-    <ClInclude Include="DroneStation.h" />
-    <ClInclude Include="Event.h" />
-    <ClInclude Include="DroneStationFinder.h" />
     <ClInclude Include="PathPlanner.h" />
-    <ClInclude Include="Simulator.h" />
-    <ClInclude Include="StationManager.h" />
-    <ClInclude Include="Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
