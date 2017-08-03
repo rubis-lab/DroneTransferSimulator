@@ -80,10 +80,11 @@ void Simulator::updateEventsBtwRange(Time start, Time end)
 
 	if(endIndex <= startIndex) return;
 	if(endIndex == startIndex + 1) std::cout << "No events" << std::endl;
-
-	events.erase(events.begin(), events.begin() + startIndex);
-	events.erase(events.begin() + endIndex, events.end());
-	sortedEvents = events;
+	sortedEvents = std::vector<Event>(events.begin() + startIndex, events.begin() + endIndex);
+	for(i = 0; i != std::distance(sortedEvents.begin(), sortedEvents.end());) 
+	{
+		occuredTimeVec.push_back(i);
+	}
 }
 
 /**
@@ -96,17 +97,66 @@ void Simulator::start(Time start, Time end)
 {
 	getEventsFromCSV("data.csv");
 	updateEventsBtwRange(start, end);
-	for(auto it = sortedEvents.begin(); it != sortedEvents.end(); ++it)
-	{
-		std::pair<double, double> occuredCoordinates = it->getCoordinates();
-		DroneStationFinder finder(occuredCoordinates);
-		int stationIndex = finder.findCloestStation();
-		int droneIndex = finder.findAvailableDrone(stationIndex);
-		double distance = finder.getDistanceFromRecentEvent(stations[stationIndex].stationLng,stations[stationIndex].stationLat);
-		PathPlanner *pathPlanner = PathPlanner::getInstance();
-		double calculatedTime;
-		calculatedTime = pathPlanner->calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, occuredCoordinates.second, occuredCoordinates.first);
 
-		stations[stationIndex].transfer(droneIndex,distance, it->getOccuredDate(), calculatedTime);
+
+	Time currentTime = start;
+	while (true)
+	{
+		if (Time::isSame(currentTime, end)) return;
+
+		for(int i = 0; i != std::distance(occuredTimeVec.begin(), occuredTimeVec.end());)
+		{
+			if(Time::isSame(currentTime, sortedEvents[i].getOccuredDate()))
+			{
+				eventOccured(sortedEvents[i].getCoordinates(),sortedEvents[i].getOccuredDate());
+				return;
+			}
+		}
+
+		for (int i = 0; i != std::distance(eventArrivalTimeVec.begin(), eventArrivalTimeVec.end());)
+		{
+			if (Time::isSame(currentTime, eventArrivalTimeVec[i].second))
+			{
+				comingBack();
+				return;
+			}
+		}
+
+		for (int i = 0; i != std::distance(stationArrivalTimeVec.begin(), stationArrivalTimeVec.end());)
+		{
+			if (Time::isSame(currentTime, stationArrivalTimeVec[i].second))
+			{
+				return;
+			}
+		}
+
+		currentTime = Time::timeAdding(currentTime, 60);
 	}
+}
+
+
+void Simulator::eventOccured(std::pair<double, double> coordinates, Time occuredTime)
+{
+	DroneStationFinder finder(coordinates);
+
+	int stationIndex = finder.findCloestStation();
+	int droneIndex = finder.findAvailableDrone(stationIndex);
+
+	double distance = finder.getDistanceFromRecentEvent(stations[stationIndex].stationLng, stations[stationIndex].stationLat);
+	
+	PathPlanner pathPlanner;
+	double calculatedTime;
+	calculatedTime = pathPlanner.calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, coordinates.second, coordinates.first);
+
+	stations[stationIndex].transfer(droneIndex, distance, occuredTime, calculatedTime);
+
+	Time eventArrivalTime = Time::timeAdding(occuredTime, calculatedTime);
+
+	return;
+}
+
+void Simulator::comingBack()
+{
+
+	return;
 }
