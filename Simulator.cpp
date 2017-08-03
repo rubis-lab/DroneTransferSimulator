@@ -45,7 +45,7 @@ void Simulator::getEventsFromCSV(char* fname)
 		ambulDate.hour = int(aTime / 100);
 		ambulDate.min = int(aTime) % 100;
 
-		events.push_back(new Event(lat, lng, occuredDate, ambulDate));
+		events.push_back(Event(lat, lng, occuredDate, ambulDate));
 	}
 	fclose(fr);
 }
@@ -103,9 +103,9 @@ void Simulator::start(Time start, Time end)
 		int stationIndex = finder.findCloestStation();
 		int droneIndex = finder.findAvailableDrone(stationIndex);
 		double distance = finder.getDistanceFromRecentEvent(stations[stationIndex].stationLng,stations[stationIndex].stationLat);
-		PathPlanner pathPlanner;
+		PathPlanner *pathPlanner = PathPlanner::getInstance();
 		double calculatedTime;
-		pathPlanner.calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, occuredCoordinates.second, occuredCoordinates.first, calculatedTime);
+		calculatedTime = pathPlanner->calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, occuredCoordinates.second, occuredCoordinates.first);
 
 		stations[stationIndex].transfer(droneIndex,distance, it->getOccuredDate(), calculatedTime);
 	}

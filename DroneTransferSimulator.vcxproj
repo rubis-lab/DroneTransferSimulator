@@ -165,8 +165,8 @@
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="DroneMap.cpp" />
     <ClCompile Include="DroneStation.cpp" />
-    <ClCompile Include="Event.cpp" />
     <ClCompile Include="DroneStationFinder.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PathPlanner.cpp" />
     <ClCompile Include="Simulator.cpp" />
@@ -177,8 +177,8 @@
     <ClInclude Include="Drone.h" />
     <ClInclude Include="DroneMap.h" />
     <ClInclude Include="DroneStation.h" />
-    <ClInclude Include="Event.h" />
     <ClInclude Include="DroneStationFinder.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="PathPlanner.h" />
     <ClInclude Include="Simulator.h" />
     <ClInclude Include="StationManager.h" />

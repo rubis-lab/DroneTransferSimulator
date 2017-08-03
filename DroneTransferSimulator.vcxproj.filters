@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Drone.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DroneMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DroneStation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -30,43 +24,55 @@
     <ClCompile Include="PathPlanner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Simulator.cpp">
+    <ClCompile Include="Drone.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DroneStation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DroneStationFinder.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StationManager.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Drone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DroneMap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DroneStation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Simulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PathPlanner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Drone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DroneStation.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DroneStationFinder.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StationManager.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
