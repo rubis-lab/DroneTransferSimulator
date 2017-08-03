@@ -22,18 +22,15 @@ From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_5
 2. Should change build type same as your system.
  - ![picture](img/Debug64.PNG)
 3. Modify project settings
- - Add MySQL Server include directory to VC++ Directories -> Include Directories
- *C:\ProgramFiles\MySQL\MySQL Server 5.7\include*
- - Add MySQL Server lib directory to VC++ Directories -> Library Directories
- *C:\ProgramFiles\MySQL\MySQL Server 5.7\lib*
+ - Add MySQL Server include directory to VC++ Directories -> Include Directories: *C:\ProgramFiles\MySQL\MySQL Server 5.7\include*
+ - Add MySQL Server lib directory to VC++ Directories -> Library Directories: *C:\ProgramFiles\MySQL\MySQL Server 5.7\lib*
  ![picture](img/VCDirectories.PNG)
- - Add MySQL Server lib to VC++ Directories -> Library Directories
-  *libmysql.lib*
+ - Add MySQL Server lib to VC++ Directories -> Library Directories: *libmysql.lib*
  ![picture](img/LinkerInput.PNG)
 4. copy **libmysql.dll** from *C:\Program Files\MySQL\MySQL Server 5.7\lib* to project directory
 5. Build and fix bugs about redefinition in both *time.h* and *my_global.h*
+ - Run Visual Studio as administrator
  - In *time.h*, annotate `struct timespec` definition
  - ![picture](img/TimespecAnnotation.png)
- - Run Visual Studio as administrator
 
 ----------
