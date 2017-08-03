@@ -1,6 +1,8 @@
 #include "StationManager.h"
 #include <iostream>
 
+std::vector<DroneStation> StationManager::stations;
+
 void StationManager::getStationLocation(int stationNum, double &lat, double &lng)
 {
 	lng = stations[stationNum].stationLng;
