@@ -1,12 +1,11 @@
 # DroneTransferSimulator 
-##  ##
-
+## 
 
 ### 1. DroneMap ###
 
 From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_500x500** from *prism.snu.ac.kr*. We have to make DBMS based on MySQL in C++ environment.
 
-###### To connect MySQL & C/C++ (Visual Studio 2015)
+#### To connect MySQL & C/C++ (Visual Studio 2015)
 
 > Download MySQL server
 
