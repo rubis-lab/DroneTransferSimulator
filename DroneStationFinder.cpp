@@ -47,7 +47,7 @@ int DroneStationFinder::findCloestStation()
 			if(distance < minValue || minValue == -1)
 			{
 				minValue = distance;
-				minIndex = std::distance(stations.begin(), it);
+				minIndex = int (std::distance(stations.begin(), it));
 			}
 		}		
 	}
@@ -67,6 +67,7 @@ int DroneStationFinder::findAvailableDrone(int stationIndex)
 	for(auto it = stations[stationIndex].drones.begin(); it != stations[stationIndex].drones.end(); it++)
 	{
 		double distance = getDistanceFromRecentEvent(stations[stationIndex].stationLng, stations[stationIndex].stationLat);
-		if(it->returnAvailDist() > distance) return std::distance(stations[stationIndex].drones.begin(), it);
+		if(it->returnAvailDist() > distance) return int(std::distance(stations[stationIndex].drones.begin(), it));
 	}
+	return -1;
 }
