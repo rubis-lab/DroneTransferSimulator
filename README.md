@@ -8,13 +8,14 @@ From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_5
 
 > Download MySQL server
 
-1. dev.mysql.com
-2. downloads -> MySQL Community Edition -> MySQL Community Server
+1. [dev.mysql.com](dev.mysql.com)
+2. downloads -> MySQL Community Edition -> [MySQL Community Server](https://dev.mysql.com/downloads/windows/installer/)
 3. MySQL Installer 5.7 for windows: Windows(x86, 32-bit), MySQL Installer MSI download
  - (64-bit version included)
-4. Begin download - mysql-installer-community-5.7.14.0.msi.
- - Ignore login, sign up.
- - No thanks, just start my download.
+4. Start downloading MySQL installer
+ - Click "**No thanks, just start my download.**"
+5. Choose setup as ***Server only***
+ ![picture](img/installer.PNG)
 
 > Project environment settings
 
