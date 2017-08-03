@@ -1,5 +1,4 @@
 # DroneTransferSimulator 
-## 
 
 ### 1. DroneMap ###
 
