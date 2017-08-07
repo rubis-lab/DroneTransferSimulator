@@ -175,9 +175,10 @@ double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, d
 
 	convertWGStoKm(srcLat, srcLng, &srcLat, &srcLng);
 	convertWGStoKm(dstLat, dstLng, &dstLat, &dstLng);
+
 	double theta = std::atan2(dstLat - srcLat, dstLng - srcLng);
 	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng));
-	
+
 	double srcX = srcLng + min(std::cos(theta + M_PI_4 * 3), std::cos(theta - M_PI_4 * 3)) * CUBE_SIZE / 2 / 1000.0;
 	double dstX = dstLng + max(std::cos(theta + M_PI_4 * 1), std::cos(theta - M_PI_4 * 1)) * CUBE_SIZE / 2 / 1000.0;
 
@@ -274,6 +275,7 @@ std::vector<PathPlanner::Cube> PathPlanner::makeNaivePath(double srcLat, double 
 {
 	std::vector<PathPlanner::Cube> cubes;
 	double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
+
 	convertWGStoKm(srcLat, srcLng, &srcLat, &srcLng);
 	convertWGStoKm(dstLat, dstLng, &dstLat, &dstLng);
 	double distance = std::sqrt((srcLat - dstLat) * (srcLat - dstLat) + (srcLng - dstLng) * (srcLng - dstLng)) * 1000;

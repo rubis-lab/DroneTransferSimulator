@@ -53,27 +53,40 @@ const std::vector<DroneMapData> DroneMap::getData(int srcRowIdx, int srcColIdx, 
 	/* Do ascending order for query */
 	if(dstRowIdx < srcRowIdx) std::swap(srcRowIdx, dstRowIdx);
 	if(dstColIdx < srcColIdx) std::swap(srcColIdx, dstColIdx);
-
-	/* Add where statement to query */
-	char queryWhere[BUF_SIZE] = { 0, };
-	sprintf(queryWhere, " where ROW >= %d and ROW <= %d and COL >= %d and COL <= %d", srcRowIdx, dstRowIdx, srcColIdx, dstColIdx);
-	queryStr += queryWhere;
-
+	
 	/* Clear the vector for result */
 	if(!resultSet.empty()) resultSet.clear();
 
-	if(doQuery(queryStr))
+	/* Add where statement to query */
+	for(int row = srcRowIdx; row <= dstRowIdx; row++)
 	{
-		res = mysql_store_result(dbConn);
-
-		while((sqlRow = mysql_fetch_row(res)) != NULL)
+		for(int col = srcColIdx; col <= dstColIdx; col++)
 		{
-			DroneMapData data(atof(sqlRow[2]), atof(sqlRow[3]), atof(sqlRow[4]), atof(sqlRow[5]));
-			resultSet.push_back(data);
+			std::pair<int, int> index(row, col);
+			if(dataMap.find(index) != dataMap.end())
+			{
+				resultSet.push_back(dataMap[index]);
+			}
+			else
+			{
+				char queryWhere[BUF_SIZE] = { 0, };
+				sprintf(queryWhere, " where ROW = %d and COL = %d", row, col);
+
+				if(doQuery(queryStr + queryWhere))
+				{
+					res = mysql_store_result(dbConn);
+
+					while((sqlRow = mysql_fetch_row(res)) != NULL)
+					{
+						DroneMapData data(atof(sqlRow[2]), atof(sqlRow[3]), atof(sqlRow[4]), atof(sqlRow[5]));
+						resultSet.push_back(data);
+						dataMap.insert(std::make_pair(index, data));
+					}
+					mysql_free_result(res);
+				}
+			}
 		}
-
-		mysql_free_result(res);
 	}
-
+	
 	return resultSet;
 }

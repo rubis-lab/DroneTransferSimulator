@@ -1,4 +1,5 @@
 #include <vector>
+#include <map>
 
 #include <my_global.h>
 #include <WinSock2.h>
@@ -18,8 +19,11 @@ struct DroneMapData
 	double lat, lng;
 	double landElevation, buildingHeight;
 
+	DroneMapData() = default;
+
 	DroneMapData(double _lat, double _lng, double _landElevation, double _buildingHeight)
 		: lat(_lat), lng(_lng), landElevation(_landElevation), buildingHeight(_buildingHeight) {}
+
 };
 
 class DroneMap
@@ -29,6 +33,9 @@ private:
 
 	MYSQL* dbConn;
 	std::vector<DroneMapData> resultSet;
+
+	std::map<std::pair<int, int>, DroneMapData> dataMap;
+
 	bool hasConnection;
 
 	bool doQuery(std::string command);
