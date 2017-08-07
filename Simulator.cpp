@@ -10,8 +10,13 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <queue>
+#include <utility>
 
-using namespace std;
+void Simulator::getStations(std::vector<DroneStation> &_stations)
+{
+	_stations = stations;
+}
 
 /**
 @brief get events from CSV file
@@ -23,14 +28,14 @@ void Simulator::getEventsFromCSV(char* fname)
 {
 	FILE *fr;
 
-	ifstream file(fname);
-	string line;
+	std::ifstream file(fname);
+	std::string line;
 	fopen_s(&fr, fname, "r");
 
 	while(getline(file,line))
 	{
 		double lng, lat, oDate, oTime, aDate, aTime;
-		vector <double> newline;
+		std::vector <double> newline;
 		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &lng, &lat, &oDate, &oTime, &aDate, &aTime);
 		
 		Time occuredDate, ambulDate;
@@ -45,7 +50,8 @@ void Simulator::getEventsFromCSV(char* fname)
 		ambulDate.hour = int(aTime / 100);
 		ambulDate.min = int(aTime) % 100;
 
-		events.push_back(Event(lat, lng, occuredDate, ambulDate));
+		events.push_back(Event(lat, lng, occuredDate, ambulDate)); //E_EVENT_OCCURED
+		
 	}
 	fclose(fr);
 }
@@ -100,63 +106,82 @@ void Simulator::start(Time start, Time end)
 
 
 	Time currentTime = start;
-	while (true)
+
+	std::priority_queue<int, std::vector<Event>, comparator> events;
+
+	while (!events.empty())
 	{
-		if (Time::isSame(currentTime, end)) return;
+		Event e = events.top();
+		events.pop();
 
-		for(int i = 0; i != std::distance(occuredTimeVec.begin(), occuredTimeVec.end());)
+		switch (e.getEventType())
 		{
-			if(Time::isSame(currentTime, sortedEvents[i].getOccuredDate()))
-			{
-				eventOccured(sortedEvents[i].getCoordinates(),sortedEvents[i].getOccuredDate());
-				return;
-			}
-		}
+		case "E_EVENT_OCCURED":
+			eventOccured(e.getCoordinates(), e.getOccuredDate());
+			break;
 
-		for (int i = 0; i != std::distance(eventArrivalTimeVec.begin(), eventArrivalTimeVec.end());)
-		{
-			if (Time::isSame(currentTime, eventArrivalTimeVec[i].second))
-			{
-				comingBack();
-				return;
-			}
+		case "E_EVENT_ARRIVAL":
+			eventArrived(e.getCoordinates(), e.getOccuredDate(), e.getStationDroneIdx());
+			break;
+		case "E_STATION_ARRIVAL":
+			stationArrival(e.getOccuredDate(),e.getStationDroneIdx());
+			break;
 		}
-
-		for (int i = 0; i != std::distance(stationArrivalTimeVec.begin(), stationArrivalTimeVec.end());)
-		{
-			if (Time::isSame(currentTime, stationArrivalTimeVec[i].second))
-			{
-				return;
-			}
-		}
-
-		currentTime = Time::timeAdding(currentTime, 60);
 	}
 }
 
-
 void Simulator::eventOccured(std::pair<double, double> coordinates, Time occuredTime)
 {
-	DroneStationFinder finder(coordinates);
 
+	//find stations and drone
+	DroneStationFinder finder(coordinates);
 	int stationIndex = finder.findCloestStation();
-	int droneIndex = finder.findAvailableDrone(stationIndex);
+	int droneIndex = finder.findAvailableDrone(stationIndex, occuredTime);
 
 	double distance = finder.getDistanceFromRecentEvent(stations[stationIndex].stationLng, stations[stationIndex].stationLat);
-	
+
+	//calculate time
 	PathPlanner pathPlanner;
 	double calculatedTime;
 	calculatedTime = pathPlanner.calcTravelTime(stations[stationIndex].stationLat, stations[stationIndex].stationLng, coordinates.second, coordinates.first);
 
-	stations[stationIndex].transfer(droneIndex, distance, occuredTime, calculatedTime);
+	Time droneArrivalTime = Time::timeAdding(occuredTime, calculatedTime);
 
-	Time eventArrivalTime = Time::timeAdding(occuredTime, calculatedTime);
+	//battery consumption, inStation=false
+	stations[stationIndex].drones[droneIndex].fly(distance, false);
 
+	//declare coming event
+	std::pair<double, double> startCoord = std::make_pair(stations[stationIndex].stationLat, stations[stationIndex].stationLng);
+	Event e(coordinates.first, coordinates.second, droneArrivalTime, droneArrivalTime); //E_EVENT_ARRIVAL
+	e.setStationDroneIdx(stationIndex, droneIndex);
+	events.push_back(e);
 	return;
 }
 
-void Simulator::comingBack()
+void Simulator::eventArrived(std::pair<double, double> occuredCoord, Time occuredTime, std::pair<int, int> stationDroneIdx)
 {
+	//time to return to the Drone Station
+	PathPlanner pathPlanner;
+	double calculatedTime;
+	calculatedTime = pathPlanner.calcTravelTime(occuredCoord.first, occuredCoord.second, stations[stationDroneIdx.first].stationLat, stations[stationDroneIdx.first].stationLng);
+	
+	//time when drone reach the station
+	Time droneArrivalTime = Time::timeAdding(occuredTime, calculatedTime);
 
+	double distance; //have to write
+
+	//battery consumption, inStation=false
+	stations[stationDroneIdx.first].drones[stationDroneIdx.second].fly(distance, false);
+
+	//event of arriving
+	Event e(occuredCoord.first, occuredCoord.second, droneArrivalTime, droneArrivalTime);
+	e.setStationDroneIdx( stationDroneIdx.first, stationDroneIdx.second);
+	events.push_back(Event(occuredCoord.first, occuredCoord.second, droneArrivalTime, droneArrivalTime)); //E_STATION_ARRIVAL
 	return;
+}
+
+void Simulator::stationArrival(Time arrivalTime, std::pair<int, int>stationDroneIdx)
+{
+	//add to charging drone, inStation=true
+	stations[stationDroneIdx.first].addChargingDrone(arrivalTime, stationDroneIdx);
 }

@@ -3,7 +3,6 @@
 #include <utility>
 #include "Event.h"
 #include "Time.h"
-#include "PathPlanner.h"
 #include "DroneStation.h"
 #include "DroneStationFinder.h"
 
@@ -22,12 +21,14 @@ public:
 	std::vector<std::pair<int, Time> > eventArrivalTimeVec;
 	std::vector<std::pair<int, Time> > stationArrivalTimeVec;
 	void getEventsFromCSV(char* fname);
+	void getStations(std::vector<DroneStation> &_stations);
+
 	std::vector<Event> getEvents();
 	void updateEventsBtwRange(Time start, Time end);
 	void start(Time start, Time end);
-
 	void eventOccured(std::pair<double, double> coordinates, Time occuredTime);
-	void comingBack();
+	void eventArrived(std::pair<double, double> occuredCoord, Time occuredTime, std::pair<int, int>stationDroneIdx);
+	void stationArrival(Time arrivalTime, std::pair<int, int>stationDroneIdx);
 
 };
 

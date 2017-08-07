@@ -14,7 +14,7 @@
 @param
 @return
 */
-void Drone::fly(double distance)
+void Drone::fly(double distance, bool _inStation)
 {
 	if(distance < 0) return;
 
@@ -23,6 +23,7 @@ void Drone::fly(double distance)
 	else if(consumedBattery > battery) return;
 
 	battery -= consumedBattery;
+	inStation = _inStation;
 }
 
 
@@ -60,6 +61,7 @@ Drone::Drone(double _maxAvailDist)
 {
 	maxAvailDist = _maxAvailDist;
 	battery = 100;
+	inStation = true;
 }
 
 
@@ -72,4 +74,14 @@ Drone::Drone(double _maxAvailDist)
 double Drone::returnAvailDist()
 {
 	return availDist;
+}
+
+bool Drone::isInStation()
+{
+	return inStation;
+}
+
+void Drone::setInStation(bool _inStation)
+{
+	inStation = _inStation;
 }

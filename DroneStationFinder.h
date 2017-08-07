@@ -16,5 +16,5 @@ public:
 	double getDistanceFromRecentEvent(double wgsLat, double wgsLng);
 	DroneStationFinder(std::pair<double, double>);
 	int findCloestStation();
-	int findAvailableDrone(int stationIndex);
+	int findAvailableDrone(int stationIndex, Time currentTime);
 };

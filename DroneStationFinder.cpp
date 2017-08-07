@@ -61,13 +61,14 @@ DroneStationFinder::DroneStationFinder(std::pair<double, double> coordinate)
 	eventLat = coordinate.second;
 }
 
-int DroneStationFinder::findAvailableDrone(int stationIndex)
+int DroneStationFinder::findAvailableDrone(int stationIndex, Time currentTime)
 {
+	stations[stationIndex].updateChargingDrones(currentTime);
 	if(stations[stationIndex].drones.empty()) return -1;
 	for(auto it = stations[stationIndex].drones.begin(); it != stations[stationIndex].drones.end(); it++)
 	{
 		double distance = getDistanceFromRecentEvent(stations[stationIndex].stationLng, stations[stationIndex].stationLat);
-		if(it->returnAvailDist() > distance) return int(std::distance(stations[stationIndex].drones.begin(), it));
+		if(it->returnAvailDist() > distance && it->isInStation()) return int(std::distance(stations[stationIndex].drones.begin(), it));
 	}
 	return -1;
 }

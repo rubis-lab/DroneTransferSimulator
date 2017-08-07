@@ -22,26 +22,6 @@ void DroneStation::setDroneNum(int n)
 	nDrone = n;
 }
 
-/**
-@brief drone transfered from station
-@details add the transfered drone to FlyingDrone vector
-@param
-@return
-*/
-void DroneStation::transfer(int _droneIndex, double _distance, Time _occuredTime, double calculatedTime)
-{
-	if (drones.begin() + _droneIndex >= drones.end() || _droneIndex < 0) return;
-	drones[_droneIndex].fly(_distance);
-
-	flyingDrone newFlyingDrone;
-	newFlyingDrone.droneIndex = _droneIndex;
-	newFlyingDrone.distance = _distance;
-	newFlyingDrone.occuredTime = _occuredTime;
-	newFlyingDrone.eventArrivalTime = Time::timeAdding(_occuredTime, calculatedTime);
-	newFlyingDrone.centerArrivalTime = Time::timeAdding(newFlyingDrone.eventArrivalTime, calculatedTime);
-	flyingDrones.push_back(newFlyingDrone);
-}
-
 
 /**
 @brief upgrade the number of drone in the drone station
@@ -49,43 +29,29 @@ void DroneStation::transfer(int _droneIndex, double _distance, Time _occuredTime
 @param
 @return
 */
-void DroneStation::updateFlyingDrones(Time currentTime)
+void DroneStation::updateChargingDrones(Time currentTime)
 {
-	for (int i = 0; i != distance(flyingDrones.begin(), flyingDrones.end());)
+	for(int i = 0; i != distance(chargingDrones.begin(), chargingDrones.end());)
 	{
-		flyingDrone returnedDrone = flyingDrones[i];
-		if (Time::timeComparator(returnedDrone.centerArrivalTime, currentTime))						//if drone arrived
+		chargingDrone returnedDrone = chargingDrones[i];
+		
+		drones[returnedDrone.droneIndex].charge(returnedDrone.centerArrivalTime, currentTime);	//battery charged from centerArrivalTime
+
+		if (drones[returnedDrone.droneIndex].returnBattery() >= 100)
 		{
-			flyingDrones.erase(flyingDrones.begin() + i);											//erase from 
-			drones[returnedDrone.droneIndex].fly(returnedDrone.distance);							//battery consumed
-			drones[returnedDrone.droneIndex].charge(returnedDrone.centerArrivalTime, currentTime);	//battery charged from centerArrivalTime
-
-			double _battery = drones[returnedDrone.droneIndex].returnBattery();
-
-			if (drones[returnedDrone.droneIndex].returnBattery() >= 100) drones[returnedDrone.droneIndex].setBattery(100);	//if full charged, battery=100
-			else																					//if battery <100, push back to charging drone vector
-			{
-				chargingDrone newChargingDrone;
-				newChargingDrone.droneIndex = returnedDrone.droneIndex;
-				newChargingDrone.centerArrivalTime = returnedDrone.centerArrivalTime;
-
-				chargingDrones.push_back(newChargingDrone);
-			}
+			drones[returnedDrone.droneIndex].setBattery(100); //if full charged, battery=100
+			chargingDrones.erase(chargingDrones.begin() + i);
 		}
 		else i++;
 	}
 }
 
-void DroneStation::updateDroneBattery(Time currentTime)
-{ //pair <index, battery>
-	for (int i = 0; i != distance(chargingDrones.begin(), chargingDrones.end());)
-	{
-		chargingDrone newChargingDrone = chargingDrones[i];
-		drones[newChargingDrone.droneIndex].charge(newChargingDrone.centerArrivalTime, currentTime);
-		if (drones[newChargingDrone.droneIndex].returnBattery() >100)
-		{
-			chargingDrones.erase(chargingDrones.begin() + i);
-		}
-		else i++;
-	}
+void DroneStation::addChargingDrone(Time arrivalTime, std::pair<int,int> stationDroneIdx)
+{
+	chargingDrone d;
+	d.centerArrivalTime = arrivalTime;
+	d.droneIndex = stationDroneIdx.second;
+	chargingDrones.push_back(d);
+
+	drones[stationDroneIdx.second].setInStation(true);
 }

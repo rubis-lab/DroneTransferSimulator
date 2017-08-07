@@ -43,9 +43,3 @@ Time Time::timeAdding(Time t, double second)
 
 	return addedTime;
 }
-
-bool Time::isSame(Time t1, Time t2)
-{
-	if (t1.min == t2.min && t1.hour == t2.hour && t1.date == t2.date && t1.month == t2.month && t1.year == t2.year) return true;
-	else return false;
-}

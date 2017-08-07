@@ -10,14 +10,7 @@ class DroneStation
 {
 private:
 	int nDrone, nMaxDrone;
-	void setDroneNum(int n);
-	struct flyingDrone
-	{
-		int droneIndex;
-		double distance;
-		Time occuredTime, eventArrivalTime, centerArrivalTime;
-	};
-	std::vector<flyingDrone> flyingDrones;
+	void setDroneNum(int n);\
 
 	struct chargingDrone
 	{
@@ -31,10 +24,8 @@ public:
 	double coverRange;
 	double stationLng, stationLat;
 	DroneStation(int _nMaxDrone, double _coverRange, double _stationLng, double _stationLat);
-	void transfer(int droneIndex, double distance, Time occuredTime, double calculatedTime);
-	void updateFlyingDrones(Time currentTime, int calculatedTime);
-	void updateFlyingDrones(Time currentTime);
-	void updateDroneBattery(Time currentTime);
+	void updateChargingDrones(Time currentTime);
+	void addChargingDrone(Time arrivalTime, std::pair<int,int> stationDroneIdx);
 };
 
 #endif

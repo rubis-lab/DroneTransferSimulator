@@ -23,14 +23,31 @@ Time Event::getOccuredDate()
 	return occuredDate;
 }
 
+char Event::getEventType()
+{
+	return type;
+}
+
 
 std::pair<double, double> Event::getCoordinates()
 {
 	return std::make_pair(lat, lng);
 }
 
+void Event::setStationDroneIdx(int _stationIndex, int _droneIndex)
+{
+	stationIndex = _stationIndex;
+	droneIndex = _droneIndex;
+}
+
+std::pair<int, int> Event::getStationDroneIdx()
+{
+	return std::make_pair(stationIndex, droneIndex);
+}
 
 bool Event::operator<(const Event& event)
 {
 	return (Time::timeComparator(occuredDate, event.occuredDate));
 }
+
+
