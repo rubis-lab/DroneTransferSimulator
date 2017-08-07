@@ -31,7 +31,7 @@ private:
 	double dstLat, dstLng;
 
 	/* key: in/out direction, value: map(key: in/out velocity, value: cubeTime) */
-	std::map<std::pair<char, char>, std::map<std::pair<int, int>, double> > cubeTime;
+	std::map<std::pair<char, char>, std::map<std::pair<int, int>, double>> cubeTime;
 
 	class Cube
 	{

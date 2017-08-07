@@ -11,7 +11,7 @@ class DroneStation
 private:
 	int nDrone, nMaxDrone;
 	void setDroneNum(int n);
-	std::vector<std::tuple<int , double, Time, bool> > flyingDrone;
+	std::vector<std::tuple<int , double, Time, bool>> flyingDrone;
 
 public:
 	std::vector<Drone> drones;
