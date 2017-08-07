@@ -15,7 +15,7 @@ From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_5
 4. Start downloading MySQL installer
  - Click "**No thanks, just start my download.**"
 5. Choose setup as ***Server only***
- ![picture](img/Installer.PNG)
+ ![picture](img/Installer.png)
 
 > Project environment settings
 
