@@ -43,6 +43,7 @@ private:
 		Cube(char _inFace, char _outFace);
 		Cube(char _inFace, char _outFace, int _inVelocity, int _outVelocity);
 
+		void setCubeVelocity(int _inVelocity, int _outVelocity);
 		int getType();
 	};
 

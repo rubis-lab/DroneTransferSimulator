@@ -32,6 +32,20 @@ PathPlanner::Cube::Cube(char _inFace, char _outFace)
 }
 
 /**
+@brief		Cube velocity setter
+@details	Set in and out velocity
+@param
+_inVelocity : input velocity
+_outVelocity : output velocity
+@return
+*/
+void PathPlanner::Cube::setCubeVelocity(int _inVelocity, int _outVelocity)
+{
+	inVelocity = _inVelocity;
+	outVelocity = _outVelocity;
+}
+
+/**
 @brief		Getter of cube type integer
 @details
 Encode as 8 digits integer to access the cube parameters
@@ -205,7 +219,6 @@ double PathPlanner::calcMaxHeight(double srcLat, double srcLng, double dstLat, d
 
 		const std::vector<DroneMapData> resultSet = droneMap->getData(srcRow, col, dstRow, col);
 		for(auto e : resultSet) maxHeight = max(maxHeight, e.buildingHeight + e.landElevation);
-		
 	}
 	return maxHeight;
 }
@@ -223,10 +236,11 @@ dstLng : destination longitude in wgs84
 double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng)
 {
 	std::vector<PathPlanner::Cube> cubes = makeNaivePath(srcLat, srcLng, dstLat, dstLng);
-	// Calculate travel time from sequential cubes
 
-	std::map<int, double> minTime;
-	minTime.insert(std::make_pair(0, 0.0));
+	// Calculate travel time from sequential cubes
+	std::vector<std::map<int, int>> minPath(cubes.size() + 1);
+	std::vector<std::map<int, double>> minTime(cubes.size() + 1);
+	minTime[0].insert(std::make_pair(0, 0.0));
 
 	for(int i = 0; i < cubes.size(); i++)
 	{
@@ -236,8 +250,7 @@ double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, 
 		std::pair<char, char> face = std::make_pair(inFace, outFace);
 		auto velMap = cubeTime[face];
 
-		std::map<int, double> tmp;
-		for(auto f : minTime)
+		for(auto f : minTime[i])
 		{
 			int inVelocity = f.first;
 			for(int outVelocity = 0; outVelocity <= 60; outVelocity += 10)
@@ -246,17 +259,34 @@ double PathPlanner::calcTravelTime(double srcLat, double srcLng, double dstLat, 
 				if(velMap.find(velocity) != velMap.end())
 				{
 					double time = f.second + velMap[velocity];
-					if(tmp.find(outVelocity) == tmp.end()) tmp.insert(std::make_pair(outVelocity, time));
-					else tmp[outVelocity] = min(tmp[outVelocity], time);
+					if(minTime[i + 1].find(outVelocity) == minTime[i + 1].end())
+					{
+						minTime[i + 1].insert(std::make_pair(outVelocity, time));
+						minPath[i + 1].insert(std::make_pair(outVelocity, inVelocity));
+					}
+					else
+					{
+						if(minTime[i + 1][outVelocity] > time)
+						{
+							minTime[i + 1][outVelocity] = time;
+							minPath[i + 1][outVelocity] = inVelocity;
+						}
+					}
 				}
 			}
 		}
-		minTime = tmp;
 	}
 
-//	for(auto e : cubes) totalTime += getRequiredTime(e.getType());
+	int inVel = 0;
+	for(int i = cubes.size(); i > 0; i--)
+	{
+		int outVel = inVel;
+		inVel = minPath[i][outVel];
+		cubes[i - 1].setCubeVelocity(inVel, outVel);
+	}
 
-	double totalTime = minTime[0];
+	double totalTime = 0;
+	for(auto e : cubes) totalTime += getRequiredTime(e.getType());
 
 	return totalTime;
 }
