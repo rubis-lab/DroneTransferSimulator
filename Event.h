@@ -13,18 +13,18 @@ private:
 	double lat, lng;
 	Time occuredDate, ambulDate;
 	int stationIndex, droneIndex;
-	char type;
-
+	
 public:
-	Event(double _lat, double _lng, Time _oDate, Time _ambulDate);
+	enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
+	eventType e = E_EVENT_OCCURED;
+	enum eventType type;
+	Event(double _lat, double _lng, Time _oDate, Time _ambulDate, eventType _type);
 	Time getOccuredDate();
-	char getEventType();
+	enum eventType getEventType();
 	std::pair<double, double> getCoordinates();
-	std::pair<double, double> getDestCoord();
 	void setStationDroneIdx(int _stationIndex, int _droneIndex);
 	std::pair<int, int> getStationDroneIdx();
 	bool operator<(const Event& event);
-	
 };
 
 #endif
