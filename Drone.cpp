@@ -14,7 +14,7 @@
 @param
 @return
 */
-void Drone::fly(double distance, bool _inStation)
+void Drone::fly(double distance)
 {
 	if(distance < 0) return;
 
@@ -23,7 +23,6 @@ void Drone::fly(double distance, bool _inStation)
 	else if(consumedBattery > battery) return;
 
 	battery -= consumedBattery;
-	inStation = _inStation;
 }
 
 
@@ -50,7 +49,12 @@ double Drone::returnBattery()
 	return battery;
 }
 
-
+/**
+@brief set battery of drone
+@details 
+@param battery (percent)
+@return
+*/
 void Drone::setBattery(double _battery)
 {
 	battery = _battery;
@@ -61,7 +65,7 @@ Drone::Drone(double _maxAvailDist)
 {
 	maxAvailDist = _maxAvailDist;
 	battery = 100;
-	inStation = true;
+	status = 0;
 }
 
 
@@ -76,12 +80,22 @@ double Drone::returnAvailDist()
 	return availDist;
 }
 
-bool Drone::isInStation()
+int Drone::returnStatus()
 {
-	return inStation;
+	return status;
 }
 
-void Drone::setInStation(bool _inStation)
+void Drone::setStatus(int _status)
 {
-	inStation = _inStation;
+	status = _status;
+}
+
+void Drone::setChargeStartTime(Time _chargeStartTime)
+{
+	chargeStartTime = _chargeStartTime;
+}
+
+Time Drone::getChargeStartTime()
+{
+	return chargeStartTime;
 }

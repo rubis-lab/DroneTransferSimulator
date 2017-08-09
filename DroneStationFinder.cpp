@@ -5,9 +5,9 @@
 #include <queue>
 
 /**
-@brief return distance between two points
+@brief return distance between event and drone station
 @details
-@param latitude, longitude of two points
+@param latitude, longitude of drone station
 @return distance (km)
 */
 double DroneStationFinder::getDistanceFromRecentEvent(double wgsLng, double wgsLat)
@@ -26,27 +26,27 @@ double DroneStationFinder::getDistanceFromRecentEvent(double wgsLng, double wgsL
 */
 bool DroneStationFinder::distanceComparator(DroneStation x, DroneStation y)
 {
-	return (getDistanceFromRecentEvent(x.stationLng, x.stationLat)>getDistanceFromRecentEvent(y.stationLng, y.stationLat));
+	return (getDistanceFromRecentEvent(x.stationLng, x.stationLat)<getDistanceFromRecentEvent(y.stationLng, y.stationLat));
 }
 
 /**
 @brief finding drone station
 @details finding cloest drone station of which coverage is bigger than distance
 @param 
-@return index of closest station in stations vector
+@return vector of drone stations
 */
-void DroneStationFinder::findAvailableStation()
+void DroneStationFinder::findAvailableStations()
 {
-	stations = StationManager::getStations();
+	std::vector<DroneStation> stations = StationManager::getStations();
 	for(int i=0; i!=std::distance(stations.begin(),stations.end()); ++i)
 	{
 		double distance = getDistanceFromRecentEvent(stations[i].stationLng, stations[i].stationLat);
-		if(stations[i].coverRange > distance) 
+		if(stations[i].coverRange > distance)
 		{
 			availableStations.push_back(stations[i]);
 		}		
 	}
-	std::priority_queue<int, std::vector<DroneStation>, comparator> availableStations;
+	std::sort(availableStations.begin(), availableStations.end());
 }
 
 DroneStationFinder::DroneStationFinder(std::pair<double, double> coordinate)
@@ -59,18 +59,21 @@ DroneStationFinder::DroneStationFinder(std::pair<double, double> coordinate)
 @brief find if there is available drone
 @details
 @param
-@return index of available drone
+@return index of available drone station and drone
 */
 std::pair<int,int> DroneStationFinder::findAvailableDrone(Time currentTime)
 {
-	for (auto it = availableStations.begin(); it != availableStations.end(); it++)
+	for(auto it = availableStations.begin(); it != availableStations.end(); it++)
 	{
 		it->updateChargingDrones(currentTime);
-		if (it->drones.empty()) continue;
-		for (auto itt = it->drones.begin(); itt != it->drones.end(); itt++)
+		if(it->drones.empty()) continue;
+		else
 		{
-			double distance = getDistanceFromRecentEvent(it->stationLng, it->stationLat);
-			if (itt->returnAvailDist() > distance && itt->isInStation()) return std::make_pair(int(std::distance(availableStations.begin(),it)), int(std::distance(it->drones.begin(), itt)));
+			for(auto itt = it->drones.begin(); itt != it->drones.end(); itt++)
+			{
+				double distance = getDistanceFromRecentEvent(it->stationLng, it->stationLat);
+				if(itt->returnStatus()!=1 && itt->returnAvailDist() > distance) return std::make_pair(int(std::distance(availableStations.begin(), it)), int(std::distance(it->drones.begin(), itt)));
+			}
 		}
 	}
 }

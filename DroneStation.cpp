@@ -7,7 +7,6 @@
  
 #include "DroneStation.h"
 #include <tuple>
-
 DroneStation::DroneStation(int _nMaxDrone, double _coverRange, double _stationLng, double _stationLat)
 {
 	nMaxDrone = _nMaxDrone;
@@ -31,27 +30,17 @@ void DroneStation::setDroneNum(int n)
 */
 void DroneStation::updateChargingDrones(Time currentTime)
 {
-	for(int i = 0; i != distance(chargingDrones.begin(), chargingDrones.end());)
+	for(auto it =drones.begin() ; it != drones.end() ;it++)
 	{
-		chargingDrone returnedDrone = chargingDrones[i];
-		
-		drones[returnedDrone.droneIndex].charge(returnedDrone.centerArrivalTime, currentTime);	//battery charged from centerArrivalTime
-
-		if (drones[returnedDrone.droneIndex].returnBattery() >= 100)
+		if(it->returnStatus()== 2) 
 		{
-			drones[returnedDrone.droneIndex].setBattery(100); //if full charged, battery=100
-			chargingDrones.erase(chargingDrones.begin() + i);
+			it->charge(it->getChargeStartTime(), currentTime); //battery charged from centerArrivalTime
+
+			if(it->returnBattery() >= 100)
+			{
+				it->setBattery(100);
+				it->setStatus(0);
+			}
 		}
-		else i++;
 	}
-}
-
-void DroneStation::addChargingDrone(Time arrivalTime, std::pair<int,int> stationDroneIdx)
-{
-	chargingDrone d;
-	d.centerArrivalTime = arrivalTime;
-	d.droneIndex = stationDroneIdx.second;
-	chargingDrones.push_back(d);
-
-	drones[stationDroneIdx.second].setInStation(true);
 }

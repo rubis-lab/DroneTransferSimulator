@@ -9,19 +9,21 @@ class Drone
 private:
 	double battery, chargingRate;	/* unit: percent */
 	double availDist, maxAvailDist; /* available distance of Drone */
-	bool inStation;
+	int status;						/* 0: in station, 1: flying, 2: charging*/
 	std::pair<double, double> destination;
-	std::vector<int> chargingDrone;
+	Time chargeStartTime;
 
 public:
 	Drone(double _maxAvilDist);
-	void fly(double distance, bool inStation);
+	void fly(double distance);
 	void charge(Time startTime, Time endTime);
 	double returnBattery();
 	void setBattery(double _battery);
 	double returnAvailDist();
-	bool isInStation();
-	void setInStation(bool _inStation);
+	int returnStatus();
+	void setStatus(int _status);
+	void setChargeStartTime(Time _chargeStartTime);
+	Time getChargeStartTime();
 };
 
 #endif
