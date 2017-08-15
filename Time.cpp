@@ -13,7 +13,7 @@ bool Time::timeComparator(Time t1, Time t2)
 	else if(t1.date != t2.date) return(t1.date < t2.date);
 	else if(t1.hour != t2.hour) return (t1.hour < t2.hour);
 	else if(t1.min != t2.min) return (t1.min < t2.min);
-	else return true;
+	else return false;
 }
 
 /**
