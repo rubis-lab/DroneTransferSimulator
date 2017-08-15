@@ -10,9 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
-#include <queue>
 #include <utility>
+#include <sstream>
 
 void Simulator::getStations(std::vector<DroneStation> &_stations)
 {
@@ -27,39 +26,42 @@ void Simulator::getStations(std::vector<DroneStation> &_stations)
 */
 void Simulator::getEventsFromCSV(char* fname)
 {
-	FILE *fr;
-
 	std::ifstream file(fname);
-	std::string line;
-	fopen_s(&fr, fname, "r");
 
-	while(getline(file,line))
+	while(file)
 	{
-		double lng, lat, oDate, oTime, aDate, aTime;
-		std::vector <double> newline;
-		fscanf_s(fr, "%lf %lf %lf %lf %lf %lf\n", &lng, &lat, &oDate, &oTime, &aDate, &aTime);
-		
+		std::string line;
+		if(!std::getline(file, line)) break;
+
+		std::istringstream ss(line);
+		std::vector <std::string> record;
+
+		while(ss)
+		{
+			std::string s;
+			if(!std::getline(ss, s, ',')) break;
+			record.push_back(s);
+		}
+		if (record.size() != 6) break;
+
 		Time occuredDate, ambulDate;
-		occuredDate.year = int(oDate / 10000);
-		occuredDate.month = int(oDate / 100000) /100;
-		occuredDate.date = int(oDate) % 100;
-		occuredDate.hour = int(oTime / 100);
-		occuredDate.min = int(oTime) % 100;
-		ambulDate.year = int(aDate / 10000);
-		ambulDate.month = int(aDate/ 10000) / 100;
-		ambulDate.date = int(aDate) % 100; 
-		ambulDate.hour = int(aTime / 100);
-		ambulDate.min = int(aTime) % 100;
+		double lng = stod(record[0], nullptr);
+		double lat = stod(record[1], nullptr);
+		occuredDate.year = stoi(record[2], nullptr) / 10000;
+		occuredDate.month = (stoi(record[2], nullptr) % 10000) / 100;
+		occuredDate.date = stoi(record[2], nullptr) % 100;
+		occuredDate.hour = stoi(record[3], nullptr) / 100;
+		occuredDate.min = stoi(record[3], nullptr) % 100;
+		ambulDate.year = stoi(record[4], nullptr) / 10000;
+		ambulDate.month = (stoi(record[4], nullptr) % 10000) / 100;
+		ambulDate.date = stoi(record[4], nullptr) % 100;
+		ambulDate.hour = stoi(record[5], nullptr) / 100;
+		ambulDate.min = stoi(record[5], nullptr) % 100;
 
 		Event::eventType e = Event::E_EVENT_OCCURED;
 		events.push_back(Event(lat, lng, occuredDate, ambulDate, e)); //E_EVENT_OCCURED
+	
 	}
-	fclose(fr);
-}
-
-std::vector<Event> Simulator::getEvents()
-{
-	return events;
 }
 
 /**
@@ -74,18 +76,20 @@ void Simulator::updateEventsBtwRange(Time start, Time end)
 
 	std::sort(events.begin(), events.end());
 	int i = 0, startIndex = 0, endIndex = 0;
-	for(auto it = events.begin(); it!= events.end(); ++it)
+	for (auto it = events.begin(); it != events.end(); ++it)
 	{
-		if(Time::timeComparator(start, it->getOccuredDate()))
+		if (Time::timeComparator(it->getOccuredDate(), start))
 		{
 			startIndex++;
 			endIndex++;
 		}
-		else if(Time::timeComparator(it->getOccuredDate(), end)) endIndex++;
+		else if (Time::timeComparator(it->getOccuredDate(), end)) endIndex++;
+		else break;
 	}
 
 	if(endIndex <= startIndex) return;
 	if(endIndex == startIndex + 1) std::cout << "No events" << std::endl;
+
 	sortedEvents = std::vector<Event>(events.begin() + startIndex, events.begin() + endIndex);
 }
 
@@ -100,14 +104,15 @@ void Simulator::start(Time start, Time end)
 	getEventsFromCSV("data.csv");
 	updateEventsBtwRange(start, end);
 
-	Time currentTime = start;
-
-	std::priority_queue<int, std::vector<Event>, comparator> events;
-
-	while (!events.empty())
+	for (int i = 0; i != std::distance(sortedEvents.begin(), sortedEvents.end()); i++)
 	{
-		Event e = events.top();
-		events.pop();
+		eventsQueue.push(sortedEvents[i]);
+	}
+
+	while (!eventsQueue.empty())
+	{
+		Event e = eventsQueue.top();
+		eventsQueue.pop();
 
 		switch (e.getEventType())
 		{
@@ -137,6 +142,7 @@ void Simulator::eventOccured(std::pair<double, double> coordinates, Time occured
 	DroneStationFinder finder(coordinates);
 	finder.findAvailableStations();
 	std::pair<int,int> stationDroneIdx = finder.findAvailableDrone(occuredTime);
+	if(stationDroneIdx.first == -1) return;
 
 	DroneStation s = stations[stationDroneIdx.first];
 	Drone d = s.drones[stationDroneIdx.second];
@@ -158,7 +164,7 @@ void Simulator::eventOccured(std::pair<double, double> coordinates, Time occured
 	Event::eventType type = Event::E_EVENT_ARRIVAL;
 	Event e(coordinates.first, coordinates.second, droneArrivalTime, droneArrivalTime, type);
 	e.setStationDroneIdx(stationDroneIdx.first, stationDroneIdx.second);
-	events.push_back(e);
+	eventsQueue.push(e);
 	return;
 }
 
@@ -189,9 +195,10 @@ void Simulator::eventArrived(std::pair<double, double> occuredCoord, Time occure
 	Event::eventType type = Event::E_STATION_ARRIVAL;
 	Event e(occuredCoord.first, occuredCoord.second, droneArrivalTime, droneArrivalTime, type);
 	e.setStationDroneIdx(stationDroneIdx.first, stationDroneIdx.second);
-	events.push_back(e);
+	eventsQueue.push(e);
 	return;
 }
+
 
 void Simulator::stationArrival(Time arrivalTime, std::pair<int, int>stationDroneIdx)
 {
