@@ -19,7 +19,7 @@ namespace DroneTransferSimulator
     {
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
- 
+
         public SimulationResult()
         {
             AllocConsole();
@@ -69,12 +69,66 @@ namespace DroneTransferSimulator
 
             gMapControl1.Overlays.Clear();
 
+            drawEventPoint(lat, lng);
+            drawStationPoint(lat - 0.0012, lng + 0.0045);
+
+            gMapControl1.Overlays.Add(markerOverlay);
+            gMapControl1.Position = marker.Position;
+        }
+
+        private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+
+            double lat = gMapControl1.FromLocalToLatLng(e.X, e.Y).Lat;
+            double lng = gMapControl1.FromLocalToLatLng(e.X, e.Y).Lng;
+            drawEventPoint(lat, lng);
+            Console.WriteLine(e.X + ", " + e.Y);
+            gMapControl1.Overlays.Add(markerOverlay);
+            gMapControl1.Position = marker.Position;
+        }
+
+        private void drawEventPoint(double lat, double lng)
+        {
             markerOverlay = new GMapOverlay("dst");
             marker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_dot);
             markerOverlay.Markers.Add(marker);
 
-            gMapControl1.Overlays.Add(markerOverlay);
-            gMapControl1.Position = marker.Position;
+            marker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+            marker.ToolTipText = string.Format("Event");
+            marker.ToolTip.Fill = Brushes.Black;
+            marker.ToolTip.Foreground = Brushes.LightGoldenrodYellow;
+            marker.ToolTip.Stroke = Pens.Black;
+            marker.ToolTip.TextPadding = new Size(5, 5);
+        }
+
+        private void drawStationPoint(double lat, double lng)
+        {
+            List<PointLatLng> points = new List<PointLatLng>();
+            double seg = Math.PI * 2 / 100;
+
+            for (int i = 0; i < 100; i++)
+            {
+                double theta = seg * i;
+                double x = lat + Math.Cos(theta) * 0.0024697;
+                double y = lng + Math.Sin(theta) * 0.0030828;
+
+                points.Add(new PointLatLng(x, y));
+            }
+
+            GMapPolygon gpol = new GMapPolygon(points, "pol");
+            gpol.Fill = new SolidBrush(Color.FromArgb(50, Color.Red));
+            gpol.Stroke = new Pen(Color.Red, 2);
+            markerOverlay.Polygons.Add(gpol);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            trackBar1.Value = Convert.ToInt32(gMapControl1.Zoom);
+        }
+
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            gMapControl1.Zoom = trackBar1.Value;
         }
     }
 }
