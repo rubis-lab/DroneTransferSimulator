@@ -70,6 +70,47 @@ namespace DroneTransferSimulator
             }
         }
 
+        private bool storeDroneMapData(int row, int col)
+        {
+            Tuple<int, int> index = new Tuple<int, int>(row, col);
+            if(dataMap.ContainsKey(index))
+            {
+                resultSet.Add(dataMap[index]);
+            }
+            else
+            {
+                string queryStr = "select * from " + TBL_NAME;
+                string queryWhere = " where ROW = " + row + " and COL = " + col;
+
+                MySqlCommand cmd = new MySqlCommand(queryStr + queryWhere, conn);
+
+                try
+                {
+                    MySqlDataReader rdr = cmd.ExecuteReader();
+
+                    while(rdr.Read())
+                    {
+                        double lat = Convert.ToDouble(rdr[2]);
+                        double lng = Convert.ToDouble(rdr[3]);
+                        double landElevation = Convert.ToDouble(rdr[4]);
+                        double buildingHeight = Convert.ToDouble(rdr[5]);
+
+                        DroneMapData droneMapData = new DroneMapData(lat, lng, landElevation, buildingHeight);
+
+                        resultSet.Add(droneMapData);
+                        dataMap.Add(index, droneMapData);
+                    }
+                    rdr.Close();
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                    return false;
+                }
+            }
+            return true;
+        }
+
         static void Swap<T>(ref T lhs, ref T rhs)
         {
             T temp = lhs;
@@ -81,9 +122,6 @@ namespace DroneTransferSimulator
         {
             if(!hasConnection) return null;
             
-            string queryStr = "select * from ";
-            queryStr += TBL_NAME;
-
             /* Do ascending order for query */
             if(dstRowIdx < srcRowIdx) Swap<int>(ref srcRowIdx, ref dstRowIdx);
             if(dstColIdx < srcColIdx) Swap<int>(ref srcColIdx, ref dstColIdx);
@@ -96,42 +134,7 @@ namespace DroneTransferSimulator
             {
                 for(int col = srcColIdx; col <= dstColIdx; col++)
                 {
-                    Tuple<int, int> index = new Tuple<int, int>(row, col);
-                    if(dataMap.ContainsKey(index))
-                    {
-                        resultSet.Add(dataMap[index]);
-                    }
-                    else
-                    {
-                        string queryWhere = " where ROW = " + row + " and COL = " + col;
-
-                        MySqlCommand cmd = new MySqlCommand(queryStr + queryWhere, conn);
-                        
-                        try
-                        {
-                            MySqlDataReader rdr = cmd.ExecuteReader();
-
-                            while(rdr.Read())
-                            {
-                                double lat = Convert.ToDouble(rdr[2]);
-                                double lng = Convert.ToDouble(rdr[3]);
-                                double landElevation = Convert.ToDouble(rdr[4]);
-                                double buildingHeight = Convert.ToDouble(rdr[5]);
-
-                                DroneMapData droneMapData = new DroneMapData(lat, lng, landElevation, buildingHeight);
-
-                                resultSet.Add(droneMapData);
-                                dataMap.Add(index, droneMapData);
-                            }
-
-                            rdr.Close();
-                        }
-                        catch(Exception e)
-                        {
-                            Console.WriteLine(e.ToString());
-                            return null;
-                        }
-                    }
+                    if(!storeDroneMapData(row, col)) return null;
 		        }
 	        }
             return resultSet;
