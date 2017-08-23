@@ -46,7 +46,18 @@ namespace DroneTransferSimulator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Hello World!");
+            PathPlanner pathPlanner = PathPlanner.getInstance();
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+
+            stopwatch.Start();
+            pathPlanner.calcTravelTime(37.578695, 126.997512, 37.578788, 126.994859);
+            System.Console.WriteLine("Time elapsed : " + stopwatch.ElapsedMilliseconds);
+            stopwatch.Stop();
+
+            stopwatch.Restart();
+            pathPlanner.calcTravelTime(37.578695, 126.997512, 37.578788, 126.994859);
+            System.Console.WriteLine("Time elapsed : " + stopwatch.ElapsedMilliseconds);
+            stopwatch.Stop();
         }
 
         private void pushDataGridRow(double latitude, double longitude, string occuredTime, string droneArrivalTime, string result)
