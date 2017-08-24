@@ -42,12 +42,12 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.stationLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stationLng = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.droneElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -223,34 +223,6 @@
             this.dataGridView2.Size = new System.Drawing.Size(438, 58);
             this.dataGridView2.TabIndex = 1;
             // 
-            // stationLat
-            // 
-            this.stationLat.HeaderText = "Station Latitude";
-            this.stationLat.Name = "stationLat";
-            this.stationLat.ReadOnly = true;
-            this.stationLat.Width = 80;
-            // 
-            // stationLng
-            // 
-            this.stationLng.HeaderText = "Station Longitude";
-            this.stationLng.Name = "stationLng";
-            this.stationLng.ReadOnly = true;
-            this.stationLng.Width = 80;
-            // 
-            // droneElapsedTime
-            // 
-            this.droneElapsedTime.HeaderText = "Drone Elapsed Time";
-            this.droneElapsedTime.Name = "droneElapsedTime";
-            this.droneElapsedTime.ReadOnly = true;
-            this.droneElapsedTime.Width = 130;
-            // 
-            // ambulanceElapsedTime
-            // 
-            this.ambulanceElapsedTime.HeaderText = "Ambulance Elapsed Time";
-            this.ambulanceElapsedTime.Name = "ambulanceElapsedTime";
-            this.ambulanceElapsedTime.ReadOnly = true;
-            this.ambulanceElapsedTime.Width = 130;
-            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.button1);
@@ -266,6 +238,34 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // stationLat
+            // 
+            this.stationLat.HeaderText = "Station Latitude";
+            this.stationLat.Name = "stationLat";
+            this.stationLat.ReadOnly = true;
+            this.stationLat.Width = 85;
+            // 
+            // stationLng
+            // 
+            this.stationLng.HeaderText = "Station Longitude";
+            this.stationLng.Name = "stationLng";
+            this.stationLng.ReadOnly = true;
+            this.stationLng.Width = 85;
+            // 
+            // droneElapsedTime
+            // 
+            this.droneElapsedTime.HeaderText = "Drone Elapsed Time";
+            this.droneElapsedTime.Name = "droneElapsedTime";
+            this.droneElapsedTime.ReadOnly = true;
+            this.droneElapsedTime.Width = 130;
+            // 
+            // ambulanceElapsedTime
+            // 
+            this.ambulanceElapsedTime.HeaderText = "Ambulance Elapsed Time";
+            this.ambulanceElapsedTime.Name = "ambulanceElapsedTime";
+            this.ambulanceElapsedTime.ReadOnly = true;
+            this.ambulanceElapsedTime.Width = 130;
             // 
             // SimulationResult
             // 
