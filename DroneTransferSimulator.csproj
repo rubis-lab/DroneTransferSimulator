@@ -58,8 +58,26 @@
     <Compile Include="Drone.cs" />
     <Compile Include="DroneMap.cs" />
     <Compile Include="DroneStation.cs" />
+    <Compile Include="DroneStationEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DroneStationEditor.Designer.cs">
+      <DependentUpon>DroneStationEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="DroneStationFinder.cs" />
     <Compile Include="Event.cs" />
+    <Compile Include="LoadEventCsv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadEventCsv.Designer.cs">
+      <DependentUpon>LoadEventCsv.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoadStationCsv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoadStationCsv.Designer.cs">
+      <DependentUpon>LoadStationCsv.cs</DependentUpon>
+    </Compile>
     <Compile Include="PathPlanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -70,6 +88,12 @@
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Simulator.cs" />
+    <Compile Include="SimulatorUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimulatorUI.Designer.cs">
+      <DependentUpon>SimulatorUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="StationManager.cs" />
     <Compile Include="Time.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

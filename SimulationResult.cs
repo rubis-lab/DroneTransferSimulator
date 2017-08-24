@@ -20,7 +20,7 @@ namespace DroneTransferSimulator
         SimulatorUI form1;
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
-
+        
         public SimulationResult()
         {
             AllocConsole();
