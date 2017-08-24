@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.filePath = new System.Windows.Forms.Label();
-            this.eventCsvPath = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -43,13 +43,12 @@
             this.filePath.Text = "File Path:";
             this.filePath.Click += new System.EventHandler(this.label1_Click);
             // 
-            // eventCsvPath
+            // textBox1
             // 
-            this.eventCsvPath.Enabled = false;
-            this.eventCsvPath.Location = new System.Drawing.Point(85, 35);
-            this.eventCsvPath.Name = "eventCsvPath";
-            this.eventCsvPath.Size = new System.Drawing.Size(173, 21);
-            this.eventCsvPath.TabIndex = 1;
+            this.textBox1.Location = new System.Drawing.Point(85, 35);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(173, 21);
+            this.textBox1.TabIndex = 1;
             // 
             // button1
             // 
@@ -59,7 +58,6 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Upload CSV";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // LoadEventCsv
             // 
@@ -67,7 +65,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(404, 91);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.eventCsvPath);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.filePath);
             this.Name = "LoadEventCsv";
             this.Text = "Event CSV Importer";
@@ -80,7 +78,7 @@
         #endregion
 
         private System.Windows.Forms.Label filePath;
-        private System.Windows.Forms.TextBox eventCsvPath;
+        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button button1;
     }
 }
