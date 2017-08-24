@@ -23,11 +23,11 @@ namespace DroneTransferSimulator
 
         public void fly(double distance)
         {
-            if (distance < 0) return;
+            if(distance < 0) return;
 
             double consumedBattery = distance / maxAvailDist * 100;
-            if (consumedBattery < 0 || consumedBattery > 100) return;
-            else if (consumedBattery > battery) return;
+            if(consumedBattery < 0 || consumedBattery > 100) return;
+            else if(consumedBattery > battery) return;
 
             battery -= consumedBattery;
         }

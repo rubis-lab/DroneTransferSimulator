@@ -243,6 +243,7 @@
             this.Controls.Add(this.stationTable);
             this.Name = "droneStationEditor";
             this.Text = "Drone Station Editor";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.droneStationEditor_Load);
             ((System.ComponentModel.ISupportInitialize)(this.stationTable)).EndInit();
             this.ResumeLayout(false);

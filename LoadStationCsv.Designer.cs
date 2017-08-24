@@ -68,6 +68,7 @@
             this.Controls.Add(this.filePath);
             this.Name = "LoadStationCsv";
             this.Text = "Drone Station CSV Importer";
+            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 

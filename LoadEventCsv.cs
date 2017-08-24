@@ -13,13 +13,13 @@ namespace DroneTransferSimulator
 {
     public partial class LoadEventCsv : Form
     {
-        simulator frm1;
+        SimulatorUI frm1;
         public LoadEventCsv()
         {
             InitializeComponent();
         }
 
-        public LoadEventCsv(simulator _form)
+        public LoadEventCsv(SimulatorUI _form)
         {
             InitializeComponent();
             frm1 = _form;

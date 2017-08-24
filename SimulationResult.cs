@@ -17,6 +17,7 @@ namespace DroneTransferSimulator
 {
     public partial class SimulationResult : Form
     {
+        SimulatorUI form1;
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
 
@@ -24,6 +25,12 @@ namespace DroneTransferSimulator
         {
             AllocConsole();
             InitializeComponent();
+        }
+
+        public SimulationResult(SimulatorUI _form)
+        {
+            InitializeComponent();
+            form1 = _form;
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
