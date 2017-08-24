@@ -1,8 +1,9 @@
 #include <vector>
 #include <ctime>
+#include <queue>
+#include <utility>
 #include "Event.h"
 #include "Time.h"
-#include "PathPlanner.h"
 #include "DroneStation.h"
 #include "DroneStationFinder.h"
 
@@ -15,12 +16,24 @@ private:
 	std::vector<Event> events;
 	std::vector<Event> sortedEvents;
 	std::vector<DroneStation> stations;
+	struct comparator
+	{
+		bool operator()(Event& lhs, Event& rhs)
+		{
+			return (Time::timeComparator(lhs.getOccuredDate(), rhs.getOccuredDate()));
+		}
+	};
+	std::priority_queue<int, std::vector<Event>, comparator> eventsQueue;
 
 public:
 	void getEventsFromCSV(char* fname);
-	std::vector<Event> getEvents();
+	void getStations(std::vector<DroneStation> &_stations);
 	void updateEventsBtwRange(Time start, Time end);
 	void start(Time start, Time end);
-};
+	void eventOccured(std::pair<double, double> coordinates, Time occuredTime);
+	void eventArrived(std::pair<double, double> occuredCoord, Time occuredTime, std::pair<int, int>stationDroneIdx);
+	void stationArrival(Time arrivalTime, std::pair<int, int>stationDroneIdx);
+	
 
+};
 #endif

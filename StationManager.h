@@ -8,6 +8,6 @@ private:
 public:
 	void getStationLocation(int stationNum, double &lat, double &lng);
 	void setStationLocation(int stationNum, double lat, double lng);
-	void setStationVector();
+	void setStationVector(int maxDrone, double coverRange, double stnLng, double stnLat);
 	static std::vector<DroneStation> getStations();
 };

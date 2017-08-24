@@ -3,21 +3,21 @@
 
 std::vector<DroneStation> StationManager::stations;
 
-void StationManager::getStationLocation(int stationNum, double &lat, double &lng)
+void StationManager::getStationLocation(int stationNum, double &lng, double &lat)
 {
 	lng = stations[stationNum].stationLng;
 	lat = stations[stationNum].stationLat;
 }
 
-void StationManager::setStationLocation(int stationNum, double lat, double lng)
+void StationManager::setStationLocation(int stationNum, double lng, double lat)
 {
 	stations[stationNum].stationLat = lat;
 	stations[stationNum].stationLng = lng;
 }
 
-void StationManager::setStationVector()
+void StationManager::setStationVector(int maxDrone, double coverRange, double stnLng, double stnLat)
 {
-	DroneStation droneStation(1, 2.0, 3.0, 4.0);
+	DroneStation droneStation(maxDrone, coverRange, stnLng, stnLat);
 	stations.push_back(droneStation);
 }
 

@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Drone.h"
 
+
 /**
 @brief drone starts to fly and battery consumed
 @details battery consumption is proportinal to distance
@@ -24,15 +25,39 @@ void Drone::fly(double distance)
 	battery -= consumedBattery;
 }
 
+
 /**
 @brief upgrade the battery of each drone
 @details
 @param
 @return
 */
-void Drone::updateBattery(Time startTime, Time endTime)
+void Drone::charge(Time startTime, Time endTime)
 {
-	return;
+	battery += chargingRate*(Time::getTimeGap(startTime, endTime));
+}
+
+
+/**
+@brief upgrade the battery of each drone
+@details
+@param
+@return
+*/
+double Drone::returnBattery()
+{
+	return battery;
+}
+
+/**
+@brief set battery of drone
+@details 
+@param battery (percent)
+@return
+*/
+void Drone::setBattery(double _battery)
+{
+	battery = _battery;
 }
 
 
@@ -40,7 +65,9 @@ Drone::Drone(double _maxAvailDist)
 {
 	maxAvailDist = _maxAvailDist;
 	battery = 100;
+	status = 0;
 }
+
 
 /**
 @brief return available distance of drone
@@ -51,4 +78,24 @@ Drone::Drone(double _maxAvailDist)
 double Drone::returnAvailDist()
 {
 	return availDist;
+}
+
+int Drone::returnStatus()
+{
+	return status;
+}
+
+void Drone::setStatus(int _status)
+{
+	status = _status;
+}
+
+void Drone::setChargeStartTime(Time _chargeStartTime)
+{
+	chargeStartTime = _chargeStartTime;
+}
+
+Time Drone::getChargeStartTime()
+{
+	return chargeStartTime;
 }

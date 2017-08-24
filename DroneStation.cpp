@@ -7,7 +7,6 @@
  
 #include "DroneStation.h"
 #include <tuple>
-
 DroneStation::DroneStation(int _nMaxDrone, double _coverRange, double _stationLng, double _stationLat)
 {
 	nMaxDrone = _nMaxDrone;
@@ -22,20 +21,6 @@ void DroneStation::setDroneNum(int n)
 	nDrone = n;
 }
 
-/**
-@brief drone transfered from station
-@details add the transfered drone to FlyingDrone vector
-@param
-@return
-*/
-void DroneStation::transfer(int droneIndex, double distance, Time occuredTime, double calculatedTime)
-{
-	if(drones.begin() + droneIndex >= drones.end() || droneIndex < 0) return;
-	drones[droneIndex].fly(distance);
-	std::tuple<int, double, Time, bool> flyingDroneInfo = std::make_tuple(droneIndex, distance, occuredTime, false);
-	flyingDrone.push_back(flyingDroneInfo);
-}
-
 
 /**
 @brief upgrade the number of drone in the drone station
@@ -43,14 +28,19 @@ void DroneStation::transfer(int droneIndex, double distance, Time occuredTime, d
 @param
 @return
 */
-void DroneStation::updateFlyingDrones(Time currentTime, int calculatedTime)
+void DroneStation::updateChargingDrones(Time currentTime)
 {
-	for(int i=0; i!=distance(flyingDrone.begin(), flyingDrone.end()); i++)
+	for(auto it =drones.begin() ; it != drones.end() ;it++)
 	{
-		std::tuple<int, double, Time, bool> flyingDroneInfo = flyingDrone[i];
-		if((Time::getTimeGap(std::get<2>(flyingDroneInfo), currentTime))*60 > calculatedTime) //check if drone arrived
+		if(it->returnStatus()== 2) 
 		{
-			flyingDrone.erase(flyingDrone.begin()+i);
+			it->charge(it->getChargeStartTime(), currentTime); //battery charged from centerArrivalTime
+
+			if(it->returnBattery() >= 100)
+			{
+				it->setBattery(100);
+				it->setStatus(0);
+			}
 		}
 	}
 }
