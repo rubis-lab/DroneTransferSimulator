@@ -19,7 +19,7 @@ namespace DroneTransferSimulator
             return lhs.distance < rhs.distance;
         }
 
-        private List<availableStation> availableStations;
+        private List<availableStation> availableStations= new List<availableStation>();
 
         public double getDistanceFromRecentEvent(double wgsLat, double wgsLng)
         {
@@ -39,10 +39,10 @@ namespace DroneTransferSimulator
         {
             List<DroneStation> stations = new List<DroneStation>();
             StationManager.getStations(ref stations);
-            for (int i = 0; i != stations.Count; ++i)
+            for(int i = 0; i != stations.Count; ++i)
             {
                 double distance = getDistanceFromRecentEvent(stations[i].stationLng, stations[i].stationLat);
-                if (stations[i].coverRange > distance)
+                if(stations[i].coverRange > distance)
                 {
                     availableStation a = new availableStation();
                     a.stationIndex = i;
@@ -61,13 +61,13 @@ namespace DroneTransferSimulator
                 StationManager.getStations(ref stations);
                 DroneStation s = stations[element.stationIndex];
                 s.updateChargingDrones(currentTime);
-                if (s.drones.Count != 0) continue;
+                if(s.drones.Count != 0) continue;
                 else
                 {
                     foreach(Drone droneElement in s.drones)
                     {
                         double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
-                        if (droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<int, int>(availableStations.IndexOf(element), s.drones.IndexOf(droneElement));
+                        if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<int, int>(availableStations.IndexOf(element), s.drones.IndexOf(droneElement));
                     }
                 }
             }

@@ -42,12 +42,12 @@
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.stationLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stationLng = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.droneElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -223,22 +223,6 @@
             this.dataGridView2.Size = new System.Drawing.Size(438, 58);
             this.dataGridView2.TabIndex = 1;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.button1);
-            this.groupBox2.Location = new System.Drawing.Point(6, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(574, 470);
-            this.groupBox2.TabIndex = 4;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Simulation Result";
-            // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 10;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // stationLat
             // 
             this.stationLat.HeaderText = "Station Latitude";
@@ -267,6 +251,22 @@
             this.ambulanceElapsedTime.ReadOnly = true;
             this.ambulanceElapsedTime.Width = 130;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.button1);
+            this.groupBox2.Location = new System.Drawing.Point(6, 4);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(574, 470);
+            this.groupBox2.TabIndex = 4;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Simulation Result";
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 10;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // SimulationResult
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -277,6 +277,7 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "SimulationResult";
             this.Text = "Drone Transfer Simulator";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.SimulationResult_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);

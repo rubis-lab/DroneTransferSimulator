@@ -16,10 +16,10 @@ using GMap.NET.WindowsForms.Markers;
 
 namespace DroneTransferSimulator
 {
-    public partial class droneStationEditor : Form
+    public partial class SimulatorUI : Form
     {
 
-        SimulatorUI frm1;
+        
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
 
@@ -27,24 +27,11 @@ namespace DroneTransferSimulator
         double latInitial = 37.459237;
         double lngInitial = 126.952115;
 
-        public droneStationEditor(SimulatorUI _form)
-        {
-            InitializeComponent();
-            frm1 = _form;
-        }
-
-        public droneStationEditor()
+        public SimulatorUI()
         {
             InitializeComponent();
         }
-
-        private void PopulateDataGridView()
-        {
-            string[] row1 = { "301 building", "37.448673", "126.952511",  "3" };
-            string[] row2 = { "Posco Sports Center", "37.467439", "126.952305", "5" };
-            stationName.DataGridView.Rows.Add(row1);
-        }
-
+        
         private void label1_Click(object sender, EventArgs e)
         {
 
@@ -52,9 +39,6 @@ namespace DroneTransferSimulator
 
         private void droneStationEditor_Load(object sender, EventArgs e)
         {
-            latitudeInput.Text = latInitial.ToString();
-            longitudeInput.Text = lngInitial.ToString();
-
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
             gMapControl1.MapProvider = GMapProviders.GoogleMap;
@@ -72,7 +56,6 @@ namespace DroneTransferSimulator
             //marker.ToolTipText = string.Format("Location:\n Latitude:{0} \n Longitude: {1}", latInitial, lngInitial);
 
             gMapControl1.Overlays.Add(markerOverlay);
-            PopulateDataGridView();
         }
 
         private void gMapControl1_Load(object sender, EventArgs e)
@@ -84,16 +67,28 @@ namespace DroneTransferSimulator
         { 
         }
 
-        private void selectLocation(object sender, DataGridViewCellMouseEventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            rowSelection = e.RowIndex;
-            stationNameInput.Text = stationTable.Rows[rowSelection].Cells[0].Value.ToString();
-            latitudeInput.Text = stationTable.Rows[rowSelection].Cells[1].Value.ToString();
-            longitudeInput.Text = stationTable.Rows[rowSelection].Cells[2].Value.ToString();
-
-            marker.Position = new PointLatLng(Convert.ToDouble(latitudeInput.Text), Convert.ToDouble(longitudeInput.Text));
-            gMapControl1.Position = marker.Position;
+            LoadEventCsv frm = new LoadEventCsv(this);
+            frm.Show();
         }
-        
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            LoadStationCsv frm = new LoadStationCsv(this);
+            frm.Show();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            droneStationEditor frm = new droneStationEditor(this);
+            frm.Show();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            SimulationResult frm = new SimulationResult(this);
+            frm.Show();
+        }
     }
 }

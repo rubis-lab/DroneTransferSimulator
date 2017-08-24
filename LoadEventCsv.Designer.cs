@@ -69,6 +69,7 @@
             this.Controls.Add(this.filePath);
             this.Name = "LoadEventCsv";
             this.Text = "Event CSV Importer";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.LoadEventCsv_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
