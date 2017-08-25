@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
 {
-    class Time
+    public class Time
     {
         public int year = 0, month = 0, date = 0, hour = 0, min = 0;
 

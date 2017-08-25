@@ -16,7 +16,7 @@ namespace DroneTransferSimulator
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SimulationResult());
+            Application.Run(new SimulatorUI());
         }
     }
 }
