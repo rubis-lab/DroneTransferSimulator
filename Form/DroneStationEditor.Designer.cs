@@ -1,6 +1,6 @@
 ﻿namespace DroneTransferSimulator
 {
-    partial class droneStationEditor
+    partial class DroneStationEditor
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -13,7 +13,7 @@
         /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if(disposing && (components != null))
             {
                 components.Dispose();
             }
@@ -101,7 +101,6 @@
             this.label1.Size = new System.Drawing.Size(109, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "Drone Station Map";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // addDroneStation
             // 
@@ -223,7 +222,7 @@
             this.apply.Text = "Apply";
             this.apply.UseVisualStyleBackColor = true;
             // 
-            // droneStationEditor
+            // DroneStationEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -242,7 +241,7 @@
             this.Controls.Add(this.addDroneStation);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.stationTable);
-            this.Name = "droneStationEditor";
+            this.Name = "DroneStationEditor";
             this.Text = "Drone Station Editor";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.droneStationEditor_Load);

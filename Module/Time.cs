@@ -25,6 +25,13 @@ namespace DroneTransferSimulator
             return (t2.min - t1.min) + 60 * (t2.hour - t1.hour + 24 * (t2.date - t1.date + 30 * (t2.month - t1.month + 12 * (t2.year = t1.year))));
         }
 
+        override public string ToString()
+        {
+            DateTime dateTime = new DateTime(year, month, date, hour, min, 0);
+
+            return dateTime.ToString("yyyy-MM-dd, hh:mm:ss");
+        }
+
         public static Time timeAdding(Time t, double second)
         {
             Time addedTime = new Time();

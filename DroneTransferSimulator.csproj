@@ -55,65 +55,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drone.cs" />
-    <Compile Include="DroneMap.cs" />
-    <Compile Include="DroneStation.cs" />
-    
-    <Compile Include="SimulatorUI.cs">
+    <Compile Include="Module\Drone.cs" />
+    <Compile Include="Module\DroneMap.cs" />
+    <Compile Include="Module\DroneStation.cs" />
+    <Compile Include="Form\SimulatorUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimulatorUI.Designer.cs">
+    <Compile Include="Form\SimulatorUI.Designer.cs">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
     </Compile>
-  
-    <Compile Include="DroneStationEditor.cs">
+    <Compile Include="Form\DroneStationEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DroneStationEditor.Designer.cs">
+    <Compile Include="Form\DroneStationEditor.Designer.cs">
       <DependentUpon>DroneStationEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="DroneStationFinder.cs" />
-    <Compile Include="Event.cs" />
-    <Compile Include="LoadEventCsv.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LoadEventCsv.Designer.cs">
-      <DependentUpon>LoadEventCsv.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LoadStationCsv.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LoadStationCsv.Designer.cs">
-      <DependentUpon>LoadStationCsv.cs</DependentUpon>
-    </Compile>
-    <Compile Include="PathPlanner.cs" />
+    <Compile Include="Module\DroneStationFinder.cs" />
+    <Compile Include="Module\Event.cs" />
+    <Compile Include="Module\PathPlanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimulationResult.cs">
+    <Compile Include="Form\SimulationResult.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SimulationResult.Designer.cs">
+    <Compile Include="Form\SimulationResult.Designer.cs">
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Simulator.cs" />
-    <Compile Include="SimulatorUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SimulatorUI.Designer.cs">
-      <DependentUpon>SimulatorUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StationManager.cs" />
-    <Compile Include="Time.cs" />
-    <EmbeddedResource Include="LoadEventCsv.resx">
-      <DependentUpon>LoadEventCsv.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LoadStationCsv.resx">
-      <DependentUpon>LoadStationCsv.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SimulatorUI.resx">
+    <Compile Include="Module\Simulator.cs" />
+    <Compile Include="Module\StationManager.cs" />
+    <Compile Include="Module\Time.cs" />
+    <EmbeddedResource Include="Form\SimulatorUI.resx">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DroneStationEditor.resx">
+    <EmbeddedResource Include="Form\DroneStationEditor.resx">
       <DependentUpon>DroneStationEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -125,7 +99,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SimulationResult.resx">
+    <EmbeddedResource Include="Form\SimulationResult.resx">
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

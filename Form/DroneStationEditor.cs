@@ -16,7 +16,7 @@ using GMap.NET.WindowsForms.Markers;
 
 namespace DroneTransferSimulator
 {
-    public partial class droneStationEditor : Form
+    public partial class DroneStationEditor : Form
     {
 
         SimulatorUI frm1;
@@ -27,13 +27,13 @@ namespace DroneTransferSimulator
         double latInitial = 37.459237;
         double lngInitial = 126.952115;
 
-        public droneStationEditor(SimulatorUI _form)
+        public DroneStationEditor(SimulatorUI _form)
         {
             InitializeComponent();
             frm1 = _form;
         }
 
-        public droneStationEditor()
+        public DroneStationEditor()
         {
             InitializeComponent();
         }
@@ -45,11 +45,6 @@ namespace DroneTransferSimulator
             stationName.DataGridView.Rows.Add(row1);
             stationName.DataGridView.Rows.Add(row2);
             stationName.DataGridView.ClearSelection();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void droneStationEditor_Load(object sender, EventArgs e)

@@ -36,6 +36,11 @@ namespace DroneTransferSimulator
             return occuredDate;
         }
 
+        public Time getAmbulDate()
+        {
+            return ambulDate;
+        }
+
         public eventType getEventType()
         {
             return type;

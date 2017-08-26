@@ -8,7 +8,10 @@ namespace DroneTransferSimulator
 {
     public class Simulator
     {
-        private List<Event> events= new List<Event>();
+        /* singleton instance for Simulator */
+        private static Simulator instance;
+
+        private List<Event> events = new List<Event>();
         private SortedList<int, Event> eventsQueue = new SortedList<int, Event>();
         private List<DroneStation> stations = new List<DroneStation>();
         
@@ -17,9 +20,9 @@ namespace DroneTransferSimulator
             eventList = events;
         }
 
-        public void getEventsFromCSV(string fname)
+        public void getEventsFromCSV(string fpath)
         {
-            System.IO.StreamReader readFile = new System.IO.StreamReader(@"C:\Users\이민지\Documents\DroneTransferSimulator\"+fname+".csv");
+            System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
             while (!readFile.EndOfStream)
             {
                 var line = readFile.ReadLine();
@@ -164,6 +167,11 @@ namespace DroneTransferSimulator
             d.setStatus(2);
             d.setChargeStartTime(arrivalTime);
         }
-
+        
+        public static Simulator getInstance()
+        {
+            if(instance == null) instance = new Simulator();
+            return instance;
+        }
     }
 }
