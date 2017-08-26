@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
 {
-    class Simulator
+    public class Simulator
     {
         private List<Event> events= new List<Event>();
-        private SortedList<int, Event> eventsQueue;
-        private List<DroneStation> stations;
-
-        public void getEventsFromCSV(ref char fname)
+        private SortedList<int, Event> eventsQueue = new SortedList<int, Event>();
+        private List<DroneStation> stations = new List<DroneStation>();
+        
+        public void getEventList(ref List<Event> eventList)
         {
-            System.IO.StreamReader readFile = new System.IO.StreamReader("..//..//data.csv");
-            string line;
-            string[] record;
-            readFile.ReadLine();
-            while ((line = readFile.ReadLine()) != null)
+            eventList = events;
+        }
+
+        public void getEventsFromCSV(string fname)
+        {
+            System.IO.StreamReader readFile = new System.IO.StreamReader(@"C:\Users\이민지\Documents\DroneTransferSimulator\"+fname+".csv");
+            while (!readFile.EndOfStream)
             {
-                record = line.Split(',');
+                var line = readFile.ReadLine();
+                var record = line.Split(',');
                 if (record.Length != 6) break;
 
                 Time occuredDate = new Time();
@@ -45,7 +48,8 @@ namespace DroneTransferSimulator
             }
             readFile.Close();
         }
-        public void updateEventsBtwRange(Time start, Time end, ref char fname)
+
+        public void updateEventsBtwRange(Time start, Time end)
         {
             if (Time.timeComparator(end, start)) return;
             events.Sort();
@@ -63,18 +67,19 @@ namespace DroneTransferSimulator
             }
 
             if (endIndex == startIndex + 1) return; // no events
-
-            events.RemoveRange(endIndex, events.Count);
-            events.RemoveRange(0, startIndex);
+            //events.RemoveRange(endIndex, events.Count-1);
+            //events.RemoveRange(0, startIndex);
 
         }
-        public void start(Time start, Time end)
+        public void start()
         {
             foreach (Event eventElement in events)
             {
                 int date = eventElement.getOccuredDate().min + 100 * (eventElement.getOccuredDate().hour + 100 * (eventElement.getOccuredDate().date + 100 * (eventElement.getOccuredDate().month + 100 * eventElement.getOccuredDate().year)));
                 eventsQueue.Add(date, eventElement);
             }
+
+            StationManager.getStations(ref stations);
 
             while (eventsQueue.Count != 0)
             {
@@ -99,6 +104,7 @@ namespace DroneTransferSimulator
         public void eventOccured(Tuple<double, double> coordinates, Time occuredTime)
         {
             //find stations and drone
+            
             DroneStationFinder finder = new DroneStationFinder(coordinates);
             finder.findAvailableStations();
             Tuple<int, int> stationDroneIdx = finder.findAvailableDrone(occuredTime);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
 {
-    class Event :IComparable<Event>
+    public class Event :IComparable<Event>
     {
         private double lat, lng;
         private Time occuredDate, ambulDate;

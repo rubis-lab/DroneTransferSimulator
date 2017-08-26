@@ -18,8 +18,8 @@ namespace DroneTransferSimulator
 {
     public partial class SimulatorUI : Form
     {
+        static public Simulator s = new Simulator();
 
-        
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;
 
@@ -37,25 +37,37 @@ namespace DroneTransferSimulator
 
         }
 
-        private void droneStationEditor_Load(object sender, EventArgs e)
+        private void SimulatorUI_Load(object sender, EventArgs e)
         {
-            gMapControl1.DragButton = MouseButtons.Left;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.MapProvider = GMapProviders.GoogleMap;
-            gMapControl1.Position = new PointLatLng(latInitial, lngInitial);
-            gMapControl1.MinZoom = 0;
-            gMapControl1.MaxZoom = 24;
-            gMapControl1.Zoom = 15;
-            gMapControl1.AutoScroll = true;
+            
+            eventMap.DragButton = MouseButtons.Left;
+            eventMap.CanDragMap = true;
+            eventMap.MapProvider = GMapProviders.GoogleMap;
+            eventMap.MinZoom = 10;
+            eventMap.MaxZoom = 20;
+            eventMap.Zoom = 10;
+            eventMap.AutoScroll = true;
 
             markerOverlay = new GMapOverlay("Maker");
+            eventMap.SetPositionByKeywords("Seoul, Korea");
+
             marker = new GMarkerGoogle(new PointLatLng(latInitial, lngInitial),GMarkerGoogleType.red_dot);
             markerOverlay.Markers.Add(marker); //add to map
 
             marker.ToolTipMode = MarkerTooltipMode.Always;
-            //marker.ToolTipText = string.Format("Location:\n Latitude:{0} \n Longitude: {1}", latInitial, lngInitial);
+            
+            eventMap.Overlays.Add(markerOverlay);
 
-            gMapControl1.Overlays.Add(markerOverlay);
+
+            stationMap.DragButton = MouseButtons.Left;
+            stationMap.CanDragMap = true;
+            stationMap.MapProvider = GMapProviders.GoogleMap;
+            stationMap.SetPositionByKeywords("Seoul, Korea");
+            stationMap.MinZoom = 10;
+            stationMap.MaxZoom = 20;
+            stationMap.Zoom = 10;
+            stationMap.AutoScroll = true;
+
         }
 
         private void gMapControl1_Load(object sender, EventArgs e)
@@ -87,8 +99,41 @@ namespace DroneTransferSimulator
 
         private void button4_Click(object sender, EventArgs e)
         {
+            DateTime startTimePicked = startTimePicker.Value;
+            Time startTime = new Time();
+            startTime.year = startTimePicked.Year;
+            startTime.month = startTimePicked.Month;
+            startTime.date = startTimePicked.Day;
+            startTime.hour = 0;
+            startTime.min = 0;
+
+            DateTime endTimePicked = endTimePicker.Value;
+            Time endTime = new Time();
+            endTime.year = endTimePicked.Year;
+            endTime.month = endTimePicked.Month;
+            endTime.date = endTimePicked.Day;
+            endTime.hour = 0;
+            endTime.min = 0;
+
+            s.updateEventsBtwRange(startTime, endTime);
+            //s.start();
+
             SimulationResult frm = new SimulationResult(this);
             frm.Show();
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void eventList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            rowSelection = e.RowIndex;
+            string lat = eventList.Rows[rowSelection].Cells[0].Value.ToString();
+            marker.Position = new PointLatLng(Convert.ToDouble(eventList.Rows[rowSelection].Cells[0].Value), Convert.ToDouble(eventList.Rows[rowSelection].Cells[1].Value));
+            eventMap.Position = marker.Position;
+            eventMap.Zoom = 15;
         }
     }
 }

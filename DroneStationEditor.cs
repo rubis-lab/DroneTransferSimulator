@@ -43,6 +43,8 @@ namespace DroneTransferSimulator
             string[] row1 = { "301 building", "37.448673", "126.952511",  "3" };
             string[] row2 = { "Posco Sports Center", "37.467439", "126.952305", "5" };
             stationName.DataGridView.Rows.Add(row1);
+            stationName.DataGridView.Rows.Add(row2);
+            stationName.DataGridView.ClearSelection();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -69,8 +71,7 @@ namespace DroneTransferSimulator
             markerOverlay.Markers.Add(marker); //add to map
 
             marker.ToolTipMode = MarkerTooltipMode.Always;
-            //marker.ToolTipText = string.Format("Location:\n Latitude:{0} \n Longitude: {1}", latInitial, lngInitial);
-
+            
             gMapControl1.Overlays.Add(markerOverlay);
             PopulateDataGridView();
         }

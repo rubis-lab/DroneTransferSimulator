@@ -64,6 +64,7 @@
             this.stationTable.Name = "stationTable";
             this.stationTable.ReadOnly = true;
             this.stationTable.RowTemplate.Height = 23;
+            this.stationTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.stationTable.Size = new System.Drawing.Size(412, 224);
             this.stationTable.TabIndex = 0;
             this.stationTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.selectLocation);
