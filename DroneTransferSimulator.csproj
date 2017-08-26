@@ -58,12 +58,14 @@
     <Compile Include="Drone.cs" />
     <Compile Include="DroneMap.cs" />
     <Compile Include="DroneStation.cs" />
+    
     <Compile Include="SimulatorUI.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SimulatorUI.Designer.cs">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
     </Compile>
+  
     <Compile Include="DroneStationEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +96,12 @@
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Simulator.cs" />
+    <Compile Include="SimulatorUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimulatorUI.Designer.cs">
+      <DependentUpon>SimulatorUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="StationManager.cs" />
     <Compile Include="Time.cs" />
     <EmbeddedResource Include="LoadEventCsv.resx">
