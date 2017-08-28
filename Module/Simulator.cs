@@ -20,36 +20,81 @@ namespace DroneTransferSimulator
             eventList = events;
         }
 
-        public void getEventsFromCSV(string fpath)
+        public void getStationList(ref List<DroneStation> stationList)
         {
-            System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
-            while (!readFile.EndOfStream)
+            stationList = stations;
+        }
+
+        public string getEventsFromCSV(string fpath)
+        {
+            try
             {
-                var line = readFile.ReadLine();
-                var record = line.Split(',');
-                if (record.Length != 6) break;
+                if(events.Count != 0) events.Clear();
 
-                Time occuredDate = new Time();
-                Time ambulDate = new Time();
-                double lng = System.Convert.ToDouble(record[0]);
-                double lat = System.Convert.ToDouble(record[1]);
-                occuredDate.year = System.Convert.ToInt32(record[2]) / 10000;
-                occuredDate.month = (System.Convert.ToInt32(record[2]) % 10000) / 100;
-                occuredDate.date = System.Convert.ToInt32(record[2]) % 100;
-                occuredDate.hour = System.Convert.ToInt32(record[3]) / 100;
-                occuredDate.min = System.Convert.ToInt32(record[3]) % 100;
+                System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
+                while(!readFile.EndOfStream)
+                {
+                    var line = readFile.ReadLine();
+                    var record = line.Split(',');
+                    if(record.Length != 6) throw new Exception("Inappropriate CSV format\nCannot be read");
 
-                ambulDate.year = System.Convert.ToInt32(record[4]) / 10000;
-                ambulDate.month = (System.Convert.ToInt32(record[4]) % 10000) / 100;
-                ambulDate.date = System.Convert.ToInt32(record[4]) % 100;
-                ambulDate.hour = System.Convert.ToInt32(record[5]) / 100;
-                ambulDate.min = System.Convert.ToInt32(record[5]) % 100;
+                    Time occuredDate = new Time();
+                    Time ambulDate = new Time();
+                    double longitude = System.Convert.ToDouble(record[0]);
+                    double latitude = System.Convert.ToDouble(record[1]);
+                    occuredDate.year = System.Convert.ToInt32(record[2]) / 10000;
+                    occuredDate.month = (System.Convert.ToInt32(record[2]) % 10000) / 100;
+                    occuredDate.date = System.Convert.ToInt32(record[2]) % 100;
+                    occuredDate.hour = System.Convert.ToInt32(record[3]) / 100;
+                    occuredDate.min = System.Convert.ToInt32(record[3]) % 100;
 
-                Event.eventType e = new Event.eventType();
-                e = Event.eventType.E_EVENT_OCCURED;
-                events.Add(new Event(lat, lng, occuredDate, ambulDate, e));
+                    ambulDate.year = System.Convert.ToInt32(record[4]) / 10000;
+                    ambulDate.month = (System.Convert.ToInt32(record[4]) % 10000) / 100;
+                    ambulDate.date = System.Convert.ToInt32(record[4]) % 100;
+                    ambulDate.hour = System.Convert.ToInt32(record[5]) / 100;
+                    ambulDate.min = System.Convert.ToInt32(record[5]) % 100;
+
+                    Event.eventType e = new Event.eventType();
+                    e = Event.eventType.E_EVENT_OCCURED;
+                    events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e));
+                }
+                readFile.Close();
             }
-            readFile.Close();
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+            return null;
+        }
+
+
+        public string getStationsFromCSV(string fpath)
+        {
+            try
+            {
+                if(stations.Count != 0) stations.Clear();
+
+                System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
+                while(!readFile.EndOfStream)
+                {
+                    var line = readFile.ReadLine();
+                    var record = line.Split(',');
+                    if(record.Length != 4) throw new Exception("Inappropriate CSV format\nCannot be read");
+
+                    string name = record[0];
+                    double latitude = System.Convert.ToDouble(record[1]);
+                    double longitude = System.Convert.ToDouble(record[2]);
+                    double coverRange = System.Convert.ToDouble(record[3]);
+
+                    stations.Add(new DroneStation(name, latitude, longitude, coverRange));
+                }
+                readFile.Close();
+            }
+            catch(Exception e)
+            {
+                return e.Message;
+            }
+            return null;
         }
 
         public void updateEventsBtwRange(Time start, Time end)

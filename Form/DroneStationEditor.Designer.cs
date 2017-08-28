@@ -51,8 +51,6 @@
             // 
             // stationTable
             // 
-            this.stationTable.AllowUserToAddRows = false;
-            this.stationTable.AllowUserToDeleteRows = false;
             this.stationTable.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.stationTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.stationTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -60,9 +58,8 @@
             this.latitude,
             this.longitude,
             this.coverage});
-            this.stationTable.Location = new System.Drawing.Point(24, 26);
+            this.stationTable.Location = new System.Drawing.Point(12, 26);
             this.stationTable.Name = "stationTable";
-            this.stationTable.ReadOnly = true;
             this.stationTable.RowTemplate.Height = 23;
             this.stationTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.stationTable.Size = new System.Drawing.Size(412, 224);
@@ -73,25 +70,21 @@
             // 
             this.stationName.HeaderText = "Station Name";
             this.stationName.Name = "stationName";
-            this.stationName.ReadOnly = true;
             // 
             // latitude
             // 
             this.latitude.HeaderText = "Latitude";
             this.latitude.Name = "latitude";
-            this.latitude.ReadOnly = true;
             // 
             // longitude
             // 
             this.longitude.HeaderText = "Longitude";
             this.longitude.Name = "longitude";
-            this.longitude.ReadOnly = true;
             // 
             // coverage
             // 
             this.coverage.HeaderText = "Coverage";
             this.coverage.Name = "coverage";
-            this.coverage.ReadOnly = true;
             // 
             // label1
             // 
@@ -157,7 +150,7 @@
             // 
             // longitudeInput
             // 
-            this.longitudeInput.Location = new System.Drawing.Point(253, 271);
+            this.longitudeInput.Location = new System.Drawing.Point(250, 271);
             this.longitudeInput.Name = "longitudeInput";
             this.longitudeInput.Size = new System.Drawing.Size(70, 21);
             this.longitudeInput.TabIndex = 14;

@@ -18,7 +18,6 @@ namespace DroneTransferSimulator
 {
     public partial class DroneStationEditor : Form
     {
-
         SimulatorUI frm1;
         GMarkerGoogle marker;
         GMapOverlay markerOverlay;

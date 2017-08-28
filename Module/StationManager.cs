@@ -21,7 +21,7 @@ namespace DroneTransferSimulator
         }
         public void setStationVector(double coverRange, double stnLat, double stnLng)
         {
-            stations.Add(new DroneStation(coverRange, stnLng, stnLat));
+            stations.Add(new DroneStation("", stnLng, stnLat, coverRange));
         }
         public static void getStations(ref List<DroneStation> droneStation)
         {

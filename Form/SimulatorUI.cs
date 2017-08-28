@@ -20,11 +20,15 @@ namespace DroneTransferSimulator
     {
         static public Simulator simulator = Simulator.getInstance();
         
-        GMarkerGoogle marker;
-        GMapOverlay markerOverlay;
+        GMapOverlay eventOverlay = new GMapOverlay("Event");
+        GMapOverlay stationOverlay = new GMapOverlay("Station");
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern bool AllocConsole();
 
         public SimulatorUI()
         {
+            AllocConsole();
             InitializeComponent();
         }
         
@@ -34,28 +38,19 @@ namespace DroneTransferSimulator
 
         private void eventMap_Load(object sender, EventArgs e)
         {
-            double latInitial = 37.459237;
-            double lngInitial = 126.952115;
-
             eventMap.DisableFocusOnMouseEnter = true;
             eventMap.DragButton = MouseButtons.Left;
             eventMap.CanDragMap = true;
             eventMap.MapProvider = GMapProviders.GoogleMap;
-            eventMap.MinZoom = 10;
+            eventMap.MinZoom = 8;
             eventMap.MaxZoom = 20;
-            eventMap.Zoom = 10;
+            eventMap.Zoom = 9;
             eventMap.AutoScroll = true;
 
-            markerOverlay = new GMapOverlay("Maker");
+            eventOverlay = new GMapOverlay("Marker");
             eventMap.SetPositionByKeywords("Seoul, Korea");
 
-            marker = new GMarkerGoogle(new PointLatLng(latInitial, lngInitial), GMarkerGoogleType.red_dot);
-            markerOverlay.Markers.Add(marker); //add to map
-
-            marker.ToolTipMode = MarkerTooltipMode.Always;
-
-            eventMap.Overlays.Add(markerOverlay);
-
+            eventMap.Overlays.Add(eventOverlay);
         }
 
         private void stationMap_Load(object sender, EventArgs e)
@@ -65,9 +60,9 @@ namespace DroneTransferSimulator
             stationMap.CanDragMap = true;
             stationMap.MapProvider = GMapProviders.GoogleMap;
             stationMap.SetPositionByKeywords("Seoul, Korea");
-            stationMap.MinZoom = 10;
+            stationMap.MinZoom = 8;
             stationMap.MaxZoom = 20;
-            stationMap.Zoom = 10;
+            stationMap.Zoom = 9;
             stationMap.AutoScroll = true;
         }
 
@@ -79,23 +74,38 @@ namespace DroneTransferSimulator
             dialog.Multiselect = false;
             if(dialog.ShowDialog() == DialogResult.OK)
             {
+                eventOverlay.Markers.Clear();
+                eventDataGridView.Rows.Clear();
+                
                 String path = dialog.FileName;
                 eventCSVTextbox.Text = path;
 
-                simulator.getEventsFromCSV(path);
+                string msg = simulator.getEventsFromCSV(path);
+                if(msg != null)
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
 
                 List<Event> eventList = new List<Event>();
-
                 simulator.getEventList(ref eventList);
 
-                foreach(Event eventElements in eventList)
+                foreach(Event eventElement in eventList)
                 {
-                    double latitude = eventElements.getCoordinates().Item1;
-                    double longitude = eventElements.getCoordinates().Item2;
-                    string occuredTime = eventElements.getOccuredDate().ToString();
-                    string ambulanceTime = eventElements.getAmbulDate().ToString();
+                    double latitude = eventElement.getCoordinates().Item1;
+                    double longitude = eventElement.getCoordinates().Item2;
+                    string occuredTime = eventElement.getOccuredDate().ToString();
+                    string ambulanceTime = eventElement.getAmbulDate().ToString();
                     eventDataGridView.Rows.Add(latitude, longitude, occuredTime, ambulanceTime);
+
+                    GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
+                    eventOverlay.Markers.Add(eventMarker);
                 }
+                eventMap.Overlays.Add(eventOverlay);
+
+                eventDataGridView.ClearSelection();
+                eventMap.Zoom = 9;
+                eventMap.SetPositionByKeywords("Seoul, Korea");
             }
         }
 
@@ -107,10 +117,66 @@ namespace DroneTransferSimulator
             dialog.Multiselect = false;
             if(dialog.ShowDialog() == DialogResult.OK)
             {
+                stationOverlay.Markers.Clear();
+                stationOverlay.Polygons.Clear();
+
                 String path = dialog.FileName;
                 stationCSVTextbox.Text = path;
+
+                string msg = simulator.getStationsFromCSV(path);
+                if(msg != null)
+                {
+                    MessageBox.Show(msg);
+                    return;
+                }
+
+                List<DroneStation> stationList = new List<DroneStation>();
+                simulator.getStationList(ref stationList);
+                foreach(DroneStation stationElement in stationList)
+                {
+                    string name = stationElement.name;
+                    double latitude = stationElement.stationLat;
+                    double longitude = stationElement.stationLng;
+                    double coverRange = stationElement.coverRange;
+                    drawStationPoint(stationElement);
+                }
+                stationMap.Zoom = 9;
+                stationMap.SetPositionByKeywords("Seoul, Korea");
             }
         }
+
+        private void drawStationPoint(DroneStation droneStation)
+        {
+            string name = droneStation.name;
+            double lat = droneStation.stationLat;
+            double lng = droneStation.stationLng;
+            double coverRange = droneStation.coverRange;
+
+            List<PointLatLng> points = new List<PointLatLng>();
+            double seg = Math.PI * 2 / 100;
+
+            for(int i = 0; i < 100; i++)
+            {
+                double theta = seg * i;
+                double x = lat + Math.Cos(theta) * 0.0024697;
+                double y = lng + Math.Sin(theta) * 0.0030828;
+
+                points.Add(new PointLatLng(x, y));
+            }
+
+            GMapPolygon gpol = new GMapPolygon(points, "pol");
+            gpol.Fill = new SolidBrush(Color.FromArgb(50, Color.Cyan));
+            gpol.Stroke = new Pen(Color.DarkCyan, 1);
+            stationOverlay.Polygons.Add(gpol);
+            
+            GMarkerGoogle stationMarker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.blue_small);
+            stationMarker.ToolTipText = name;
+            stationMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
+            stationOverlay.Markers.Add(stationMarker);
+
+            stationMap.Overlays.Add(stationOverlay);
+        }
+
 
         private void stationEditButton_Click(object sender, EventArgs e)
         {
@@ -145,11 +211,9 @@ namespace DroneTransferSimulator
         
         private void eventDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            int rowSelection;
-            rowSelection = e.RowIndex;
-            string lat = eventDataGridView.Rows[rowSelection].Cells[0].Value.ToString();
-            marker.Position = new PointLatLng(Convert.ToDouble(eventDataGridView.Rows[rowSelection].Cells[0].Value), Convert.ToDouble(eventDataGridView.Rows[rowSelection].Cells[1].Value));
-            eventMap.Position = marker.Position;
+            double latitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[0].Value;
+            double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[1].Value;
+            eventMap.Position = new PointLatLng(latitude, longitude);
             eventMap.Zoom = 15;
         }
     }

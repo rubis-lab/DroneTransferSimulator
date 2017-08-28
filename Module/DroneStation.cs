@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
 {
-    class DroneStation
+    public class DroneStation
     {
-        public List<Drone> drones= new List<Drone>();
+        public List<Drone> drones = new List<Drone>();
         public double coverRange;
         public double stationLng, stationLat;
-        public DroneStation(double _coverRange, double _stationLat, double _stationLng)
+        public string name;
+        public DroneStation(string _name, double _stationLat, double _stationLng, double _coverRange)
         {
+            name = _name;
             coverRange = _coverRange;
             stationLat = _stationLat;
             stationLng = _stationLng;
@@ -21,7 +23,7 @@ namespace DroneTransferSimulator
         {
             foreach(Drone droneElement in drones)
             {
-                if(droneElement.returnStatus() ==2)
+                if(droneElement.returnStatus() == 2)
                 {
                     droneElement.charge(droneElement.getChargeStartTime(), currentTime); //battery charged from centerArrivalTime
 

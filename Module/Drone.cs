@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
 {
-    class Drone
+    public class Drone
     {
         private double battery, chargingRate;   /* unit: percent */
         private double maxAvailDist; /* available distance of Drone */
