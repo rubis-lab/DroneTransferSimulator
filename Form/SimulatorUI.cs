@@ -19,7 +19,8 @@ namespace DroneTransferSimulator
     public partial class SimulatorUI : Form
     {
         static public Simulator simulator = Simulator.getInstance();
-        
+        public Dictionary<string, DroneStation> stationDict;
+
         GMapOverlay eventOverlay = new GMapOverlay("Event");
         GMapOverlay stationOverlay = new GMapOverlay("Station");
 
@@ -130,19 +131,47 @@ namespace DroneTransferSimulator
                     return;
                 }
 
-                List<DroneStation> stationList = new List<DroneStation>();
-                simulator.getStationList(ref stationList);
-                foreach(DroneStation stationElement in stationList)
+                stationDict = simulator.getStationDict();
+                
+                foreach(KeyValuePair<string, DroneStation> dict in stationDict)
                 {
+                    DroneStation stationElement = dict.Value;
                     string name = stationElement.name;
                     double latitude = stationElement.stationLat;
                     double longitude = stationElement.stationLng;
                     double coverRange = stationElement.coverRange;
                     drawStationPoint(stationElement);
                 }
+                stationMap.Overlays.Add(stationOverlay);
                 stationMap.Zoom = 9;
                 stationMap.SetPositionByKeywords("Seoul, Korea");
             }
+        }
+
+        private void drawCircle(PointLatLng p, double coverRange)
+        {
+            List<PointLatLng> points = new List<PointLatLng>();
+            double pNum = 30;
+            double seg = Math.PI * 2 / pNum;
+
+            stationOverlay.Polygons.Clear();
+            stationMap.Overlays.Clear();
+
+            for(int i = 0; i < pNum; i++)
+            {
+                double theta = seg * i;
+                double y = p.Lat + Math.Cos(theta) / 0.030828 / 60 / 60 * coverRange;
+                double x = p.Lng + Math.Sin(theta) / 0.024697 / 60 / 60 * coverRange;
+
+                points.Add(new PointLatLng(y, x));
+            }
+
+            GMapPolygon gpol = new GMapPolygon(points, "pol");
+            gpol.Fill = new SolidBrush(Color.FromArgb(20, Color.Cyan));
+            gpol.Stroke = new Pen(Color.DarkCyan, (float)0.5);
+            stationOverlay.Polygons.Add(gpol);
+
+            stationMap.Overlays.Add(stationOverlay);
         }
 
         private void drawStationPoint(DroneStation droneStation)
@@ -152,31 +181,11 @@ namespace DroneTransferSimulator
             double lng = droneStation.stationLng;
             double coverRange = droneStation.coverRange;
 
-            List<PointLatLng> points = new List<PointLatLng>();
-            double seg = Math.PI * 2 / 100;
-
-            for(int i = 0; i < 100; i++)
-            {
-                double theta = seg * i;
-                double x = lat + Math.Cos(theta) * 0.0024697;
-                double y = lng + Math.Sin(theta) * 0.0030828;
-
-                points.Add(new PointLatLng(x, y));
-            }
-
-            GMapPolygon gpol = new GMapPolygon(points, "pol");
-            gpol.Fill = new SolidBrush(Color.FromArgb(50, Color.Cyan));
-            gpol.Stroke = new Pen(Color.DarkCyan, 1);
-            stationOverlay.Polygons.Add(gpol);
-            
             GMarkerGoogle stationMarker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.blue_small);
             stationMarker.ToolTipText = name;
             stationMarker.ToolTipMode = MarkerTooltipMode.OnMouseOver;
             stationOverlay.Markers.Add(stationMarker);
-
-            stationMap.Overlays.Add(stationOverlay);
         }
-
 
         private void stationEditButton_Click(object sender, EventArgs e)
         {
@@ -215,6 +224,15 @@ namespace DroneTransferSimulator
             double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[1].Value;
             eventMap.Position = new PointLatLng(latitude, longitude);
             eventMap.Zoom = 15;
+        }
+
+        private void stationMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        {
+            stationMap.Position = item.Position;
+            stationMap.Zoom = 12;
+
+            drawCircle(item.Position, stationDict[item.ToolTipText].coverRange);
+            stationMap.Overlays.Add(stationOverlay);
         }
     }
 }

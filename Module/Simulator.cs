@@ -13,6 +13,7 @@ namespace DroneTransferSimulator
 
         private List<Event> events = new List<Event>();
         private SortedList<int, Event> eventsQueue = new SortedList<int, Event>();
+        private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
         private List<DroneStation> stations = new List<DroneStation>();
         
         public void getEventList(ref List<Event> eventList)
@@ -23,6 +24,11 @@ namespace DroneTransferSimulator
         public void getStationList(ref List<DroneStation> stationList)
         {
             stationList = stations;
+        }
+
+        public Dictionary<string, DroneStation> getStationDict()
+        {
+            return stationDict;
         }
 
         public string getEventsFromCSV(string fpath)
@@ -73,6 +79,7 @@ namespace DroneTransferSimulator
             try
             {
                 if(stations.Count != 0) stations.Clear();
+                if(stationDict.Count != 0) stationDict.Clear();
 
                 System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
                 while(!readFile.EndOfStream)
@@ -87,6 +94,7 @@ namespace DroneTransferSimulator
                     double coverRange = System.Convert.ToDouble(record[3]);
 
                     stations.Add(new DroneStation(name, latitude, longitude, coverRange));
+                    stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange));
                 }
                 readFile.Close();
             }

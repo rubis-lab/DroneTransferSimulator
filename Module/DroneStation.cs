@@ -19,6 +19,12 @@ namespace DroneTransferSimulator
             stationLat = _stationLat;
             stationLng = _stationLng;
         }
+        public DroneStation(double _stationLat, double _stationLng, double _coverRange)
+        {
+            coverRange = _coverRange;
+            stationLat = _stationLat;
+            stationLng = _stationLng;
+        }
         public void updateChargingDrones(Time currentTime)
         {
             foreach(Drone droneElement in drones)

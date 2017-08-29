@@ -109,6 +109,8 @@ namespace DroneTransferSimulator
 
         private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
         {
+            PointLatLng p = gMapControl1.FromLocalToLatLng(e.X, e.Y);
+            Console.WriteLine(p.Lat + ", " + p.Lng);
         }
 
         private void timer1_Tick(object sender, EventArgs e)

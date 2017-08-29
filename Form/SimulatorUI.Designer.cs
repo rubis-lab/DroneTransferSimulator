@@ -273,6 +273,7 @@
             this.stationMap.Size = new System.Drawing.Size(251, 349);
             this.stationMap.TabIndex = 21;
             this.stationMap.Zoom = 0D;
+            this.stationMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.stationMap_OnMarkerClick);
             this.stationMap.Load += new System.EventHandler(this.stationMap_Load);
             // 
             // eventMapLabel
