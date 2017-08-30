@@ -134,9 +134,9 @@
             // 
             // stationLoadButton
             // 
-            this.stationLoadButton.Location = new System.Drawing.Point(476, 58);
+            this.stationLoadButton.Location = new System.Drawing.Point(476, 57);
             this.stationLoadButton.Name = "stationLoadButton";
-            this.stationLoadButton.Size = new System.Drawing.Size(26, 23);
+            this.stationLoadButton.Size = new System.Drawing.Size(26, 24);
             this.stationLoadButton.TabIndex = 12;
             this.stationLoadButton.Text = "...";
             this.stationLoadButton.UseVisualStyleBackColor = true;
@@ -144,9 +144,9 @@
             // 
             // eventLoadButton
             // 
-            this.eventLoadButton.Location = new System.Drawing.Point(476, 20);
+            this.eventLoadButton.Location = new System.Drawing.Point(476, 19);
             this.eventLoadButton.Name = "eventLoadButton";
-            this.eventLoadButton.Size = new System.Drawing.Size(26, 23);
+            this.eventLoadButton.Size = new System.Drawing.Size(26, 24);
             this.eventLoadButton.TabIndex = 11;
             this.eventLoadButton.Text = "...";
             this.eventLoadButton.UseVisualStyleBackColor = true;
@@ -156,6 +156,7 @@
             // 
             this.stationCSVTextbox.Location = new System.Drawing.Point(12, 58);
             this.stationCSVTextbox.Name = "stationCSVTextbox";
+            this.stationCSVTextbox.ReadOnly = true;
             this.stationCSVTextbox.Size = new System.Drawing.Size(458, 21);
             this.stationCSVTextbox.TabIndex = 10;
             // 
@@ -163,6 +164,7 @@
             // 
             this.eventCSVTextbox.Location = new System.Drawing.Point(12, 20);
             this.eventCSVTextbox.Name = "eventCSVTextbox";
+            this.eventCSVTextbox.ReadOnly = true;
             this.eventCSVTextbox.Size = new System.Drawing.Size(458, 21);
             this.eventCSVTextbox.TabIndex = 9;
             // 
@@ -171,18 +173,18 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 44);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(104, 12);
+            this.label2.Size = new System.Drawing.Size(109, 12);
             this.label2.TabIndex = 8;
-            this.label2.Text = "Drone Station csv";
+            this.label2.Text = "Drone Station CSV";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 5);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 12);
+            this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 7;
-            this.label1.Text = "Event csv";
+            this.label1.Text = "Event CSV";
             // 
             // stationEditButton
             // 
@@ -220,7 +222,7 @@
             this.startTimePicker.Name = "startTimePicker";
             this.startTimePicker.Size = new System.Drawing.Size(200, 21);
             this.startTimePicker.TabIndex = 17;
-            this.startTimePicker.Value = new System.DateTime(2017, 8, 25, 0, 0, 0, 0);
+            this.startTimePicker.Value = new System.DateTime(2013, 1, 1, 0, 0, 0, 0);
             // 
             // label5
             // 
@@ -237,6 +239,7 @@
             this.endTimePicker.Name = "endTimePicker";
             this.endTimePicker.Size = new System.Drawing.Size(200, 21);
             this.endTimePicker.TabIndex = 19;
+            this.endTimePicker.Value = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
             // 
             // startSimButton
             // 
@@ -319,7 +322,6 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "SimulatorUI";
             this.Text = "Drone Transfer Simulator";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.SimulatorUI_Load);
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).EndInit();
             this.groupBox1.ResumeLayout(false);

@@ -8,44 +8,84 @@ namespace DroneTransferSimulator
 {
     public class Time
     {
-        public int year = 0, month = 0, date = 0, hour = 0, min = 0;
+        public int yy, MM, dd, hh, mm, ss;
+
+        public Time()
+        {
+            yy = 0;
+            MM = 0;
+            dd = 0;
+            hh = 0;
+            mm = 0;
+            ss = 0;
+        }
+
+        public Time(int _yy, int _MM, int _dd, int _hh, int _mm, int _ss)
+        {
+            yy = _yy;
+            MM = _MM;
+            dd = _dd;
+            hh = _hh;
+            mm = _mm;
+            ss = _ss;
+        }
+
+
+        public static bool operator <(Time t1, Time t2)
+        {
+            if(t1.yy != t2.yy) return (t1.yy < t2.yy);
+            else if(t1.MM != t2.MM) return (t1.MM < t2.MM);
+            else if(t1.dd != t2.dd) return (t1.dd < t2.dd);
+            else if(t1.hh != t2.hh) return (t1.hh < t2.hh);
+            else if(t1.mm != t2.mm) return (t1.mm < t2.mm);
+            else return false;
+        }
+
+        public static bool operator >(Time t1, Time t2)
+        {
+            if(t1.yy != t2.yy) return (t1.yy > t2.yy);
+            else if(t1.MM != t2.MM) return (t1.MM > t2.MM);
+            else if(t1.dd != t2.dd) return (t1.dd > t2.dd);
+            else if(t1.hh != t2.hh) return (t1.hh > t2.hh);
+            else if(t1.mm != t2.mm) return (t1.mm > t2.mm);
+            else return false;
+        }
 
         public static bool timeComparator(Time t1, Time t2)
         {
-            if(t1.year != t2.year) return (t1.year < t2.year);
-            else if(t1.month != t2.month) return (t1.month < t2.month);
-            else if(t1.date != t2.date) return (t1.date < t2.date);
-            else if(t1.hour != t2.hour) return (t1.hour < t2.hour);
-            else if(t1.min != t2.min) return (t1.min < t2.min);
+            if(t1.yy != t2.yy) return (t1.yy < t2.yy);
+            else if(t1.MM != t2.MM) return (t1.MM < t2.MM);
+            else if(t1.dd != t2.dd) return (t1.dd < t2.dd);
+            else if(t1.hh != t2.hh) return (t1.hh < t2.hh);
+            else if(t1.mm != t2.mm) return (t1.mm < t2.mm);
             else return false;
         }
 
         public static int getTimeGap(Time t1, Time t2)
         {
-            return (t2.min - t1.min) + 60 * (t2.hour - t1.hour + 24 * (t2.date - t1.date + 30 * (t2.month - t1.month + 12 * (t2.year = t1.year))));
+            return (t2.mm - t1.mm) + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd + 30 * (t2.MM - t1.MM + 12 * (t2.yy = t1.yy))));
         }
 
         override public string ToString()
         {
-            DateTime dateTime = new DateTime(year, month, date, hour, min, 0);
-
+            DateTime dateTime = new DateTime(yy, MM, dd, hh, mm, 0);
             return dateTime.ToString("yyyy-MM-dd, hh:mm:ss");
         }
 
-        public static Time timeAdding(Time t, double second)
+        public static Time timeAdding(Time t, double ss)
         {
             Time addedTime = new Time();
-            int minute = (int)second / 60 + 1;
-            int _min = t.min + minute;
-            addedTime.min = _min % 60;
-            int _hour = t.hour + _min / 60;
-            addedTime.hour = _hour / 24;
-            int _date = t.date + _hour / 24;
-            addedTime.date = _date % 30;
-            int _month = t.month + _date / 30;
-            addedTime.month = _month % 12;
-            int _year = t.year + _month / 12;
-            addedTime.year = _year;
+            int mmute = (int)ss / 60 + 1;
+            int _mm = t.mm + mmute;
+            addedTime.mm = _mm % 60;
+            int _hh = t.hh + _mm / 60;
+            addedTime.hh = _hh / 24;
+            int _date = t.dd + _hh / 24;
+            addedTime.dd = _date % 30;
+            int _MM = t.MM + _date / 30;
+            addedTime.MM = _MM % 12;
+            int _yy = t.yy + _MM / 12;
+            addedTime.yy = _yy;
 
             return addedTime;
         }

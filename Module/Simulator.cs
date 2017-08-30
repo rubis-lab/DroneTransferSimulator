@@ -16,9 +16,9 @@ namespace DroneTransferSimulator
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
         private List<DroneStation> stations = new List<DroneStation>();
         
-        public void getEventList(ref List<Event> eventList)
+        public List<Event> getEventList()
         {
-            eventList = events;
+            return events;
         }
 
         public void getStationList(ref List<DroneStation> stationList)
@@ -48,17 +48,17 @@ namespace DroneTransferSimulator
                     Time ambulDate = new Time();
                     double longitude = System.Convert.ToDouble(record[0]);
                     double latitude = System.Convert.ToDouble(record[1]);
-                    occuredDate.year = System.Convert.ToInt32(record[2]) / 10000;
-                    occuredDate.month = (System.Convert.ToInt32(record[2]) % 10000) / 100;
-                    occuredDate.date = System.Convert.ToInt32(record[2]) % 100;
-                    occuredDate.hour = System.Convert.ToInt32(record[3]) / 100;
-                    occuredDate.min = System.Convert.ToInt32(record[3]) % 100;
+                    occuredDate.yy = System.Convert.ToInt32(record[2]) / 10000;
+                    occuredDate.MM = (System.Convert.ToInt32(record[2]) % 10000) / 100;
+                    occuredDate.dd = System.Convert.ToInt32(record[2]) % 100;
+                    occuredDate.hh = System.Convert.ToInt32(record[3]) / 100;
+                    occuredDate.mm = System.Convert.ToInt32(record[3]) % 100;
 
-                    ambulDate.year = System.Convert.ToInt32(record[4]) / 10000;
-                    ambulDate.month = (System.Convert.ToInt32(record[4]) % 10000) / 100;
-                    ambulDate.date = System.Convert.ToInt32(record[4]) % 100;
-                    ambulDate.hour = System.Convert.ToInt32(record[5]) / 100;
-                    ambulDate.min = System.Convert.ToInt32(record[5]) % 100;
+                    ambulDate.yy = System.Convert.ToInt32(record[4]) / 10000;
+                    ambulDate.MM = (System.Convert.ToInt32(record[4]) % 10000) / 100;
+                    ambulDate.dd = System.Convert.ToInt32(record[4]) % 100;
+                    ambulDate.hh = System.Convert.ToInt32(record[5]) / 100;
+                    ambulDate.mm = System.Convert.ToInt32(record[5]) % 100;
 
                     Event.eventType e = new Event.eventType();
                     e = Event.eventType.E_EVENT_OCCURED;
@@ -72,8 +72,7 @@ namespace DroneTransferSimulator
             }
             return null;
         }
-
-
+        
         public string getStationsFromCSV(string fpath)
         {
             try
@@ -107,47 +106,43 @@ namespace DroneTransferSimulator
 
         public void updateEventsBtwRange(Time start, Time end)
         {
-            if (Time.timeComparator(end, start)) return;
+            if(Time.timeComparator(end, start)) return;
             events.Sort();
 
-            int startIndex = 0, endIndex = 0;
-            foreach (Event eventElement in events)
+            List<Event> selectedEvent = new List<Event>();
+            
+            foreach(Event eventElement in events)
             {
-                if (Time.timeComparator(eventElement.getOccuredDate(), start))
+                if(start < eventElement.getOccuredDate() && eventElement.getOccuredDate() < end)
                 {
-                    startIndex++;
-                    endIndex++;
+                    selectedEvent.Add(eventElement);
                 }
-                else if (Time.timeComparator(eventElement.getOccuredDate(), end)) endIndex++;
-                else break;
             }
 
-            if (endIndex == startIndex + 1) return; // no events
-            //events.RemoveRange(endIndex, events.Count-1);
-            //events.RemoveRange(0, startIndex);
-
+            selectedEvent.Sort();
+            events = selectedEvent;
         }
+
         public void start()
         {
-            foreach (Event eventElement in events)
+            foreach(Event eventElement in events)
             {
-                int date = eventElement.getOccuredDate().min + 100 * (eventElement.getOccuredDate().hour + 100 * (eventElement.getOccuredDate().date + 100 * (eventElement.getOccuredDate().month + 100 * eventElement.getOccuredDate().year)));
+                int date = eventElement.getOccuredDate().mm + 100 * (eventElement.getOccuredDate().hh + 100 * (eventElement.getOccuredDate().dd + 100 * (eventElement.getOccuredDate().MM + 100 * eventElement.getOccuredDate().yy)));
                 eventsQueue.Add(date, eventElement);
             }
 
             StationManager.getStations(ref stations);
 
-            while (eventsQueue.Count != 0)
+            while(eventsQueue.Count != 0)
             {
                 Event e = eventsQueue.Values[0];
                 eventsQueue.RemoveAt(0);
 
-                switch (e.getEventType())
+                switch(e.getEventType())
                 {
                     case Event.eventType.E_EVENT_OCCURED:
                         eventOccured(e.getCoordinates(), e.getOccuredDate());
                         break;
-
                     case Event.eventType.E_EVENT_ARRIVAL:
                         eventArrived(e.getCoordinates(), e.getOccuredDate(), e.getStationDroneIdx());
                         break;
@@ -160,11 +155,10 @@ namespace DroneTransferSimulator
         public void eventOccured(Tuple<double, double> coordinates, Time occuredTime)
         {
             //find stations and drone
-            
             DroneStationFinder finder = new DroneStationFinder(coordinates);
             finder.findAvailableStations();
             Tuple<int, int> stationDroneIdx = finder.findAvailableDrone(occuredTime);
-            if (stationDroneIdx.Item1 == -1) return;
+            if(stationDroneIdx.Item1 == -1) return;
 
             DroneStation s = stations[stationDroneIdx.Item1];
             Drone d = s.drones[stationDroneIdx.Item2];
@@ -182,12 +176,12 @@ namespace DroneTransferSimulator
             d.fly(distance);
             d.setStatus(1);
 
-            //declare coming event
+            //declare commg event
             Event.eventType type = Event.eventType.E_EVENT_ARRIVAL;
             Event e = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type);
             e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
             
-            int date = e.getOccuredDate().min + 100 * (e.getOccuredDate().hour + 100 * (e.getOccuredDate().date + 100 * (e.getOccuredDate().month + 100 * e.getOccuredDate().year)));
+            int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
             eventsQueue.Add(date, e);
         }
         public void eventArrived(Tuple<double, double> occuredCoord, Time occuredTime, Tuple<int, int> stationDroneIdx)
@@ -211,7 +205,7 @@ namespace DroneTransferSimulator
             Event e = new Event(occuredCoord.Item1, occuredCoord.Item2, droneArrivalTime, droneArrivalTime, type);
             e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
 
-            int date = e.getOccuredDate().min + 100 * (e.getOccuredDate().hour + 100 * (e.getOccuredDate().date + 100 * (e.getOccuredDate().month + 100 * e.getOccuredDate().year)));
+            int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
             eventsQueue.Add(date, e);
         }
         public void stationArrival(Time arrivalTime, Tuple<int, int> stationDroneIdx)

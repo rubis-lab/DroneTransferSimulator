@@ -277,7 +277,6 @@
             this.Controls.Add(this.groupBox2);
             this.Name = "SimulationResult";
             this.Text = "Drone Transfer Simulator";
-            this.TopMost = true;
             this.Load += new System.EventHandler(this.SimulationResult_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);

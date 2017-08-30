@@ -85,11 +85,11 @@ namespace DroneTransferSimulator
                 if(msg != null)
                 {
                     MessageBox.Show(msg);
+                    eventCSVTextbox.Text = "";
                     return;
                 }
 
-                List<Event> eventList = new List<Event>();
-                simulator.getEventList(ref eventList);
+                List<Event> eventList = simulator.getEventList();
 
                 foreach(Event eventElement in eventList)
                 {
@@ -110,6 +110,27 @@ namespace DroneTransferSimulator
             }
         }
 
+        public void updateStationDict()
+        {
+            stationOverlay.Markers.Clear();
+            stationOverlay.Polygons.Clear();
+
+            stationDict = simulator.getStationDict();
+
+            foreach(KeyValuePair<string, DroneStation> dict in stationDict)
+            {
+                DroneStation stationElement = dict.Value;
+                string name = stationElement.name;
+                double latitude = stationElement.stationLat;
+                double longitude = stationElement.stationLng;
+                double coverRange = stationElement.coverRange;
+                drawStationPoint(stationElement);
+            }
+            stationMap.Overlays.Add(stationOverlay);
+            stationMap.Zoom = 9;
+            stationMap.SetPositionByKeywords("Seoul, Korea");
+        }
+
         private void stationLoadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -128,23 +149,10 @@ namespace DroneTransferSimulator
                 if(msg != null)
                 {
                     MessageBox.Show(msg);
+                    stationCSVTextbox.Text = "";
                     return;
                 }
-
-                stationDict = simulator.getStationDict();
-                
-                foreach(KeyValuePair<string, DroneStation> dict in stationDict)
-                {
-                    DroneStation stationElement = dict.Value;
-                    string name = stationElement.name;
-                    double latitude = stationElement.stationLat;
-                    double longitude = stationElement.stationLng;
-                    double coverRange = stationElement.coverRange;
-                    drawStationPoint(stationElement);
-                }
-                stationMap.Overlays.Add(stationOverlay);
-                stationMap.Zoom = 9;
-                stationMap.SetPositionByKeywords("Seoul, Korea");
+                updateStationDict();
             }
         }
 
@@ -195,21 +203,22 @@ namespace DroneTransferSimulator
 
         private void startSimButton_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if(eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV files uploaded");
+                if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
             DateTime startTimePicked = startTimePicker.Value;
-            Time startTime = new Time();
-            startTime.year = startTimePicked.Year;
-            startTime.month = startTimePicked.Month;
-            startTime.date = startTimePicked.Day;
-            startTime.hour = 0;
-            startTime.min = 0;
+            Time startTime = new Time(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
 
             DateTime endTimePicked = endTimePicker.Value;
-            Time endTime = new Time();
-            endTime.year = endTimePicked.Year;
-            endTime.month = endTimePicked.Month;
-            endTime.date = endTimePicked.Day;
-            endTime.hour = 0;
-            endTime.min = 0;
+            Time endTime = new Time(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
 
             simulator.updateEventsBtwRange(startTime, endTime);
             //s.start();

@@ -17,8 +17,8 @@ namespace DroneTransferSimulator
 
         public int CompareTo(Event obj)
         {
-            if (Time.timeComparator(this.getOccuredDate(), obj.getOccuredDate())) return 1;
-            if (Time.timeComparator(obj.getOccuredDate(), this.getOccuredDate())) return -1;
+            if(this.getOccuredDate() > obj.getOccuredDate()) return 1;
+            if(obj.getOccuredDate() > this.getOccuredDate()) return -1;
             return 0;
         }
 

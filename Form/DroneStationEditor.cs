@@ -29,11 +29,9 @@ namespace DroneTransferSimulator
         {
             InitializeComponent();
             simulatorUIForm = _form;
-        }
 
-        public DroneStationEditor()
-        {
-            InitializeComponent();
+            if(simulatorUIForm.stationCSVTextbox.TextLength == 0) this.Text = "Drone Station Editor";
+            else this.Text = simulatorUIForm.stationCSVTextbox.Text;
         }
 
         private void PopulateDataGridView()
@@ -301,6 +299,21 @@ namespace DroneTransferSimulator
 
             if(dialog.ShowDialog() == DialogResult.OK)
             {
+                String path = dialog.FileName;
+                System.IO.StreamWriter csvFileWriter = new System.IO.StreamWriter(path, false);
+                
+                foreach(DataGridViewRow row in stationTable.Rows)
+                {
+                    string csvData = row.Cells[0].Value.ToString();
+                    for(int i = 1; i < 4; i++) csvData += "," + row.Cells[i].Value.ToString();
+                    csvFileWriter.WriteLine(csvData); 
+                }
+                csvFileWriter.Flush();
+                csvFileWriter.Close();
+                this.Close();
+                
+                simulatorUIForm.stationCSVTextbox.Text = path;
+                simulatorUIForm.updateStationDict();
             }
         }
     }
