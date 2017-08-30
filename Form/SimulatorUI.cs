@@ -18,8 +18,8 @@ namespace DroneTransferSimulator
 {
     public partial class SimulatorUI : Form
     {
-        static public Simulator simulator = Simulator.getInstance();
-        public Dictionary<string, DroneStation> stationDict;
+        static Simulator simulator = Simulator.getInstance();
+        static Dictionary<string, DroneStation> stationDict = simulator.getStationDict();
 
         GMapOverlay eventOverlay = new GMapOverlay("Event");
         GMapOverlay stationOverlay = new GMapOverlay("Station");
@@ -233,6 +233,12 @@ namespace DroneTransferSimulator
 
             drawCircle(item.Position, stationDict[item.ToolTipText].coverRange);
             stationMap.Overlays.Add(stationOverlay);
+        }
+
+        private void eventMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
+        {
+            eventMap.Position = item.Position;
+            eventMap.Zoom = 15;
         }
     }
 }

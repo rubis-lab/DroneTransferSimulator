@@ -80,6 +80,7 @@
             this.eventMap.Size = new System.Drawing.Size(255, 349);
             this.eventMap.TabIndex = 4;
             this.eventMap.Zoom = 0D;
+            this.eventMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.eventMap_OnMarkerClick);
             this.eventMap.Load += new System.EventHandler(this.eventMap_Load);
             // 
             // eventDataGridView
