@@ -14,7 +14,7 @@ From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_5
 4. Start downloading MSI Installer
  - Click "**No thanks, just start my download.**"
 
-> C# Project environment settings
+> C# project environment settings
 
 1. Create a C# project as Console or Windows Form type.
 2. Add a MySQL Data reference to the project.
@@ -24,3 +24,21 @@ From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_5
 ![picture](img/mysql_reference.PNG)
 
 ----------
+
+
+### 2. GMap.net for Windows Form ###
+
+We used Google map to show events' position and routes, edit drone stations during Drone Transfer Simulation. This describes how to include packages to the project.
+
+#### To include GMap.net package
+
+> C# project package installation
+
+1. Install GMap.NET.WindowsForms
+ - Project(*menu*) -> Manage NuGet Packages
+ - Install GMap.NET.WindowsForms(1.7.5 ver)
+
+![picture](img/gmap_package.PNG)
+
+----------
+
