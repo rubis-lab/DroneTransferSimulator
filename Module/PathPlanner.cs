@@ -154,8 +154,6 @@ namespace DroneTransferSimulator
             double totalTime = 0;
             foreach(Cube e in cubes) totalTime += getRequiredTime(e.getType());
             
-            Console.WriteLine(totalTime);
-            
             return totalTime;
         }
 
@@ -163,7 +161,6 @@ namespace DroneTransferSimulator
         private List<Cube> makeNaivePath(double srcLat, double srcLng, double dstLat, double dstLng)
         {
             List<Cube> cubes = new List<Cube>();
-            double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
 
             convertWGStoKm(srcLat, srcLng, ref srcLat, ref srcLng);
             convertWGStoKm(dstLat, dstLng, ref dstLat, ref dstLng);
@@ -173,6 +170,8 @@ namespace DroneTransferSimulator
             convertKmtoRC(srcLat, srcLng, ref srcRow, ref srcCol);
             convertKmtoRC(dstLat, dstLng, ref dstRow, ref dstCol);
 
+            double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
+            
             DroneMap droneMap = DroneMap.getInstance();
 
             List<DroneMapData> srcSet = droneMap.getData(srcRow, srcCol, srcRow, srcCol);
@@ -198,7 +197,7 @@ namespace DroneTransferSimulator
         }
 
         private double calcMaxHeight(double srcLat, double srcLng, double dstLat, double dstLng)
-        {
+        {/*
             double maxHeight = 0.0;
             DroneMap droneMap = DroneMap.getInstance();
             
@@ -241,7 +240,8 @@ namespace DroneTransferSimulator
                 foreach(DroneMapData e in resultSet) maxHeight = System.Math.Max(maxHeight, e.buildingHeight + e.landElevation);
             }
 
-            return maxHeight;
+            return maxHeight;*/
+            return 100.0;
         }
 
         private double getRequiredTime(int cubeType)

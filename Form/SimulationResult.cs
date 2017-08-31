@@ -17,24 +17,15 @@ namespace DroneTransferSimulator
 {
     public partial class SimulationResult : Form
     {
-        SimulatorUI form1;
-        GMarkerGoogle marker;
+        static Simulator simulator = Simulator.getInstance();
+        SimulatorUI simulatorUIForm;
         GMapOverlay markerOverlay;
-        
-        public SimulationResult()
-        {
-            AllocConsole();
-            InitializeComponent();
-        }
 
         public SimulationResult(SimulatorUI _form)
         {
             InitializeComponent();
-            form1 = _form;
+            simulatorUIForm = _form;
         }
-
-        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
-        private static extern bool AllocConsole();
 
         private void SimulationResult_Load(object sender, EventArgs e)
         {
@@ -44,28 +35,28 @@ namespace DroneTransferSimulator
 
         private void initGMapControl()
         {
-            gMapControl1.DragButton = MouseButtons.Left;
-            gMapControl1.CanDragMap = true;
-            gMapControl1.MapProvider = GMapProviders.GoogleMap;
-            gMapControl1.SetPositionByKeywords("Seoul, Korea");
-            gMapControl1.MinZoom = 10;
-            gMapControl1.MaxZoom = 20;
-            gMapControl1.Zoom = 10;
-            gMapControl1.AutoScroll = true;
+            eventMap.DisableFocusOnMouseEnter = true;
+            eventMap.DragButton = MouseButtons.Left;
+            eventMap.CanDragMap = true;
+            eventMap.MapProvider = GMapProviders.GoogleMap;
+            eventMap.SetPositionByKeywords("Seoul, Korea");
+            eventMap.MinZoom = 10;
+            eventMap.MaxZoom = 20;
+            eventMap.Zoom = 10;
+            eventMap.AutoScroll = true;
         }
 
         private void initDataGridView()
         {
-            Time t = new Time();
-            Event e = new Event(37.578695, 126.997512, null, null, Event.eventType.E_EVENT_OCCURED);
-            for(int i = 0; i < 10; i++)
+            List<Event> eventList = simulator.getEventList();
+            foreach(Event e in eventList)
             {
                 double latitude = e.getCoordinates().Item1;
                 double longitude = e.getCoordinates().Item2;
-                string occuredTime = "2017-07-19, 15:20:03";
+                string occuredTime = e.getOccuredDate().ToString();
                 string droneArrivalTime = "2017-07-19, 15:20:03";
                 string result = "success";
-                dataGridView1.Rows.Add(dataGridView1.RowCount - 1, latitude, longitude, occuredTime, droneArrivalTime, result);
+                eventTable.Rows.Add(eventTable.RowCount - 1, latitude, longitude, occuredTime, droneArrivalTime, result);
             }
         }
 
@@ -88,17 +79,17 @@ namespace DroneTransferSimulator
         private void dataGridView1_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             int ind = e.RowIndex;
-            if(ind < 0 || ind >= dataGridView1.RowCount - 1) return;
+            if(ind < 0 || ind >= eventTable.RowCount - 1) return;
 
             string msg = "";
             for(int i = 0; i < 6; i++)
-                msg += dataGridView1.Rows[ind].Cells[i].Value.ToString() + " / ";
+                msg += eventTable.Rows[ind].Cells[i].Value.ToString() + " / ";
             Console.WriteLine(msg);
 
-            double lat = (double)dataGridView1[1, ind].Value;
-            double lng = (double)dataGridView1[2, ind].Value;
+            double lat = (double)eventTable[1, ind].Value;
+            double lng = (double)eventTable[2, ind].Value;
 
-            gMapControl1.Overlays.Clear();
+            eventMap.Overlays.Clear();
 
        //     drawEventPoint(lat, lng);
        //     drawStationPoint(lat - 0.0012, lng + 0.0045);
@@ -109,18 +100,18 @@ namespace DroneTransferSimulator
 
         private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
         {
-            PointLatLng p = gMapControl1.FromLocalToLatLng(e.X, e.Y);
+            PointLatLng p = eventMap.FromLocalToLatLng(e.X, e.Y);
             Console.WriteLine(p.Lat + ", " + p.Lng);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            trackBar1.Value = Convert.ToInt32(gMapControl1.Zoom);
+            trackBar1.Value = Convert.ToInt32(eventMap.Zoom);
         }
 
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
-            gMapControl1.Zoom = trackBar1.Value;
+            eventMap.Zoom = trackBar1.Value;
         }
     }
 }

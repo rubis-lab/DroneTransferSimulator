@@ -8,10 +8,12 @@ namespace DroneTransferSimulator
 {
     class DroneStationFinder
     {
+        Dictionary<string, DroneStation> stationDict = Simulator.getInstance().getStationDict();
         private double eventLng, eventLat;
         private struct availableStation
         {
             public int stationIndex;
+            public string name;
             public double distance;
         };
         private static bool stationsComparator(ref availableStation lhs, ref availableStation rhs)
@@ -19,7 +21,7 @@ namespace DroneTransferSimulator
             return lhs.distance < rhs.distance;
         }
 
-        private List<availableStation> availableStations= new List<availableStation>();
+        private List<availableStation> availableStations = new List<availableStation>();
 
         public double getDistanceFromRecentEvent(double wgsLat, double wgsLng)
         {
@@ -38,28 +40,29 @@ namespace DroneTransferSimulator
         public void findAvailableStations()
         {
             List<DroneStation> stations = new List<DroneStation>();
-            StationManager.getStations(ref stations);
-            for(int i = 0; i != stations.Count; ++i)
+            foreach(KeyValuePair<string, DroneStation> dict in stationDict)
             {
-                double distance = getDistanceFromRecentEvent(stations[i].stationLng, stations[i].stationLat);
-                if(stations[i].coverRange > distance)
+                DroneStation st = dict.Value;
+                double distance = getDistanceFromRecentEvent(st.stationLat, st.stationLng);
+                
+                if(st.coverRange > distance)
                 {
                     availableStation a = new availableStation();
-                    a.stationIndex = i;
+                    a.name = dict.Key;
                     a.distance = distance;
                     availableStations.Add(a);
                 }
             }
-            availableStations.OrderBy(n => n.distance).ToList();
+            availableStations = availableStations.OrderBy(n => n.distance).ToList();
         }
 
-        public Tuple<int, int> findAvailableDrone(Time currentTime)
+        public Tuple<string, int> findAvailableDrone(Time currentTime)
         {
-            foreach(availableStation element in availableStations)
+            foreach(availableStation e in availableStations)
             {
-                List<DroneStation> stations = new List<DroneStation>();
-                StationManager.getStations(ref stations);
-                DroneStation s = stations[element.stationIndex];
+                DroneStation s = stationDict[e.name];
+                return new Tuple<string, int>(s.name, 0);
+             /*   
                 s.updateChargingDrones(currentTime);
                 if(s.drones.Count != 0) continue;
                 else
@@ -67,11 +70,11 @@ namespace DroneTransferSimulator
                     foreach(Drone droneElement in s.drones)
                     {
                         double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
-                        if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<int, int>(availableStations.IndexOf(element), s.drones.IndexOf(droneElement));
+                        if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<int, int>(availableStations.IndexOf(e), s.drones.IndexOf(droneElement));
                     }
-                }
+                }*/
             }
-            return new Tuple<int, int>(-1, -1);
+            return new Tuple<string, int>("", -1);
         }
 
     }

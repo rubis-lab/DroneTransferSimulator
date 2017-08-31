@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.eventTable = new System.Windows.Forms.DataGridView();
             this.index = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -40,7 +40,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
-            this.gMapControl1 = new GMap.NET.WindowsForms.GMapControl();
+            this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.stationLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stationLng = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,7 +48,7 @@
             this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -59,25 +59,25 @@
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // eventTable
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.eventTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.eventTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.index,
             this.latitude,
             this.longitude,
             this.occuredTime,
             this.droneArrivalTime,
             this.result});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 20);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(560, 418);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
+            this.eventTable.Location = new System.Drawing.Point(12, 20);
+            this.eventTable.Name = "eventTable";
+            this.eventTable.ReadOnly = true;
+            this.eventTable.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.eventTable.RowTemplate.Height = 23;
+            this.eventTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.eventTable.Size = new System.Drawing.Size(560, 418);
+            this.eventTable.TabIndex = 0;
+            this.eventTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
             // 
             // index
             // 
@@ -153,7 +153,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.trackBar1);
-            this.splitContainer1.Panel1.Controls.Add(this.gMapControl1);
+            this.splitContainer1.Panel1.Controls.Add(this.eventMap);
             // 
             // splitContainer1.Panel2
             // 
@@ -177,33 +177,33 @@
             this.trackBar1.Value = 10;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
-            // gMapControl1
+            // eventMap
             // 
-            this.gMapControl1.Bearing = 0F;
-            this.gMapControl1.CanDragMap = true;
-            this.gMapControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gMapControl1.EmptyTileColor = System.Drawing.Color.Navy;
-            this.gMapControl1.GrayScaleMode = false;
-            this.gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.gMapControl1.LevelsKeepInMemmory = 5;
-            this.gMapControl1.Location = new System.Drawing.Point(0, 0);
-            this.gMapControl1.MarkersEnabled = true;
-            this.gMapControl1.MaxZoom = 2;
-            this.gMapControl1.MinZoom = 2;
-            this.gMapControl1.MouseWheelZoomEnabled = true;
-            this.gMapControl1.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.gMapControl1.Name = "gMapControl1";
-            this.gMapControl1.NegativeMode = false;
-            this.gMapControl1.PolygonsEnabled = true;
-            this.gMapControl1.RetryLoadTile = 0;
-            this.gMapControl1.RoutesEnabled = true;
-            this.gMapControl1.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.gMapControl1.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.gMapControl1.ShowTileGridLines = false;
-            this.gMapControl1.Size = new System.Drawing.Size(438, 384);
-            this.gMapControl1.TabIndex = 0;
-            this.gMapControl1.Zoom = 0D;
-            this.gMapControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseClick);
+            this.eventMap.Bearing = 0F;
+            this.eventMap.CanDragMap = true;
+            this.eventMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.eventMap.EmptyTileColor = System.Drawing.Color.Navy;
+            this.eventMap.GrayScaleMode = false;
+            this.eventMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.eventMap.LevelsKeepInMemmory = 5;
+            this.eventMap.Location = new System.Drawing.Point(0, 0);
+            this.eventMap.MarkersEnabled = true;
+            this.eventMap.MaxZoom = 2;
+            this.eventMap.MinZoom = 2;
+            this.eventMap.MouseWheelZoomEnabled = true;
+            this.eventMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.eventMap.Name = "eventMap";
+            this.eventMap.NegativeMode = false;
+            this.eventMap.PolygonsEnabled = true;
+            this.eventMap.RetryLoadTile = 0;
+            this.eventMap.RoutesEnabled = true;
+            this.eventMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.eventMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.eventMap.ShowTileGridLines = false;
+            this.eventMap.Size = new System.Drawing.Size(438, 384);
+            this.eventMap.TabIndex = 0;
+            this.eventMap.Zoom = 0D;
+            this.eventMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseClick);
             // 
             // dataGridView2
             // 
@@ -273,12 +273,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 481);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.eventTable);
             this.Controls.Add(this.groupBox2);
             this.Name = "SimulationResult";
             this.Text = "Drone Transfer Simulator";
             this.Load += new System.EventHandler(this.SimulationResult_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventTable)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -293,12 +293,12 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView eventTable;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private GMap.NET.WindowsForms.GMapControl gMapControl1;
+        private GMap.NET.WindowsForms.GMapControl eventMap;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.DataGridViewTextBoxColumn index;

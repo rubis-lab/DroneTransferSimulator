@@ -63,29 +63,28 @@ namespace DroneTransferSimulator
 
         public static int getTimeGap(Time t1, Time t2)
         {
-            return (t2.mm - t1.mm) + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd + 30 * (t2.MM - t1.MM + 12 * (t2.yy = t1.yy))));
+            return (t2.mm - t1.mm) + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd + 30 * (t2.MM - t1.MM + 12 * (t2.yy - t1.yy))));
         }
 
         override public string ToString()
         {
-            DateTime dateTime = new DateTime(yy, MM, dd, hh, mm, 0);
-            return dateTime.ToString("yyyy-MM-dd, hh:mm:ss");
+            DateTime dateTime = new DateTime(yy, MM, dd, hh, mm, ss);
+            return dateTime.ToString("yyyy-MM-dd, HH:mm:ss");
         }
 
         public static Time timeAdding(Time t, double ss)
         {
             Time addedTime = new Time();
-            int mmute = (int)ss / 60 + 1;
-            int _mm = t.mm + mmute;
+            int _ss = (int)ss;
+            addedTime.ss = _ss % 60;
+            int _mm = t.mm + _ss / 60;
             addedTime.mm = _mm % 60;
             int _hh = t.hh + _mm / 60;
-            addedTime.hh = _hh / 24;
-            int _date = t.dd + _hh / 24;
-            addedTime.dd = _date % 30;
-            int _MM = t.MM + _date / 30;
-            addedTime.MM = _MM % 12;
-            int _yy = t.yy + _MM / 12;
-            addedTime.yy = _yy;
+            addedTime.hh = _hh % 24;
+
+            addedTime.dd = t.dd;
+            addedTime.MM = t.MM;
+            addedTime.yy = t.yy;
 
             return addedTime;
         }

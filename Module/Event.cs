@@ -19,7 +19,7 @@ namespace DroneTransferSimulator
         {
             if(this.getOccuredDate() > obj.getOccuredDate()) return 1;
             if(obj.getOccuredDate() > this.getOccuredDate()) return -1;
-            return 0;
+            return 1;
         }
 
         public Event(double _lat, double _lng, Time _oDate, Time _ambulDate, eventType _type)

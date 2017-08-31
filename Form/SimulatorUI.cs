@@ -207,24 +207,26 @@ namespace DroneTransferSimulator
             {
                 if(eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV files uploaded");
                 if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
+
+                DateTime startTimePicked = startTimePicker.Value;
+                Time startTime = new Time(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
+
+                DateTime endTimePicked = endTimePicker.Value;
+                Time endTime = new Time(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
+
+                if(endTime < startTime) throw new Exception("Start should be earlier than end");
+
+                simulator.updateEventsBtwRange(startTime, endTime);
+                simulator.start();
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                return;
             }
 
-            DateTime startTimePicked = startTimePicker.Value;
-            Time startTime = new Time(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
-
-            DateTime endTimePicked = endTimePicker.Value;
-            Time endTime = new Time(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
-
-            simulator.updateEventsBtwRange(startTime, endTime);
-            //s.start();
-
+            /*
             SimulationResult frm = new SimulationResult(this);
-            frm.Show();
+            frm.Show();*/
         }
         
         private void eventDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)

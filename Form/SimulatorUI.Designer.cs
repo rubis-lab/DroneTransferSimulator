@@ -239,7 +239,7 @@
             this.endTimePicker.Name = "endTimePicker";
             this.endTimePicker.Size = new System.Drawing.Size(200, 21);
             this.endTimePicker.TabIndex = 19;
-            this.endTimePicker.Value = new System.DateTime(2015, 1, 1, 0, 0, 0, 0);
+            this.endTimePicker.Value = new System.DateTime(2013, 1, 10, 0, 0, 0, 0);
             // 
             // startSimButton
             // 
