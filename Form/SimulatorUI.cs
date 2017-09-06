@@ -156,6 +156,26 @@ namespace DroneTransferSimulator
             }
         }
 
+        private void droneLoadButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "CSV files | *.csv";
+            dialog.Multiselect = false;
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                String path = dialog.FileName;
+                droneCSVTextbox.Text = path;
+
+                string msg = simulator.getDronesFromCSV(path);
+                if(msg != null)
+                {
+                    MessageBox.Show(msg);
+                    droneCSVTextbox.Text = "";
+                    return;
+                }
+            }
+        }
+
         private void drawCircle(PointLatLng p, double coverRange)
         {
             List<PointLatLng> points = new List<PointLatLng>();
@@ -251,5 +271,7 @@ namespace DroneTransferSimulator
             eventMap.Position = item.Position;
             eventMap.Zoom = 15;
         }
+
+        
     }
 }

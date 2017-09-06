@@ -14,7 +14,7 @@ namespace DroneTransferSimulator
         private const double DIST_LNG = (LR_LNG - UL_LNG);   /* Distance between UB_LNG and LB_LNG */
 
         /* singleton instance for PathPlanner */
-        private static PathPlanner instance;
+        //private static PathPlanner instance;
 
         /* key: in/out direction, value: map(key: in/out velocity, value: cubeTime) */
         private Dictionary<Tuple<char, char>, Dictionary<Tuple<int, int>, double>> cubeTime;
@@ -296,6 +296,7 @@ namespace DroneTransferSimulator
         
         public static PathPlanner getInstance()
         {
+            PathPlanner instance = new PathPlanner();
             if (instance == null) instance = new PathPlanner();
             return instance;
         }
