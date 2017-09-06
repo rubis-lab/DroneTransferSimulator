@@ -2,36 +2,43 @@
 
 ### 1. DroneMap ###
 
-From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_500x500** from *prism.snu.ac.kr*. We have to make DBMS based on MySQL in C++ environment.
+From **QuantizeCity** by *wonseokdjango*, we're able to access **Seoul\_40x40\_500x500** from *prism.snu.ac.kr*. We have to make DBMS based on MySQL in C# environment.
 
-#### To connect MySQL & C/C++ (Visual Studio 2015)
+#### To connect MySQL & C# project (Visual Studio 2015)
 
 > Download MySQL server
 
 1. [dev.mysql.com](dev.mysql.com)
-2. downloads -> MySQL Community Edition -> [MySQL Community Server](https://dev.mysql.com/downloads/windows/installer/)
-3. MySQL Installer 5.7 for windows: Windows(x86, 32-bit), MySQL Installer MSI download
- - (64-bit version included)
-4. Start downloading MySQL installer
+2. downloads -> MySQL Connectors -> [Download Connector/Net](https://dev.mysql.com/downloads/connector/net/)
+3. Windows (x86, 32-bit), MSI Installer(6.9.9 ver) download
+4. Start downloading MSI Installer
  - Click "**No thanks, just start my download.**"
-5. Choose setup as ***Server only***
- ![picture](img/installer.PNG)
 
-> Project environment settings
+> C# project environment settings
 
-1. Create an empty C++ project in Visual Studio 2015.
-2. Should change build type same as your system.
- - ![picture](img/Debug64.PNG)
-3. Modify project settings
- - Add MySQL Server include directory to VC++ Directories -> Include Directories: *C:\ProgramFiles\MySQL\MySQL Server 5.7\include*
- - Add MySQL Server lib directory to VC++ Directories -> Library Directories: *C:\ProgramFiles\MySQL\MySQL Server 5.7\lib*
- ![picture](img/VCDirectories.PNG)
- - Add MySQL Server lib to VC++ Directories -> Library Directories: *libmysql.lib*
- ![picture](img/LinkerInput.PNG)
-4. copy **libmysql.dll** from *C:\Program Files\MySQL\MySQL Server 5.7\lib* to project directory
-5. Build and fix bugs about redefinition in both *time.h* and *my_global.h*
- - Run Visual Studio as administrator
- - In *time.h*, annotate `struct timespec` definition
- - ![picture](img/TimespecAnnotation.png)
+1. Create a C# project as Console or Windows Form type.
+2. Add a MySQL Data reference to the project.
+ - Project(*right click*) -> Add -> Reference
+ - Search MySql and apply **MySql.Data**
+
+![picture](img/mysql_reference.PNG)
 
 ----------
+
+
+### 2. GMap.net for Windows Form ###
+
+We used Google map to show events' position and routes, edit drone stations during Drone Transfer Simulation. This describes how to include packages to the project.
+
+#### To include GMap.net package
+
+> C# project package installation
+
+1. Install GMap.NET.WindowsForms
+ - Project(*menu*) -> Manage NuGet Packages
+ - Install GMap.NET.WindowsForms(1.7.5 ver)
+
+![picture](img/gmap_package.PNG)
+
+----------
+
