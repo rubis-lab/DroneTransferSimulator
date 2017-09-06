@@ -37,15 +37,14 @@ namespace DroneTransferSimulator
             eventLng = coordinates.Item2;
         }
 
-        public void findAvailableStations()
+        public Tuple<string, int> findAvailableDrone(Time currentTime)
         {
-            List<DroneStation> stations = new List<DroneStation>();
-            foreach(KeyValuePair<string, DroneStation> dict in stationDict)
+            foreach (KeyValuePair<string, DroneStation> dict in stationDict)
             {
                 DroneStation st = dict.Value;
                 double distance = getDistanceFromRecentEvent(st.stationLat, st.stationLng);
-                
-                if(st.coverRange > distance)
+
+                if (st.coverRange > distance)
                 {
                     availableStation a = new availableStation();
                     a.name = dict.Key;
@@ -53,29 +52,32 @@ namespace DroneTransferSimulator
                     availableStations.Add(a);
                 }
             }
-            availableStations = availableStations.OrderBy(n => n.distance).ToList();
-        }
-
-        public Tuple<string, int> findAvailableDrone(Time currentTime)
-        {
-            foreach(availableStation e in availableStations)
+            if(availableStations.Count == 0)
             {
-                DroneStation s = stationDict[e.name];
-                return new Tuple<string, int>(s.name, 0);
-             /*   
-                s.updateChargingDrones(currentTime);
-                if(s.drones.Count != 0) continue;
-                else
-                {
-                    foreach(Drone droneElement in s.drones)
-                    {
-                        double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
-                        if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<int, int>(availableStations.IndexOf(e), s.drones.IndexOf(droneElement));
-                    }
-                }*/
+                Console.WriteLine("No available Drone Station (coverage problem)");
+                return new Tuple<string, int>("", -1);
             }
-            return new Tuple<string, int>("", -1);
+            else
+            {
+                availableStations = availableStations.OrderBy(n => n.distance).ToList();
+                foreach (availableStation e in availableStations)
+                {
+                    DroneStation s = stationDict[e.name];
+                                        
+                    //s.updateChargingDrones(currentTime);
+                    if(s.drones.Count == 0) continue;
+                    else
+                    {
+                        foreach(Drone droneElement in s.drones)
+                        {
+                            double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
+                            if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                        }
+                    }
+                }
+                Console.WriteLine("No available drones in available stations");
+                return new Tuple<string, int>("", -1);
+            }
         }
-
     }
 }

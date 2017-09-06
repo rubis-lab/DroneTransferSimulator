@@ -50,6 +50,9 @@
             this.stationMap = new GMap.NET.WindowsForms.GMapControl();
             this.eventMapLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.droneLoadButton = new System.Windows.Forms.Button();
+            this.droneCSVTextbox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -95,12 +98,12 @@
             this.longitude,
             this.occuredTime,
             this.ambulTime});
-            this.eventDataGridView.Location = new System.Drawing.Point(12, 87);
+            this.eventDataGridView.Location = new System.Drawing.Point(12, 130);
             this.eventDataGridView.Name = "eventDataGridView";
             this.eventDataGridView.ReadOnly = true;
             this.eventDataGridView.RowTemplate.Height = 23;
             this.eventDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventDataGridView.Size = new System.Drawing.Size(490, 306);
+            this.eventDataGridView.Size = new System.Drawing.Size(490, 263);
             this.eventDataGridView.TabIndex = 13;
             this.eventDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventDataGridView_RowEnter);
             // 
@@ -301,11 +304,41 @@
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
             // 
+            // droneLoadButton
+            // 
+            this.droneLoadButton.Location = new System.Drawing.Point(476, 100);
+            this.droneLoadButton.Name = "droneLoadButton";
+            this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
+            this.droneLoadButton.TabIndex = 26;
+            this.droneLoadButton.Text = "...";
+            this.droneLoadButton.UseVisualStyleBackColor = true;
+            this.droneLoadButton.Click += new System.EventHandler(this.droneLoadButton_Click);
+            // 
+            // droneCSVTextbox
+            // 
+            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 101);
+            this.droneCSVTextbox.Name = "droneCSVTextbox";
+            this.droneCSVTextbox.ReadOnly = true;
+            this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
+            this.droneCSVTextbox.TabIndex = 25;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 87);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 12);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Drone CSV";
+            // 
             // SimulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 481);
+            this.Controls.Add(this.droneLoadButton);
+            this.Controls.Add(this.droneCSVTextbox);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.startSimButton);
             this.Controls.Add(this.endTimePicker);
             this.Controls.Add(this.label5);
@@ -354,6 +387,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn occuredTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ambulTime;
+        private System.Windows.Forms.Button droneLoadButton;
+        public System.Windows.Forms.TextBox droneCSVTextbox;
+        private System.Windows.Forms.Label label3;
     }
 }
 

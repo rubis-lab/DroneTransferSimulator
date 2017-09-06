@@ -14,7 +14,7 @@ namespace DroneTransferSimulator
         private const double DIST_LNG = (LR_LNG - UL_LNG);   /* Distance between UB_LNG and LB_LNG */
 
         /* singleton instance for PathPlanner */
-        private static PathPlanner instance;
+        //private static PathPlanner instance;
 
         /* key: in/out direction, value: map(key: in/out velocity, value: cubeTime) */
         private Dictionary<Tuple<char, char>, Dictionary<Tuple<int, int>, double>> cubeTime;
@@ -173,18 +173,20 @@ namespace DroneTransferSimulator
             double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
             
             DroneMap droneMap = DroneMap.getInstance();
-
+            /*
             List<DroneMapData> srcSet = droneMap.getData(srcRow, srcCol, srcRow, srcCol);
             double srcHeight = srcSet[0].landElevation;
 
             List<DroneMapData> dstSet = droneMap.getData(dstRow, dstCol, dstRow, dstCol);
             double dstHeight = dstSet[0].landElevation;
-
-            for(double h = srcHeight; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
+            */
+            //for(double h = srcHeight; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
+            for (double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
             cubes.Add(new Cube('d', 'r'));
             for(double d = 0.0; d <= distance; d += 10.0) cubes.Add(new Cube('l', 'r'));
             cubes.Add(new Cube('l', 'd'));
-            for(double h = dstHeight; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
+            //for(double h = dstHeight; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
+            for (double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
 
             return cubes;
         }
@@ -296,6 +298,7 @@ namespace DroneTransferSimulator
         
         public static PathPlanner getInstance()
         {
+            PathPlanner instance = new PathPlanner();
             if (instance == null) instance = new PathPlanner();
             return instance;
         }
