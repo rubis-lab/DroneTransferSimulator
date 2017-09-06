@@ -10,7 +10,8 @@ namespace DroneTransferSimulator
     {
         private double lat, lng;
         private Time occuredDate, ambulDate;
-        private int stationIndex, droneIndex;
+        private string stationName;
+        private int droneIndex;
         private eventType type;
 
         public enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
@@ -51,15 +52,15 @@ namespace DroneTransferSimulator
             return new Tuple<double, double>(lat, lng);
         }
 
-        public void setStationDroneIdx(int _stationIndex, int _droneIndex)
+        public void setStationDroneIdx(string _stationName, int _droneIndex)
         {
-            stationIndex = _stationIndex;
+            stationName = _stationName;
             droneIndex = _droneIndex;
         }
 
-        public Tuple<int, int> getStationDroneIdx()
+        public Tuple<string, int> getStationDroneIdx()
         {
-            return new Tuple<int, int>(stationIndex, droneIndex);
+            return new Tuple<string, int>(stationName, droneIndex);
         }
     }
 }

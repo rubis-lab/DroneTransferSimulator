@@ -39,7 +39,6 @@ namespace DroneTransferSimulator
 
         public Tuple<string, int> findAvailableDrone(Time currentTime)
         {
-            List<DroneStation> stations = new List<DroneStation>();
             foreach (KeyValuePair<string, DroneStation> dict in stationDict)
             {
                 DroneStation st = dict.Value;
@@ -72,14 +71,11 @@ namespace DroneTransferSimulator
                         foreach(Drone droneElement in s.drones)
                         {
                             double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
-                            //if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
-                            if (droneElement.returnStatus() != 1) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                            if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
                         }
                     }
-                    
-                    
                 }
-                Console.WriteLine("No availbale drones in available stations");
+                Console.WriteLine("No available drones in available stations");
                 return new Tuple<string, int>("", -1);
             }
         }
