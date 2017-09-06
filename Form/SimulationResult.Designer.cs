@@ -41,13 +41,12 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.eventMap = new GMap.NET.WindowsForms.GMapControl();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.stationLat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.stationLng = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.droneElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.eventDetailTable = new System.Windows.Forms.DataGridView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.stationName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.droneElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.eventTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -55,12 +54,14 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDetailTable)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // eventTable
             // 
+            this.eventTable.AllowUserToAddRows = false;
+            this.eventTable.AllowUserToDeleteRows = false;
             this.eventTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.eventTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.index,
@@ -77,7 +78,7 @@
             this.eventTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.eventTable.Size = new System.Drawing.Size(560, 418);
             this.eventTable.TabIndex = 0;
-            this.eventTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_RowEnter);
+            this.eventTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventTable_RowEnter);
             // 
             // index
             // 
@@ -157,15 +158,16 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.dataGridView2);
+            this.splitContainer1.Panel2.Controls.Add(this.eventDetailTable);
             this.splitContainer1.Size = new System.Drawing.Size(440, 450);
-            this.splitContainer1.SplitterDistance = 386;
+            this.splitContainer1.SplitterDistance = 389;
             this.splitContainer1.TabIndex = 2;
             // 
             // trackBar1
             // 
             this.trackBar1.AutoSize = false;
-            this.trackBar1.Location = new System.Drawing.Point(405, 185);
+            this.trackBar1.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.trackBar1.Location = new System.Drawing.Point(403, 166);
             this.trackBar1.Margin = new System.Windows.Forms.Padding(1);
             this.trackBar1.Maximum = 20;
             this.trackBar1.Minimum = 10;
@@ -200,56 +202,27 @@
             this.eventMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
             this.eventMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
             this.eventMap.ShowTileGridLines = false;
-            this.eventMap.Size = new System.Drawing.Size(438, 384);
+            this.eventMap.Size = new System.Drawing.Size(438, 387);
             this.eventMap.TabIndex = 0;
             this.eventMap.Zoom = 0D;
             this.eventMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gMapControl1_MouseClick);
             // 
-            // dataGridView2
+            // eventDetailTable
             // 
-            this.dataGridView2.AllowUserToAddRows = false;
-            this.dataGridView2.AllowUserToDeleteRows = false;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.stationLat,
-            this.stationLng,
+            this.eventDetailTable.AllowUserToAddRows = false;
+            this.eventDetailTable.AllowUserToDeleteRows = false;
+            this.eventDetailTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.eventDetailTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.stationName,
             this.droneElapsedTime,
             this.ambulanceElapsedTime});
-            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.ReadOnly = true;
-            this.dataGridView2.RowHeadersVisible = false;
-            this.dataGridView2.Size = new System.Drawing.Size(438, 58);
-            this.dataGridView2.TabIndex = 1;
-            // 
-            // stationLat
-            // 
-            this.stationLat.HeaderText = "Station Latitude";
-            this.stationLat.Name = "stationLat";
-            this.stationLat.ReadOnly = true;
-            this.stationLat.Width = 85;
-            // 
-            // stationLng
-            // 
-            this.stationLng.HeaderText = "Station Longitude";
-            this.stationLng.Name = "stationLng";
-            this.stationLng.ReadOnly = true;
-            this.stationLng.Width = 85;
-            // 
-            // droneElapsedTime
-            // 
-            this.droneElapsedTime.HeaderText = "Drone Elapsed Time";
-            this.droneElapsedTime.Name = "droneElapsedTime";
-            this.droneElapsedTime.ReadOnly = true;
-            this.droneElapsedTime.Width = 130;
-            // 
-            // ambulanceElapsedTime
-            // 
-            this.ambulanceElapsedTime.HeaderText = "Ambulance Elapsed Time";
-            this.ambulanceElapsedTime.Name = "ambulanceElapsedTime";
-            this.ambulanceElapsedTime.ReadOnly = true;
-            this.ambulanceElapsedTime.Width = 130;
+            this.eventDetailTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.eventDetailTable.Location = new System.Drawing.Point(0, 0);
+            this.eventDetailTable.Name = "eventDetailTable";
+            this.eventDetailTable.ReadOnly = true;
+            this.eventDetailTable.RowHeadersVisible = false;
+            this.eventDetailTable.Size = new System.Drawing.Size(438, 55);
+            this.eventDetailTable.TabIndex = 1;
             // 
             // groupBox2
             // 
@@ -266,6 +239,27 @@
             this.timer1.Enabled = true;
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // stationName
+            // 
+            this.stationName.HeaderText = "Station Name";
+            this.stationName.Name = "stationName";
+            this.stationName.ReadOnly = true;
+            this.stationName.Width = 85;
+            // 
+            // droneElapsedTime
+            // 
+            this.droneElapsedTime.HeaderText = "Drone Elapsed Time";
+            this.droneElapsedTime.Name = "droneElapsedTime";
+            this.droneElapsedTime.ReadOnly = true;
+            this.droneElapsedTime.Width = 120;
+            // 
+            // ambulanceElapsedTime
+            // 
+            this.ambulanceElapsedTime.HeaderText = "Ambulance Elapsed Time";
+            this.ambulanceElapsedTime.Name = "ambulanceElapsedTime";
+            this.ambulanceElapsedTime.ReadOnly = true;
+            this.ambulanceElapsedTime.Width = 120;
             // 
             // SimulationResult
             // 
@@ -285,7 +279,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.eventDetailTable)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -307,9 +301,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn occuredTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn droneArrivalTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn stationLat;
-        private System.Windows.Forms.DataGridViewTextBoxColumn stationLng;
+        private System.Windows.Forms.DataGridView eventDetailTable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn stationName;
         private System.Windows.Forms.DataGridViewTextBoxColumn droneElapsedTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ambulanceElapsedTime;
     }
