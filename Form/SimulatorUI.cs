@@ -244,9 +244,9 @@ namespace DroneTransferSimulator
                 MessageBox.Show(ex.Message);
             }
 
-            /*
+
             SimulationResult frm = new SimulationResult(this);
-            frm.Show();*/
+            frm.Show();
         }
         
         private void eventDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)

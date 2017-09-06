@@ -61,15 +61,22 @@ namespace DroneTransferSimulator
             else return false;
         }
 
-        public static int getTimeGap(Time t1, Time t2)
+        public static int getTimeGap(Time t2, Time t1)
         {
-            return (t2.mm - t1.mm) + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd + 30 * (t2.MM - t1.MM + 12 * (t2.yy - t1.yy))));
+            return (t2.ss - t1.ss) + 60 * (t2.mm - t1.mm + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd)));
         }
 
         override public string ToString()
         {
-            DateTime dateTime = new DateTime(yy, MM, dd, hh, mm, ss);
-            return dateTime.ToString("yyyy-MM-dd, HH:mm:ss");
+            try
+            {
+                DateTime dateTime = new DateTime(yy, MM, dd, hh, mm, ss);
+                return dateTime.ToString("yyyy-MM-dd, HH:mm:ss");
+            }
+            catch
+            {
+                return "-";
+            }
         }
 
         public static Time timeAdding(Time t, double ss)
