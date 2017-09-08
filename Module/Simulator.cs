@@ -154,18 +154,18 @@ namespace DroneTransferSimulator
                 switch(e.getEventType())
                 {
                     case Event.eventType.E_EVENT_OCCURED:
-                        Console.WriteLine("E_EVENT_OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
+                        Console.WriteLine("\n" + e.getOccuredDate().ToString() + " OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventOccured(e);
                         events.Add(e);
                         break;
 
                     case Event.eventType.E_EVENT_ARRIVAL:
-                        Console.WriteLine("E_EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
-                        //eventArrived(e.getCoordinates(), e.getOccuredDate(), e.getStationDroneIdx());
+                        Console.WriteLine("\n" + e.getOccuredDate().ToString() + " EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
+                        eventArrived(e.getCoordinates(), e.getOccuredDate(), e.getStationDroneIdx());
                         break;
 
                     case Event.eventType.E_STATION_ARRIVAL:
-                        Console.WriteLine("E_EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
+                        Console.WriteLine("\n" + e.getOccuredDate().ToString() + " EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
 
                         //            stationArrival(e.getOccuredDate(), e.getStationDroneIdx());
                         break;
@@ -174,10 +174,10 @@ namespace DroneTransferSimulator
 
             }
         }
-        public void eventOccured(Event e)
+        public void eventOccured(Event ev)
         {
-            Tuple<double, double> coordinates = e.getCoordinates();
-            Time occuredTime = e.getOccuredDate();
+            Tuple<double, double> coordinates = ev.getCoordinates();
+            Time occuredTime = ev.getOccuredDate();
 
             //find stations and drone
             DroneStationFinder finder = new DroneStationFinder(coordinates);
@@ -198,9 +198,9 @@ namespace DroneTransferSimulator
             
             Time droneArrivalTime = Time.timeAdding(occuredTime, calculatedTime);
 
-            e.setDroneDate(droneArrivalTime);
-            e.setResult("success");
-            e.setStation(s);
+            ev.setDroneDate(droneArrivalTime);
+            ev.setResult("success");
+            ev.setStation(s);
 
             Console.WriteLine(occuredTime.ToString() + ", " + droneArrivalTime.ToString());
             
@@ -211,15 +211,14 @@ namespace DroneTransferSimulator
             //declare coming event
             Event.eventType type = Event.eventType.E_EVENT_ARRIVAL;
             Event e = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type);
-            e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
             
-            int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
             eventSet.Add(e, e);
         }
 
         public void eventArrived(Tuple<double, double> occuredCoord, Time occuredTime, Tuple<string, int> stationDroneIdx)
         {
-            
+            Console.WriteLine("hello");
+            /*
             //time to return to the Drone Station
             PathPlanner pathPlanner = PathPlanner.getInstance();
             double calculatedTime;
@@ -240,7 +239,7 @@ namespace DroneTransferSimulator
             e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
 
             int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
-            eventSet.Add(e, e);
+            eventSet.Add(e, e);*/
         }
 
         public void stationArrival(Time arrivalTime, Tuple<string, int> stationDroneIdx)

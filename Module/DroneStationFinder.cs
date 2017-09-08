@@ -12,7 +12,6 @@ namespace DroneTransferSimulator
         private double eventLng, eventLat;
         private struct availableStation
         {
-            public int stationIndex;
             public string name;
             public double distance;
         };
@@ -54,13 +53,13 @@ namespace DroneTransferSimulator
             }
             if(availableStations.Count == 0)
             {
-                Console.WriteLine("No available Drone Station (coverage problem)");
+                Console.WriteLine("Coverage Problem");
                 return new Tuple<string, int>("", -1);
             }
             else
             {
                 availableStations = availableStations.OrderBy(n => n.distance).ToList();
-                foreach (availableStation e in availableStations)
+                foreach(availableStation e in availableStations)
                 {
                     DroneStation s = stationDict[e.name];
                                         
@@ -71,11 +70,14 @@ namespace DroneTransferSimulator
                         foreach(Drone droneElement in s.drones)
                         {
                             double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
-                            if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                            if(droneElement.returnStatus() != 1 && droneElement.returnAvailDist() > distance)
+                            {
+                                return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                            }
                         }
                     }
                 }
-                Console.WriteLine("No available drones in available stations");
+                Console.WriteLine("No Available Drones");
                 return new Tuple<string, int>("", -1);
             }
         }
