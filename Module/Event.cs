@@ -10,7 +10,6 @@ namespace DroneTransferSimulator
     {
         private double lat, lng;
         private Time occuredDate, ambulDate, droneDate;
-        private string stationName;
         private int droneIndex;
         private eventType type;
         private string result;
@@ -65,11 +64,6 @@ namespace DroneTransferSimulator
         public Tuple<double, double> getCoordinates()
         {
             return new Tuple<double, double>(lat, lng);
-        }
-
-        public Tuple<string, int> getStationDroneIdx()
-        {
-            return new Tuple<string, int>(stationName, droneIndex);
         }
 
         public void setDroneDate(Time _droneDate)
