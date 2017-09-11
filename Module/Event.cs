@@ -67,17 +67,6 @@ namespace DroneTransferSimulator
             return new Tuple<double, double>(lat, lng);
         }
 
-        public DroneStation getStation()
-        {
-            return station;
-        }
-
-        public void setStationDroneIdx(string _stationName, int _droneIndex)
-        {
-            stationName = _stationName;
-            droneIndex = _droneIndex;
-        }
-
         public Tuple<string, int> getStationDroneIdx()
         {
             return new Tuple<string, int>(stationName, droneIndex);
@@ -97,5 +86,22 @@ namespace DroneTransferSimulator
         {
             station = _station;
         }
+
+        public DroneStation getStation()
+        {
+            return station;
+        }
+
+        public int getDroneIndex()
+        {
+            return droneIndex;
+        }
+        
+        public void setStationDroneIdx(DroneStation _station, int _droneIndex)
+        {
+            station = _station;
+            droneIndex = _droneIndex;
+        }
+
     }
 }
