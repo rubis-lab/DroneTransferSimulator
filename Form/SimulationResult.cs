@@ -17,7 +17,6 @@ namespace DroneTransferSimulator
 {
     public partial class SimulationResult : Form
     {
-        //static Simulator simulator = Simulator.getInstance();
         Simulator simulator = SimulatorUI.simulator;
         List<Event> eventList;
         SimulatorUI simulatorUIForm;
@@ -48,25 +47,6 @@ namespace DroneTransferSimulator
             eventMap.Overlays.Clear();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            PathPlanner pathPlanner = PathPlanner.getInstance();
-            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-
-            stopwatch.Start();
-            pathPlanner.calcTravelTime(37.578695, 126.997512, 37.578788, 126.994859);
-            System.Console.WriteLine("Time elapsed : " + stopwatch.ElapsedMilliseconds);
-            stopwatch.Stop();
-
-            stopwatch.Restart();
-            pathPlanner.calcTravelTime(37.578695, 126.997512, 37.578788, 126.994859);
-            System.Console.WriteLine("Time elapsed : " + stopwatch.ElapsedMilliseconds);
-            stopwatch.Stop();
-
-            Analysis frm = new Analysis(this);
-            frm.Show();
-        }
-
         private void eventTable_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
             int ind = e.RowIndex;
@@ -95,15 +75,13 @@ namespace DroneTransferSimulator
             DroneStation station = eventList[ind].getStation();
 
             eventDetailTable.Rows.Clear();
-            eventDetailTable.Rows.Add(station.name, droneGap, ambulGap);
+            eventDetailTable.Rows.Add(station.name, station.stationLat, station.stationLng, droneGap, ambulGap);
 
             stationOverlay.Markers.Clear();
             eventMap.Overlays.Clear();
 
             drawEventPoint(lat, lng);
             drawStationPoint(station);
-            
-        //    gMapControl1.Position = marker.Position;
         }
 
         private void drawEventPoint(double lat, double lng)
@@ -159,12 +137,6 @@ namespace DroneTransferSimulator
             stationOverlay.Polygons.Add(gpol);
         }
 
-        private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
-        {
-            PointLatLng p = eventMap.FromLocalToLatLng(e.X, e.Y);
-            Console.WriteLine(p.Lat + ", " + p.Lng);
-        }
-
         private void updateDataGridView()
         {
             eventTable.Rows.Clear();
@@ -177,7 +149,7 @@ namespace DroneTransferSimulator
                 string occuredTime = e.getOccuredDate().ToString();
                 string droneArrivalTime = e.getDroneDate().ToString();
                 string result = "Coverage Problem";
-                if(e.getResult() == Event.eventResult.SUCCESS) result = e.getStationDroneIdx().Item1;
+                if(e.getResult() == Event.eventResult.SUCCESS) result = e.getStation().name;
                 else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No available drone";
                 eventTable.Rows.Add(i, latitude, longitude, occuredTime, droneArrivalTime, result);
             }
@@ -197,6 +169,11 @@ namespace DroneTransferSimulator
         {
             eventMap.Zoom = trackBar1.Value;
         }
-        
+
+        private void analyzeButton_Click(object sender, EventArgs e)
+        {
+            Analysis frm = new Analysis(this);
+            frm.Show();
+        }
     }
 }

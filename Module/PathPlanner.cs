@@ -181,12 +181,12 @@ namespace DroneTransferSimulator
             double dstHeight = dstSet[0].landElevation;*/
             
             //for(double h = srcHeight; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
-            for (double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
+            for(double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
             cubes.Add(new Cube('d', 'r'));
             for(double d = 0.0; d <= distance; d += 10.0) cubes.Add(new Cube('l', 'r'));
             cubes.Add(new Cube('l', 'd'));
             //for(double h = dstHeight; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
-            for (double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
+            for(double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('u', 'd'));
 
             return cubes;
         }

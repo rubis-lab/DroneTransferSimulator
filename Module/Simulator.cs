@@ -142,8 +142,6 @@ namespace DroneTransferSimulator
 
         public void start()
         {
-            Console.WriteLine("Start");
-
             if(events.Count != 0) events.Clear();
 
             while(eventSet.Count != 0)
@@ -155,11 +153,11 @@ namespace DroneTransferSimulator
                     case Event.eventType.E_EVENT_OCCURED:
                         Console.WriteLine("\n" + e.getOccuredDate().ToString() + " OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventOccured(e);
-                        //events.Add(e);
+                        events.Add(e);
+                        isDone = true;
                         break;
 
                     case Event.eventType.E_EVENT_ARRIVAL:
-
                         Console.WriteLine("\n" + e.getOccuredDate().ToString() + " EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventArrived(e);
                         break;
@@ -178,14 +176,16 @@ namespace DroneTransferSimulator
             Time occuredTime = ev.getOccuredDate();
 
             //find stations and drone
-            DroneStationFinder finder = new DroneStationFinder(e);
+            DroneStationFinder finder = new DroneStationFinder(ev);
             Tuple<string, int> stationDroneIdx = finder.findAvailableDrone();
-            e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
+
             if(stationDroneIdx.Item1.Length == 0) return;
-            successEventNum += 1;
-            Console.WriteLine(stationDroneIdx.Item1 + ", " + stationDroneIdx.Item2);            
+
             DroneStation s = stationDict[stationDroneIdx.Item1];
             Drone drone = s.drones[stationDroneIdx.Item2];
+
+            ev.setStationDroneIdx(s, stationDroneIdx.Item2);
+            successEventNum += 1;
 
             double distance = finder.getDistanceFromRecentEvent(s.stationLat, s.stationLng);
 
@@ -194,10 +194,10 @@ namespace DroneTransferSimulator
             double calculatedTime;
             calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2);
             
-            Time droneArrivalTime = Time.timeAdding(e.getOccuredDate(), calculatedTime);
+            Time droneArrivalTime = Time.timeAdding(ev.getOccuredDate(), calculatedTime);
 
             ev.setDroneDate(droneArrivalTime);
-            ev.setResult("success");
+            ev.setResult(Event.eventResult.SUCCESS);
             ev.setStationDroneIdx(s, stationDroneIdx.Item2);
 
             //battery consumption
@@ -231,10 +231,9 @@ namespace DroneTransferSimulator
             Time droneArrivalTime = Time.timeAdding(ev.getOccuredDate(), calculatedTime);
             
             //battery consumption
-            DroneStationFinder f = new DroneStationFinder(new Tuple<double, double>(eventLat, eventLng));
+            DroneStationFinder f = new DroneStationFinder(ev);
             double distance = f.getDistanceFromRecentEvent(stationLat, stationLng);
             drone.fly(distance);
-            Console.WriteLine(drone.returnBattery());
             
             //event of arriving
             Event.eventType type = Event.eventType.E_STATION_ARRIVAL;

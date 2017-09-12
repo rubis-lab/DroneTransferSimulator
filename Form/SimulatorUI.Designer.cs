@@ -48,11 +48,11 @@
             this.startSimButton = new System.Windows.Forms.Button();
             this.stationMap = new GMap.NET.WindowsForms.GMapControl();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.eventMapLabel = new System.Windows.Forms.Label();
+            this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             this.droneLoadButton = new System.Windows.Forms.Button();
             this.droneCSVTextbox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.eventMapLabel = new System.Windows.Forms.Label();
-            this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -266,36 +266,6 @@
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
             // 
-            // droneLoadButton
-            // 
-
-            this.droneLoadButton.Enabled = false;
-            this.droneLoadButton.Location = new System.Drawing.Point(476, 100);
-
-            this.droneLoadButton.Name = "droneLoadButton";
-            this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
-            this.droneLoadButton.TabIndex = 26;
-            this.droneLoadButton.Text = "...";
-            this.droneLoadButton.UseVisualStyleBackColor = true;
-            this.droneLoadButton.Click += new System.EventHandler(this.droneLoadButton_Click);
-            // 
-            // droneCSVTextbox
-            // 
-            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 96);
-            this.droneCSVTextbox.Name = "droneCSVTextbox";
-            this.droneCSVTextbox.ReadOnly = true;
-            this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
-            this.droneCSVTextbox.TabIndex = 25;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 82);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 12);
-            this.label3.TabIndex = 24;
-            this.label3.Text = "Drone CSV";
-            // 
             // eventMapLabel
             // 
             this.eventMapLabel.AutoSize = true;
@@ -333,6 +303,34 @@
             this.eventMap.Zoom = 0D;
             this.eventMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.eventMap_OnMarkerClick);
             this.eventMap.Load += new System.EventHandler(this.eventMap_Load);
+            // 
+            // droneLoadButton
+            // 
+            this.droneLoadButton.Enabled = false;
+            this.droneLoadButton.Location = new System.Drawing.Point(476, 95);
+            this.droneLoadButton.Name = "droneLoadButton";
+            this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
+            this.droneLoadButton.TabIndex = 26;
+            this.droneLoadButton.Text = "...";
+            this.droneLoadButton.UseVisualStyleBackColor = true;
+            this.droneLoadButton.Click += new System.EventHandler(this.droneLoadButton_Click);
+            // 
+            // droneCSVTextbox
+            // 
+            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 96);
+            this.droneCSVTextbox.Name = "droneCSVTextbox";
+            this.droneCSVTextbox.ReadOnly = true;
+            this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
+            this.droneCSVTextbox.TabIndex = 25;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 82);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(67, 12);
+            this.label3.TabIndex = 24;
+            this.label3.Text = "Drone CSV";
             // 
             // SimulatorUI
             // 

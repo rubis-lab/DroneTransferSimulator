@@ -55,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\Analysis.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\Analysis.Designer.cs">
+      <DependentUpon>Analysis.cs</DependentUpon>
+    </Compile>
     <Compile Include="Module\Drone.cs" />
     <Compile Include="Module\DroneMap.cs" />
     <Compile Include="Module\DroneStation.cs" />
@@ -83,6 +89,9 @@
     </Compile>
     <Compile Include="Module\Simulator.cs" />
     <Compile Include="Module\Time.cs" />
+    <EmbeddedResource Include="Form\Analysis.resx">
+      <DependentUpon>Analysis.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form\SimulatorUI.resx">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
     </EmbeddedResource>
