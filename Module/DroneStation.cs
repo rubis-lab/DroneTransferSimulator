@@ -32,7 +32,7 @@ namespace DroneTransferSimulator
         {
             foreach(Drone droneElement in drones)
             {
-                if(droneElement.returnStatus() == 2)
+                if(droneElement.returnStatus() == Drone.droneStatus.CHARGING)
                 {
                     droneElement.charge(droneElement.getChargeStartTime(), currentTime); //battery charged from centerArrivalTime
 

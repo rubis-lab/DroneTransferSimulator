@@ -10,7 +10,8 @@ namespace DroneTransferSimulator
     {
         private double battery, chargingRate;   /* unit: percent */
         private double maxAvailDist; /* available distance of Drone */
-        private int status;                     /* 0: in station, 1: flying, 2: charging*/
+        public enum droneStatus { IN_STATION, FLYING, CHARGING };
+        private droneStatus status;
         private Time chargeStartTime;
 
         public Drone(double _maxAvailDist, double _chargingRate)
@@ -18,7 +19,7 @@ namespace DroneTransferSimulator
             maxAvailDist = _maxAvailDist;
             chargingRate = _chargingRate;
             battery = 100;
-            status = 0;
+            status = droneStatus.IN_STATION;
         }
 
         public void fly(double distance)
@@ -47,11 +48,11 @@ namespace DroneTransferSimulator
         {
             return maxAvailDist / 100 * battery;
         }
-        public int returnStatus()
+        public droneStatus returnStatus()
         {
             return status;
         }
-        public void setStatus(int _status)
+        public void setStatus(droneStatus _status)
         {
             status = _status;
         }

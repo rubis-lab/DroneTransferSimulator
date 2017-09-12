@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             this.eventDataGridView = new System.Windows.Forms.DataGridView();
             this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -48,43 +47,15 @@
             this.endTimePicker = new System.Windows.Forms.DateTimePicker();
             this.startSimButton = new System.Windows.Forms.Button();
             this.stationMap = new GMap.NET.WindowsForms.GMapControl();
-            this.eventMapLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.droneLoadButton = new System.Windows.Forms.Button();
             this.droneCSVTextbox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.eventMapLabel = new System.Windows.Forms.Label();
+            this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // eventMap
-            // 
-            this.eventMap.Bearing = 0F;
-            this.eventMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.eventMap.CanDragMap = true;
-            this.eventMap.EmptyTileColor = System.Drawing.Color.Navy;
-            this.eventMap.GrayScaleMode = false;
-            this.eventMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
-            this.eventMap.LevelsKeepInMemmory = 5;
-            this.eventMap.Location = new System.Drawing.Point(6, 24);
-            this.eventMap.MarkersEnabled = true;
-            this.eventMap.MaxZoom = 2;
-            this.eventMap.MinZoom = 2;
-            this.eventMap.MouseWheelZoomEnabled = true;
-            this.eventMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
-            this.eventMap.Name = "eventMap";
-            this.eventMap.NegativeMode = false;
-            this.eventMap.PolygonsEnabled = true;
-            this.eventMap.RetryLoadTile = 0;
-            this.eventMap.RoutesEnabled = true;
-            this.eventMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
-            this.eventMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
-            this.eventMap.ShowTileGridLines = false;
-            this.eventMap.Size = new System.Drawing.Size(255, 349);
-            this.eventMap.TabIndex = 4;
-            this.eventMap.Zoom = 0D;
-            this.eventMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.eventMap_OnMarkerClick);
-            this.eventMap.Load += new System.EventHandler(this.eventMap_Load);
             // 
             // eventDataGridView
             // 
@@ -283,15 +254,6 @@
             this.stationMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.stationMap_OnMarkerClick);
             this.stationMap.Load += new System.EventHandler(this.stationMap_Load);
             // 
-            // eventMapLabel
-            // 
-            this.eventMapLabel.AutoSize = true;
-            this.eventMapLabel.Location = new System.Drawing.Point(6, 11);
-            this.eventMapLabel.Name = "eventMapLabel";
-            this.eventMapLabel.Size = new System.Drawing.Size(65, 12);
-            this.eventMapLabel.TabIndex = 22;
-            this.eventMapLabel.Text = "Event Map";
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.stationMap);
@@ -306,6 +268,7 @@
             // 
             // droneLoadButton
             // 
+            this.droneLoadButton.Enabled = false;
             this.droneLoadButton.Location = new System.Drawing.Point(476, 100);
             this.droneLoadButton.Name = "droneLoadButton";
             this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
@@ -330,6 +293,44 @@
             this.label3.Size = new System.Drawing.Size(67, 12);
             this.label3.TabIndex = 24;
             this.label3.Text = "Drone CSV";
+            // 
+            // eventMapLabel
+            // 
+            this.eventMapLabel.AutoSize = true;
+            this.eventMapLabel.Location = new System.Drawing.Point(6, 11);
+            this.eventMapLabel.Name = "eventMapLabel";
+            this.eventMapLabel.Size = new System.Drawing.Size(65, 12);
+            this.eventMapLabel.TabIndex = 22;
+            this.eventMapLabel.Text = "Event Map";
+            // 
+            // eventMap
+            // 
+            this.eventMap.Bearing = 0F;
+            this.eventMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.eventMap.CanDragMap = true;
+            this.eventMap.EmptyTileColor = System.Drawing.Color.Navy;
+            this.eventMap.GrayScaleMode = false;
+            this.eventMap.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
+            this.eventMap.LevelsKeepInMemmory = 5;
+            this.eventMap.Location = new System.Drawing.Point(6, 24);
+            this.eventMap.MarkersEnabled = true;
+            this.eventMap.MaxZoom = 2;
+            this.eventMap.MinZoom = 2;
+            this.eventMap.MouseWheelZoomEnabled = true;
+            this.eventMap.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter;
+            this.eventMap.Name = "eventMap";
+            this.eventMap.NegativeMode = false;
+            this.eventMap.PolygonsEnabled = true;
+            this.eventMap.RetryLoadTile = 0;
+            this.eventMap.RoutesEnabled = true;
+            this.eventMap.ScaleMode = GMap.NET.WindowsForms.ScaleModes.Integer;
+            this.eventMap.SelectedAreaFillColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(65)))), ((int)(((byte)(105)))), ((int)(((byte)(225)))));
+            this.eventMap.ShowTileGridLines = false;
+            this.eventMap.Size = new System.Drawing.Size(255, 349);
+            this.eventMap.TabIndex = 4;
+            this.eventMap.Zoom = 0D;
+            this.eventMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.eventMap_OnMarkerClick);
+            this.eventMap.Load += new System.EventHandler(this.eventMap_Load);
             // 
             // SimulatorUI
             // 
@@ -365,7 +366,6 @@
         }
 
         #endregion
-        private GMap.NET.WindowsForms.GMapControl eventMap;
         public System.Windows.Forms.DataGridView eventDataGridView;
         private System.Windows.Forms.Button stationLoadButton;
         private System.Windows.Forms.Button eventLoadButton;
@@ -381,7 +381,6 @@
         private System.Windows.Forms.DateTimePicker endTimePicker;
         private System.Windows.Forms.Button startSimButton;
         private GMap.NET.WindowsForms.GMapControl stationMap;
-        private System.Windows.Forms.Label eventMapLabel;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
@@ -390,6 +389,8 @@
         private System.Windows.Forms.Button droneLoadButton;
         public System.Windows.Forms.TextBox droneCSVTextbox;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label eventMapLabel;
+        private GMap.NET.WindowsForms.GMapControl eventMap;
     }
 }
 

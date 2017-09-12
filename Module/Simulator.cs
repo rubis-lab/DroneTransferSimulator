@@ -15,6 +15,12 @@ namespace DroneTransferSimulator
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
+        private int successEventNum=0;
+
+        public double getSuccessRate()
+        {
+            return successEventNum / events.Count;
+        }
         
         public List<Event> getEventList()
         {
@@ -116,7 +122,7 @@ namespace DroneTransferSimulator
                 {
                     var line = readFile.ReadLine();
                     var record = line.Split(',');
-                    if (record.Length != 3) throw new Exception("Inappropriate CSV format\nCannot be read");
+                    if(record.Length != 3) throw new Exception("Inappropriate CSV format\nCannot be read");
                     Drone d = new Drone(System.Convert.ToDouble(record[1]), System.Convert.ToDouble(record[2]));
                     stationDict[record[0]].drones.Add(d);
                 }
@@ -156,34 +162,36 @@ namespace DroneTransferSimulator
                     case Event.eventType.E_EVENT_OCCURED:
                         Console.WriteLine("E_EVENT_OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventOccured(e);
-                        events.Add(e);
+                        //events.Add(e);
                         break;
 
                     case Event.eventType.E_EVENT_ARRIVAL:
                         Console.WriteLine("E_EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
-                        //eventArrived(e.getCoordinates(), e.getOccuredDate(), e.getStationDroneIdx());
+                        //eventArrived(e);
                         break;
 
                     case Event.eventType.E_STATION_ARRIVAL:
-                        Console.WriteLine("E_EVENT_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
+                        Console.WriteLine("E_STATION_ARRIVAL >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
 
-                        //            stationArrival(e.getOccuredDate(), e.getStationDroneIdx());
+                        //stationArrival(e.getOccuredDate(), e.getStationDroneIdx());
                         break;
                 }
                 isDone = true;
-
             }
         }
-        public void eventOccured(Event e)
+
+        public void eventOccured(Event ee)
         {
+            Event e = ee;
             Tuple<double, double> coordinates = e.getCoordinates();
-            Time occuredTime = e.getOccuredDate();
 
             //find stations and drone
-            DroneStationFinder finder = new DroneStationFinder(coordinates);
-            Tuple<string, int> stationDroneIdx = finder.findAvailableDrone(occuredTime);
+            DroneStationFinder finder = new DroneStationFinder(e);
+            Tuple<string, int> stationDroneIdx = finder.findAvailableDrone();
+            e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
             if(stationDroneIdx.Item1.Length == 0) return;
 
+            successEventNum += 1;
             Console.WriteLine(stationDroneIdx.Item1 + ", " + stationDroneIdx.Item2);
             
             DroneStation s = stationDict[stationDroneIdx.Item1];
@@ -196,30 +204,31 @@ namespace DroneTransferSimulator
             double calculatedTime;
             calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2);
             
-            Time droneArrivalTime = Time.timeAdding(occuredTime, calculatedTime);
+            Time droneArrivalTime = Time.timeAdding(e.getOccuredDate(), calculatedTime);
 
             e.setDroneDate(droneArrivalTime);
-            e.setResult("success");
             e.setStation(s);
 
-            Console.WriteLine(occuredTime.ToString() + ", " + droneArrivalTime.ToString());
+            Console.WriteLine(e.getOccuredDate().ToString() + ", " + droneArrivalTime.ToString());
             
             //battery consumption
             d.fly(distance);
-            d.setStatus(1);
+            d.setStatus(Drone.droneStatus.FLYING);
 
             //declare coming event
             Event.eventType type = Event.eventType.E_EVENT_ARRIVAL;
-            Event e = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type);
-            e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
-            
-            int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
-            eventSet.Add(e, e);
+            Event comingE = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type);
+            comingE.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
+            eventSet.Add(comingE, comingE);
         }
 
-        public void eventArrived(Tuple<double, double> occuredCoord, Time occuredTime, Tuple<string, int> stationDroneIdx)
+        public void eventArrived(Event ee)
         {
-            
+            Event e = ee;
+            Tuple<double, double> occuredCoord = e.getCoordinates();
+            Time occuredTime = e.getOccuredDate();
+            Tuple<string, int> stationDroneIdx = e.getStationDroneIdx();
+
             //time to return to the Drone Station
             PathPlanner pathPlanner = PathPlanner.getInstance();
             double calculatedTime;
@@ -230,23 +239,23 @@ namespace DroneTransferSimulator
             Console.WriteLine(occuredTime.ToString() + ", " + droneArrivalTime.ToString());
 
             //battery consumption
-            DroneStationFinder f = new DroneStationFinder(new Tuple<double, double>(occuredCoord.Item1, occuredCoord.Item2));
+            DroneStationFinder f = new DroneStationFinder(e);
             double distance = f.getDistanceFromRecentEvent(stationDict[stationDroneIdx.Item1].stationLng, stationDict[stationDroneIdx.Item1].stationLat);
             stationDict[stationDroneIdx.Item1].drones[stationDroneIdx.Item2].fly(distance);
 
             //event of arriving
             Event.eventType type = Event.eventType.E_STATION_ARRIVAL;
-            Event e = new Event(occuredCoord.Item1, occuredCoord.Item2, droneArrivalTime, droneArrivalTime, type);
-            e.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
+            Event comingE = new Event(occuredCoord.Item1, occuredCoord.Item2, droneArrivalTime, droneArrivalTime, type);
+            comingE.setStationDroneIdx(stationDroneIdx.Item1, stationDroneIdx.Item2);
 
-            int date = e.getOccuredDate().mm + 100 * (e.getOccuredDate().hh + 100 * (e.getOccuredDate().dd + 100 * (e.getOccuredDate().MM + 100 * e.getOccuredDate().yy)));
-            eventSet.Add(e, e);
+            int date = comingE.getOccuredDate().mm + 100 * (comingE.getOccuredDate().hh + 100 * (comingE.getOccuredDate().dd + 100 * (comingE.getOccuredDate().MM + 100 * comingE.getOccuredDate().yy)));
+            eventSet.Add(comingE, comingE);
         }
 
         public void stationArrival(Time arrivalTime, Tuple<string, int> stationDroneIdx)
         {
             Drone d = stationDict[stationDroneIdx.Item1].drones[stationDroneIdx.Item2];
-            d.setStatus(2);
+            d.setStatus(Drone.droneStatus.CHARGING);
             d.setChargeStartTime(arrivalTime);
         }
         
