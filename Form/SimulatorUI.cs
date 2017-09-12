@@ -29,7 +29,7 @@ namespace DroneTransferSimulator
 
         public SimulatorUI()
         {
-            AllocConsole();
+        //    AllocConsole();
             InitializeComponent();
         }
         

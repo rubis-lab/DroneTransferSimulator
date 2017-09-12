@@ -74,7 +74,7 @@ namespace DroneTransferSimulator
             droneDate = _droneDate;
         }
 
-        public void setResult(string _result)
+        public void setResult(eventResult _result)
         {
             result = _result;
         }

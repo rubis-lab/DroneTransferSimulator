@@ -58,7 +58,7 @@ namespace DroneTransferSimulator
             }
             if(availableStations.Count == 0)
             {
-                Console.WriteLine("No available Drone Station (coverage problem)");
+                Console.WriteLine("No available stations (coverage problem)");
                 e.setResult(Event.eventResult.COVERAGE_PROBLEM);
                 return new Tuple<string, int>("", -1);
             }
@@ -77,7 +77,10 @@ namespace DroneTransferSimulator
                         {
                             double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
 
-                            if (droneElement.returnStatus() != Drone.droneStatus.FLYING && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                            if(droneElement.returnStatus() != Drone.droneType.D_FLYING && droneElement.returnAvailDist() > 2 * distance)
+                            {
+                                return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
+                            }
                             
                         }
                     }
