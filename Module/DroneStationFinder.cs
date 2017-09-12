@@ -65,17 +65,18 @@ namespace DroneTransferSimulator
             else
             {   
                 availableStations = availableStations.OrderBy(n => n.distance).ToList();
-                foreach (availableStation e in availableStations)
+                foreach(availableStation e in availableStations)
                 {
                     DroneStation s = stationDict[e.name];
                                         
-                    //s.updateChargingDrones(currentTime);
+                    s.updateChargingDrones(currentTime);
                     if(s.drones.Count == 0) continue;
                     else
                     {
                         foreach(Drone droneElement in s.drones)
                         {
                             double distance = getDistanceFromRecentEvent(s.stationLat, s.stationLng);
+
                             if (droneElement.returnStatus() != Drone.droneStatus.FLYING && droneElement.returnAvailDist() > distance) return new Tuple<string, int>(s.name, s.drones.IndexOf(droneElement));
                             
                         }

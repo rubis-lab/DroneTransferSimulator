@@ -269,7 +269,6 @@ namespace DroneTransferSimulator
                 MessageBox.Show(ex.Message);
             }
 
-
             SimulationResult frm = new SimulationResult(this);
             frm.Show();
         }
@@ -296,7 +295,5 @@ namespace DroneTransferSimulator
             eventMap.Position = item.Position;
             eventMap.Zoom = 15;
         }
-
-        
     }
 }

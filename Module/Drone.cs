@@ -12,14 +12,18 @@ namespace DroneTransferSimulator
         private double maxAvailDist; /* available distance of Drone */
         public enum droneStatus { IN_STATION, FLYING, CHARGING };
         private droneStatus status;
+
         private Time chargeStartTime;
+        public enum droneType { D_IN_STATION, D_FLYING, D_CHARGING };
 
         public Drone(double _maxAvailDist, double _chargingRate)
         {
             maxAvailDist = _maxAvailDist;
             chargingRate = _chargingRate;
             battery = 100;
-            status = droneStatus.IN_STATION;
+
+            status = droneType.D_IN_STATION;
+
         }
 
         public void fly(double distance)
@@ -48,11 +52,12 @@ namespace DroneTransferSimulator
         {
             return maxAvailDist / 100 * battery;
         }
-        public droneStatus returnStatus()
+
+        public droneType returnStatus()
         {
             return status;
         }
-        public void setStatus(droneStatus _status)
+        public void setStatus(droneType _status)
         {
             status = _status;
         }

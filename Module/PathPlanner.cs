@@ -171,15 +171,15 @@ namespace DroneTransferSimulator
             convertKmtoRC(dstLat, dstLng, ref dstRow, ref dstCol);
 
             double height = calcMaxHeight(srcLat, srcLng, dstLat, dstLng);
-            
-            DroneMap droneMap = DroneMap.getInstance();
             /*
+            DroneMap droneMap = DroneMap.getInstance();
+            
             List<DroneMapData> srcSet = droneMap.getData(srcRow, srcCol, srcRow, srcCol);
             double srcHeight = srcSet[0].landElevation;
 
             List<DroneMapData> dstSet = droneMap.getData(dstRow, dstCol, dstRow, dstCol);
-            double dstHeight = dstSet[0].landElevation;
-            */
+            double dstHeight = dstSet[0].landElevation;*/
+            
             //for(double h = srcHeight; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
             for (double h = 0; h <= height; h += 10.0) cubes.Add(new Cube('d', 'u'));
             cubes.Add(new Cube('d', 'r'));

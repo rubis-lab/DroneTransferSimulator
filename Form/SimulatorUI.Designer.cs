@@ -69,12 +69,12 @@
             this.longitude,
             this.occuredTime,
             this.ambulTime});
-            this.eventDataGridView.Location = new System.Drawing.Point(12, 130);
+            this.eventDataGridView.Location = new System.Drawing.Point(12, 123);
             this.eventDataGridView.Name = "eventDataGridView";
             this.eventDataGridView.ReadOnly = true;
             this.eventDataGridView.RowTemplate.Height = 23;
             this.eventDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventDataGridView.Size = new System.Drawing.Size(490, 263);
+            this.eventDataGridView.Size = new System.Drawing.Size(490, 270);
             this.eventDataGridView.TabIndex = 13;
             this.eventDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventDataGridView_RowEnter);
             // 
@@ -268,8 +268,10 @@
             // 
             // droneLoadButton
             // 
+
             this.droneLoadButton.Enabled = false;
             this.droneLoadButton.Location = new System.Drawing.Point(476, 100);
+
             this.droneLoadButton.Name = "droneLoadButton";
             this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
             this.droneLoadButton.TabIndex = 26;
@@ -279,7 +281,7 @@
             // 
             // droneCSVTextbox
             // 
-            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 101);
+            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 96);
             this.droneCSVTextbox.Name = "droneCSVTextbox";
             this.droneCSVTextbox.ReadOnly = true;
             this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
@@ -288,7 +290,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 87);
+            this.label3.Location = new System.Drawing.Point(12, 82);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 12);
             this.label3.TabIndex = 24;

@@ -82,7 +82,6 @@
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Module\Simulator.cs" />
-    <Compile Include="Module\StationManager.cs" />
     <Compile Include="Module\Time.cs" />
     <EmbeddedResource Include="Form\SimulatorUI.resx">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
