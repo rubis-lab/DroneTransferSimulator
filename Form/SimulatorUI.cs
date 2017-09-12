@@ -254,12 +254,12 @@ namespace DroneTransferSimulator
                 if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
 
                 DateTime startTimePicked = startTimePicker.Value;
-                Time startTime = new Time(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
+                DateTime startTime = new DateTime(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
 
                 DateTime endTimePicked = endTimePicker.Value;
-                Time endTime = new Time(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
+                DateTime endTime = new DateTime(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
 
-                if(endTime < startTime) throw new Exception("Start should be earlier than end");
+                if( DateTime.Compare(endTime, startTime) <=0 ) throw new Exception("Start should be earlier than end");
 
                 simulator.updateEventsBtwRange(startTime, endTime);
                 simulator.start();

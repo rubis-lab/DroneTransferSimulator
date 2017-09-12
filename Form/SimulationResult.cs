@@ -64,12 +64,12 @@ namespace DroneTransferSimulator
             double lat = eventList[ind].getCoordinates().Item1;
             double lng = eventList[ind].getCoordinates().Item2;
 
-            Time occuredTime = eventList[ind].getOccuredDate();
-            Time droneTime = eventList[ind].getDroneDate();
-            Time ambulTime = eventList[ind].getAmbulDate();
-
-            int droneSec = Time.getTimeGap(droneTime, occuredTime);
-            int ambulSec = Time.getTimeGap(ambulTime, occuredTime);
+            DateTime occuredTime = eventList[ind].getOccuredDate();
+            DateTime droneTime = eventList[ind].getDroneDate();
+            DateTime ambulTime = eventList[ind].getAmbulDate();
+            
+            int droneSec = occuredTime.Subtract(droneTime).Seconds;
+            int ambulSec = occuredTime.Subtract(ambulTime).Seconds;
             string droneGap = "" + (droneSec / 60) + "' " + (droneSec % 60) + "\"";
             string ambulGap = "" + (ambulSec / 60) + "' " + (ambulSec % 60) + "\"";
 

@@ -42,7 +42,7 @@ namespace DroneTransferSimulator
 
         public Tuple<string, int> findAvailableDrone()
         {
-            Time currentTime = e.getOccuredDate();
+            DateTime currentTime = e.getOccuredDate();
             foreach(KeyValuePair<string, DroneStation> dict in stationDict)
             {
                 DroneStation st = dict.Value;

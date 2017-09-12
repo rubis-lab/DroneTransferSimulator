@@ -12,7 +12,7 @@ namespace DroneTransferSimulator
         private double maxAvailDist; /* available distance of Drone */
         private droneType status;
 
-        private Time chargeStartTime;
+        private DateTime chargeStartTime;
         public enum droneType { D_IN_STATION, D_FLYING, D_CHARGING };
 
         public Drone(double _maxAvailDist, double _chargingRate)
@@ -34,9 +34,9 @@ namespace DroneTransferSimulator
 
             battery -= consumedBattery;
         }
-        public void charge(Time startTime, Time endTime)
+        public void charge(DateTime startTime, DateTime endTime)
         {
-            battery += chargingRate * (Time.getTimeGap(startTime, endTime));
+            battery += chargingRate * (endTime.Subtract(startTime).Minutes);
         }
         public double returnBattery()
         {
@@ -59,11 +59,12 @@ namespace DroneTransferSimulator
         {
             status = _status;
         }
-        public void setChargeStartTime(Time _chargeStartTime)
+        public void setChargeStartTime(DateTime _chargeStartTime)
         {
             chargeStartTime = _chargeStartTime;
         }
-        public Time getChargeStartTime()
+
+        public DateTime getChargeStartTime()
         {
             return chargeStartTime;
         }

@@ -12,7 +12,7 @@ namespace DroneTransferSimulator
         public enum eventResult { SUCCESS, COVERAGE_PROBLEM, NO_DRONE };
 
         private double lat, lng;
-        private Time occuredDate, ambulDate, droneDate;
+        private DateTime occuredDate, ambulDate, droneDate;
         private int droneIndex;
         private eventType type;
         private eventResult result;
@@ -27,29 +27,29 @@ namespace DroneTransferSimulator
             return 1;
         }
 
-        public Event(double _lat, double _lng, Time _oDate, Time _ambulDate, eventType _type)
+        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type)
         {
             lat = _lat;
             lng = _lng;
             occuredDate = _oDate;
             ambulDate = _ambulDate;
-            droneDate = new Time();
+            droneDate = new DateTime();
             type = _type;
             result = 0;
             station = null;
         }
 
-        public Time getOccuredDate()
+        public DateTime getOccuredDate()
         {
             return occuredDate;
         }
 
-        public Time getAmbulDate()
+        public DateTime getAmbulDate()
         {
             return ambulDate;
         }
 
-        public Time getDroneDate()
+        public DateTime getDroneDate()
         {
             return droneDate;
         }
@@ -69,7 +69,7 @@ namespace DroneTransferSimulator
             return new Tuple<double, double>(lat, lng);
         }
 
-        public void setDroneDate(Time _droneDate)
+        public void setDroneDate(DateTime _droneDate)
         {
             droneDate = _droneDate;
         }

@@ -10,6 +10,7 @@ namespace DroneTransferSimulator
     {
         public int yy, MM, dd, hh, mm, ss;
 
+        /*
         public Time()
         {
             yy = 0;
@@ -60,11 +61,14 @@ namespace DroneTransferSimulator
             else if(t1.mm != t2.mm) return (t1.mm < t2.mm);
             else return false;
         }
+        */
 
+        /*
         public static int getTimeGap(Time t2, Time t1)
         {
             return (t2.ss - t1.ss) + 60 * (t2.mm - t1.mm + 60 * (t2.hh - t1.hh + 24 * (t2.dd - t1.dd)));
         }
+        */
 
         override public string ToString()
         {
@@ -78,7 +82,7 @@ namespace DroneTransferSimulator
                 return "-";
             }
         }
-
+        /*
         public static Time timeAdding(Time t, double ss)
         {
             Time addedTime = new Time();
@@ -95,5 +99,6 @@ namespace DroneTransferSimulator
 
             return addedTime;
         }
+        */
     }
 }

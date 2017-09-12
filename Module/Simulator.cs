@@ -46,21 +46,23 @@ namespace DroneTransferSimulator
                     var record = line.Split(',');
                     if(record.Length != 6) throw new Exception("Inappropriate CSV format\nCannot be read");
 
-                    Time occuredDate = new Time();
-                    Time ambulDate = new Time();
+                    
+                    
                     double longitude = System.Convert.ToDouble(record[0]);
                     double latitude = System.Convert.ToDouble(record[1]);
-                    occuredDate.yy = System.Convert.ToInt32(record[2]) / 10000;
-                    occuredDate.MM = (System.Convert.ToInt32(record[2]) % 10000) / 100;
-                    occuredDate.dd = System.Convert.ToInt32(record[2]) % 100;
-                    occuredDate.hh = System.Convert.ToInt32(record[3]) / 100;
-                    occuredDate.mm = System.Convert.ToInt32(record[3]) % 100;
+                    int yy = System.Convert.ToInt32(record[2]) / 10000;
+                    int MM = (System.Convert.ToInt32(record[2]) % 10000) / 100;
+                    int dd = System.Convert.ToInt32(record[2]) % 100;
+                    int hh = System.Convert.ToInt32(record[3]) / 100;
+                    int mm = System.Convert.ToInt32(record[3]) % 100;
+                    DateTime occuredDate = new DateTime(yy, MM, dd, hh, mm, 0);
 
-                    ambulDate.yy = System.Convert.ToInt32(record[4]) / 10000;
-                    ambulDate.MM = (System.Convert.ToInt32(record[4]) % 10000) / 100;
-                    ambulDate.dd = System.Convert.ToInt32(record[4]) % 100;
-                    ambulDate.hh = System.Convert.ToInt32(record[5]) / 100;
-                    ambulDate.mm = System.Convert.ToInt32(record[5]) % 100;
+                    yy = System.Convert.ToInt32(record[4]) / 10000;
+                    MM = (System.Convert.ToInt32(record[4]) % 10000) / 100;
+                    dd = System.Convert.ToInt32(record[4]) % 100;
+                    hh = System.Convert.ToInt32(record[5]) / 100;
+                    mm = System.Convert.ToInt32(record[5]) % 100;
+                    DateTime ambulDate = new DateTime(yy, MM, dd, hh, mm, 0);
 
                     Event.eventType e = new Event.eventType();
                     e = Event.eventType.E_EVENT_OCCURED;
@@ -125,11 +127,11 @@ namespace DroneTransferSimulator
             return null;
         }
 
-        public void updateEventsBtwRange(Time start, Time end)
+        public void updateEventsBtwRange(DateTime start, DateTime end)
         {
             foreach(Event eventElement in events)
             {
-                if(start < eventElement.getOccuredDate() && eventElement.getOccuredDate() < end)
+                if( DateTime.Compare(start , eventElement.getOccuredDate())<=0 && DateTime.Compare(eventElement.getOccuredDate() , end)<=0)
                 {
                     eventSet.Add(eventElement, eventElement);
                 }
@@ -169,7 +171,7 @@ namespace DroneTransferSimulator
         public void eventOccured(Event ev)
         {
             Tuple<double, double> coordinates = ev.getCoordinates();
-            Time occuredTime = ev.getOccuredDate();
+            DateTime occuredTime = ev.getOccuredDate();
 
             //find stations and drone
             DroneStationFinder finder = new DroneStationFinder(ev);
@@ -190,8 +192,8 @@ namespace DroneTransferSimulator
             double calculatedTime;
             calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2);
             droneElapsedTime.Add(calculatedTime);
-            
-            Time droneArrivalTime = Time.timeAdding(ev.getOccuredDate(), calculatedTime);
+
+            DateTime droneArrivalTime = ev.getOccuredDate().AddSeconds(calculatedTime);
 
             ev.setDroneDate(droneArrivalTime);
             ev.setResult(Event.eventResult.SUCCESS);
@@ -225,7 +227,7 @@ namespace DroneTransferSimulator
             calculatedTime = pathPlanner.calcTravelTime(eventLat, eventLng, stationLat, stationLng);
 
             //time when drone reach the station
-            Time droneArrivalTime = Time.timeAdding(ev.getOccuredDate(), calculatedTime);
+            DateTime droneArrivalTime = ev.getOccuredDate().AddSeconds(calculatedTime);
             
             //battery consumption
             DroneStationFinder f = new DroneStationFinder(ev);

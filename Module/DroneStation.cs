@@ -28,7 +28,7 @@ namespace DroneTransferSimulator
             stationLng = _stationLng;
         }
 
-        public void updateChargingDrones(Time currentTime)
+        public void updateChargingDrones(DateTime currentTime)
         {
             foreach(Drone droneElement in drones)
             {

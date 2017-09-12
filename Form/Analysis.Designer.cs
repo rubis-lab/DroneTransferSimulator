@@ -65,6 +65,7 @@
             this.analyzeResultTable.RowTemplate.Height = 23;
             this.analyzeResultTable.Size = new System.Drawing.Size(362, 239);
             this.analyzeResultTable.TabIndex = 1;
+            this.analyzeResultTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.analyzeResultTable_CellContentClick);
             // 
             // anallysisItem
             // 

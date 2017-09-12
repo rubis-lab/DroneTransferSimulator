@@ -16,7 +16,7 @@ namespace DroneTransferSimulator
         static private Simulator simulator = SimulatorUI.simulator;
         private List<Event> events = simulator.getEventList();
         private List<double> droneTimeList = simulator.droneElapsedTime;
-        private List<int> ambulTimeList = new List<int>();
+        private List<double> ambulTimeList = new List<double>();
 
         public Analysis()
         {
@@ -27,9 +27,9 @@ namespace DroneTransferSimulator
         {
             foreach(Event _event in events)
             {
-                Time ambulTime = _event.getAmbulDate();
-                Time occuredTime = _event.getOccuredDate();
-                int ambulElapsedTime = Time.getTimeGap(ambulTime, occuredTime);
+                DateTime ambulTime = _event.getAmbulDate();
+                DateTime occuredTime = _event.getOccuredDate();
+                double ambulElapsedTime = (ambulTime - occuredTime).TotalSeconds;
                 ambulTimeList.Add(ambulElapsedTime);
             }
         }
@@ -92,9 +92,9 @@ namespace DroneTransferSimulator
 
             if (itemListBox.CheckedItems.Count != 0)
             {
-                string[] row0 = { "Rescue Success Rate", getSuccessRate().ToString(), "1" };
-                string[] row1 = { "Mean of Elapsed Time", getDroneMean().ToString(), getAmbulMean().ToString() };
-                string[] row2 = { "Standart Deviation of Elapsed Time", getDroneStdev().ToString(), getAmbulStdev().ToString() };
+                string[] row0 = { "Rescue Success Rate", "1", getSuccessRate().ToString() };
+                string[] row1 = { "Mean of Elapsed Time", getAmbulMean().ToString(), getDroneMean().ToString() };
+                string[] row2 = { "Standart Deviation of Elapsed Time", getAmbulStdev().ToString(), getDroneStdev().ToString() };
 
                 if (itemListBox.GetItemCheckState(0) == CheckState.Checked)
                 {
@@ -111,6 +111,11 @@ namespace DroneTransferSimulator
                 }
             }
             else return;
+        }
+
+        private void analyzeResultTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
