@@ -18,7 +18,7 @@ namespace DroneTransferSimulator
 {
     public partial class SimulatorUI : Form
     {
-        static Simulator simulator = Simulator.getInstance();
+        static public Simulator simulator = Simulator.getInstance();
         static Dictionary<string, DroneStation> stationDict = simulator.getStationDict();
 
         GMapOverlay eventOverlay = new GMapOverlay("Event");
@@ -80,7 +80,6 @@ namespace DroneTransferSimulator
                 
                 String path = dialog.FileName;
                 eventCSVTextbox.Text = path;
-
                 string msg = simulator.getEventsFromCSV(path);
                 if(msg != null)
                 {
@@ -98,12 +97,36 @@ namespace DroneTransferSimulator
                     string occuredTime = eventElement.getOccuredDate().ToString();
                     string ambulanceTime = eventElement.getAmbulDate().ToString();
                     eventDataGridView.Rows.Add(latitude, longitude, occuredTime, ambulanceTime);
-
+                    
                     GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
                     eventOverlay.Markers.Add(eventMarker);
+                    
+                    /*
+                    List<PointLatLng> points = new List<PointLatLng>();
+                    double pNum = 30;
+                    double seg = Math.PI * 2 / pNum;
+
+                    eventOverlay.Polygons.Clear();
+                    eventMap.Overlays.Clear();
+
+                    for (int i = 0; i < pNum; i++)
+                    {
+                        double theta = seg * i;
+                        double y = latitude + Math.Cos(theta) / 0.030828 / 60 / 60 * 0.5;
+                        double x = longitude + Math.Sin(theta) / 0.024697 / 60 / 60 * 0.5;
+
+                        points.Add(new PointLatLng(y, x));
+                    }
+
+                    GMapPolygon gpol = new GMapPolygon(points, "pol");
+                    gpol.Fill = new SolidBrush(Color.FromArgb(20, Color.Red));
+                    //gpol.Stroke = new Pen(Color.DarkCyan, (float)0.5);
+                    eventOverlay.Polygons.Add(gpol);
+
+                 */   
                 }
                 eventMap.Overlays.Add(eventOverlay);
-
+                
                 eventDataGridView.ClearSelection();
                 eventMap.Zoom = 9;
                 eventMap.SetPositionByKeywords("Seoul, Korea");
@@ -113,6 +136,7 @@ namespace DroneTransferSimulator
         public void updateStationDict()
         {
             stationOverlay.Markers.Clear();
+
             stationOverlay.Polygons.Clear();
 
             stationDict = simulator.getStationDict();
@@ -153,6 +177,7 @@ namespace DroneTransferSimulator
                     return;
                 }
                 updateStationDict();
+                droneLoadButton.Enabled = true;
             }
         }
 

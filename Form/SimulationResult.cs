@@ -17,10 +17,10 @@ namespace DroneTransferSimulator
 {
     public partial class SimulationResult : Form
     {
-        static Simulator simulator = Simulator.getInstance();
+        //static Simulator simulator = Simulator.getInstance();
+        Simulator simulator = SimulatorUI.simulator;
         List<Event> eventList;
         SimulatorUI simulatorUIForm;
-        GMapOverlay markerOverlay = new GMapOverlay("Marker");
         GMapOverlay stationOverlay = new GMapOverlay("Station");
 
         public SimulationResult(SimulatorUI _form)
@@ -62,6 +62,9 @@ namespace DroneTransferSimulator
             pathPlanner.calcTravelTime(37.578695, 126.997512, 37.578788, 126.994859);
             System.Console.WriteLine("Time elapsed : " + stopwatch.ElapsedMilliseconds);
             stopwatch.Stop();
+
+            Analysis frm = new Analysis(this);
+            frm.Show();
         }
 
         private void eventTable_RowEnter(object sender, DataGridViewCellEventArgs e)
@@ -70,7 +73,7 @@ namespace DroneTransferSimulator
             eventDetailTable.Rows.Clear();
             initGMapControl();
             if(ind < 0 || ind >= eventTable.RowCount - 1) return;
-            if(eventList[ind].getResult() == "failure") return;
+            if(eventList[ind].getResult()!= Event.eventResult.SUCCESS) return;
 
             string msg = "";
             for(int i = 0; i < 6; i++)
@@ -79,6 +82,7 @@ namespace DroneTransferSimulator
 
             double lat = eventList[ind].getCoordinates().Item1;
             double lng = eventList[ind].getCoordinates().Item2;
+
             Time occuredTime = eventList[ind].getOccuredDate();
             Time droneTime = eventList[ind].getDroneDate();
             Time ambulTime = eventList[ind].getAmbulDate();
@@ -93,41 +97,25 @@ namespace DroneTransferSimulator
             eventDetailTable.Rows.Clear();
             eventDetailTable.Rows.Add(station.name, droneGap, ambulGap);
 
+            stationOverlay.Markers.Clear();
             eventMap.Overlays.Clear();
 
-       //     drawEventPoint(lat, lng);
+            drawEventPoint(lat, lng);
             drawStationPoint(station);
             
         //    gMapControl1.Position = marker.Position;
         }
 
-        private void drawCircle(PointLatLng p, double coverRange)
+        private void drawEventPoint(double lat, double lng)
         {
-            List<PointLatLng> points = new List<PointLatLng>();
-            double pNum = 30;
-            double seg = Math.PI * 2 / pNum;
+            GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(lat, lng), GMarkerGoogleType.red_small);
+            stationOverlay.Markers.Add(eventMarker);
+            eventMap.Overlays.Add(stationOverlay);
 
-            stationOverlay.Polygons.Clear();
-            eventMap.Overlays.Clear();
-
-            for(int i = 0; i < pNum; i++)
-            {
-                double theta = seg * i;
-                double y = p.Lat + Math.Cos(theta) / 0.030828 / 60 / 60 * coverRange;
-                double x = p.Lng + Math.Sin(theta) / 0.024697 / 60 / 60 * coverRange;
-
-                points.Add(new PointLatLng(y, x));
-            }
-
-            GMapPolygon gpol = new GMapPolygon(points, "pol");
-            gpol.Fill = new SolidBrush(Color.FromArgb(20, Color.Cyan));
-            gpol.Stroke = new Pen(Color.DarkCyan, (float)0.5);
-            stationOverlay.Polygons.Add(gpol);
         }
 
         private void drawStationPoint(DroneStation droneStation)
         {
-            stationOverlay.Markers.Clear();
             string name = droneStation.name;
             double lat = droneStation.stationLat;
             double lng = droneStation.stationLng;
@@ -147,6 +135,30 @@ namespace DroneTransferSimulator
             eventMap.Zoom = 12;
         }
 
+        private void drawCircle(PointLatLng p, double coverRange)
+        {
+            List<PointLatLng> points = new List<PointLatLng>();
+            double pNum = 30;
+            double seg = Math.PI * 2 / pNum;
+
+            stationOverlay.Polygons.Clear();
+            eventMap.Overlays.Clear();
+
+            for (int i = 0; i < pNum; i++)
+            {
+                double theta = seg * i;
+                double y = p.Lat + Math.Cos(theta) / 0.030828 / 60 / 60 * coverRange;
+                double x = p.Lng + Math.Sin(theta) / 0.024697 / 60 / 60 * coverRange;
+
+                points.Add(new PointLatLng(y, x));
+            }
+
+            GMapPolygon gpol = new GMapPolygon(points, "pol");
+            gpol.Fill = new SolidBrush(Color.FromArgb(20, Color.Cyan));
+            gpol.Stroke = new Pen(Color.DarkCyan, (float)0.5);
+            stationOverlay.Polygons.Add(gpol);
+        }
+
         private void gMapControl1_MouseClick(object sender, MouseEventArgs e)
         {
             PointLatLng p = eventMap.FromLocalToLatLng(e.X, e.Y);
@@ -164,7 +176,9 @@ namespace DroneTransferSimulator
                 double longitude = e.getCoordinates().Item2;
                 string occuredTime = e.getOccuredDate().ToString();
                 string droneArrivalTime = e.getDroneDate().ToString();
-                string result = e.getResult();
+                string result = "Coverage Problem";
+                if(e.getResult() == Event.eventResult.SUCCESS) result = e.getStationDroneIdx().Item1;
+                else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No available drone";
                 eventTable.Rows.Add(i, latitude, longitude, occuredTime, droneArrivalTime, result);
             }
         }
@@ -183,5 +197,6 @@ namespace DroneTransferSimulator
         {
             eventMap.Zoom = trackBar1.Value;
         }
+        
     }
 }

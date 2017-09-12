@@ -8,14 +8,17 @@ namespace DroneTransferSimulator
 {
     public class Event :IComparable<Event>
     {
+        public enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
+        public enum eventResult { SUCCESS, COVERAGE_PROBLEM, NO_DRONE };
+
         private double lat, lng;
         private Time occuredDate, ambulDate, droneDate;
         private int droneIndex;
         private eventType type;
-        private string result;
+        private eventResult result;
         private DroneStation station;
 
-        public enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
+        
 
         public int CompareTo(Event obj)
         {
@@ -32,7 +35,7 @@ namespace DroneTransferSimulator
             ambulDate = _ambulDate;
             droneDate = new Time();
             type = _type;
-            result = "failure";
+            result = 0;
             station = null;
         }
 
@@ -51,7 +54,7 @@ namespace DroneTransferSimulator
             return droneDate;
         }
 
-        public string getResult()
+        public eventResult getResult()
         {
             return result;
         }
