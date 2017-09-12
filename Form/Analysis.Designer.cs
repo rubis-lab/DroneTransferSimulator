@@ -30,16 +30,18 @@
         {
             this.itemListBox = new System.Windows.Forms.CheckedListBox();
             this.analyzeResultTable = new System.Windows.Forms.DataGridView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.anallysisItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ambulance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.drone = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.analyzeResultTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // itemListBox
             // 
+            this.itemListBox.CheckOnClick = true;
             this.itemListBox.FormattingEnabled = true;
             this.itemListBox.Items.AddRange(new object[] {
             "Rescue Success Rate",
@@ -49,7 +51,7 @@
             this.itemListBox.Name = "itemListBox";
             this.itemListBox.Size = new System.Drawing.Size(339, 148);
             this.itemListBox.TabIndex = 0;
-            this.itemListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.itemListBox_ItemCheck);
+            this.itemListBox.SelectedIndexChanged += new System.EventHandler(this.itemListBox_SelectedIndexChanged);
             // 
             // analyzeResultTable
             // 
@@ -58,21 +60,11 @@
             this.anallysisItem,
             this.ambulance,
             this.drone});
-            this.analyzeResultTable.Location = new System.Drawing.Point(12, 216);
+            this.analyzeResultTable.Location = new System.Drawing.Point(12, 226);
             this.analyzeResultTable.Name = "analyzeResultTable";
             this.analyzeResultTable.RowTemplate.Height = 23;
-            this.analyzeResultTable.Size = new System.Drawing.Size(362, 249);
+            this.analyzeResultTable.Size = new System.Drawing.Size(362, 239);
             this.analyzeResultTable.TabIndex = 1;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.itemListBox);
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(362, 183);
-            this.groupBox1.TabIndex = 2;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Analysis Item";
             // 
             // anallysisItem
             // 
@@ -89,11 +81,32 @@
             this.drone.HeaderText = "Drone";
             this.drone.Name = "drone";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.itemListBox);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(362, 173);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Analysis Item";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(118, 191);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(133, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "↓";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 494);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.analyzeResultTable);
             this.Controls.Add(this.groupBox1);
             this.Name = "Analysis";
@@ -112,5 +125,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn anallysisItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ambulance;
         private System.Windows.Forms.DataGridViewTextBoxColumn drone;
+        private System.Windows.Forms.Button button1;
     }
 }

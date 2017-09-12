@@ -17,8 +17,9 @@ namespace DroneTransferSimulator
 {
     public partial class SimulationResult : Form
     {
-        Simulator simulator = SimulatorUI.simulator;
-        List<Event> eventList;
+        static private Simulator simulator = SimulatorUI.simulator;
+        private List<Event> eventList;
+        public List<double> ambulElaspedTime = new List<double>();
         SimulatorUI simulatorUIForm;
         GMapOverlay stationOverlay = new GMapOverlay("Station");
 
