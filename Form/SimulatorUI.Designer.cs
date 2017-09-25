@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.eventDataGridView = new System.Windows.Forms.DataGridView();
-            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ambulTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stationLoadButton = new System.Windows.Forms.Button();
             this.eventLoadButton = new System.Windows.Forms.Button();
             this.stationCSVTextbox = new System.Windows.Forms.TextBox();
@@ -53,6 +49,11 @@
             this.droneLoadButton = new System.Windows.Forms.Button();
             this.droneCSVTextbox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ambulTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +68,7 @@
             this.eventDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.latitude,
             this.longitude,
+            this.address,
             this.occuredTime,
             this.ambulTime});
             this.eventDataGridView.Location = new System.Drawing.Point(12, 123);
@@ -77,34 +79,6 @@
             this.eventDataGridView.Size = new System.Drawing.Size(490, 270);
             this.eventDataGridView.TabIndex = 13;
             this.eventDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventDataGridView_RowEnter);
-            // 
-            // latitude
-            // 
-            this.latitude.HeaderText = "Latitude";
-            this.latitude.Name = "latitude";
-            this.latitude.ReadOnly = true;
-            this.latitude.Width = 80;
-            // 
-            // longitude
-            // 
-            this.longitude.HeaderText = "Longitude";
-            this.longitude.Name = "longitude";
-            this.longitude.ReadOnly = true;
-            this.longitude.Width = 80;
-            // 
-            // occuredTime
-            // 
-            this.occuredTime.HeaderText = "Occured Time";
-            this.occuredTime.Name = "occuredTime";
-            this.occuredTime.ReadOnly = true;
-            this.occuredTime.Width = 135;
-            // 
-            // ambulTime
-            // 
-            this.ambulTime.HeaderText = "Ambulance Time";
-            this.ambulTime.Name = "ambulTime";
-            this.ambulTime.ReadOnly = true;
-            this.ambulTime.Width = 135;
             // 
             // stationLoadButton
             // 
@@ -332,6 +306,40 @@
             this.label3.TabIndex = 24;
             this.label3.Text = "Drone CSV";
             // 
+            // latitude
+            // 
+            this.latitude.HeaderText = "Latitude";
+            this.latitude.Name = "latitude";
+            this.latitude.ReadOnly = true;
+            this.latitude.Width = 80;
+            // 
+            // longitude
+            // 
+            this.longitude.HeaderText = "Longitude";
+            this.longitude.Name = "longitude";
+            this.longitude.ReadOnly = true;
+            this.longitude.Width = 80;
+            // 
+            // address
+            // 
+            this.address.HeaderText = "Address";
+            this.address.Name = "address";
+            this.address.ReadOnly = true;
+            // 
+            // occuredTime
+            // 
+            this.occuredTime.HeaderText = "Occured Time";
+            this.occuredTime.Name = "occuredTime";
+            this.occuredTime.ReadOnly = true;
+            this.occuredTime.Width = 135;
+            // 
+            // ambulTime
+            // 
+            this.ambulTime.HeaderText = "Ambulance Time";
+            this.ambulTime.Name = "ambulTime";
+            this.ambulTime.ReadOnly = true;
+            this.ambulTime.Width = 135;
+            // 
             // SimulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -382,15 +390,16 @@
         private System.Windows.Forms.Button startSimButton;
         private GMap.NET.WindowsForms.GMapControl stationMap;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
-        private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
-        private System.Windows.Forms.DataGridViewTextBoxColumn occuredTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ambulTime;
         private System.Windows.Forms.Button droneLoadButton;
         public System.Windows.Forms.TextBox droneCSVTextbox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label eventMapLabel;
         private GMap.NET.WindowsForms.GMapControl eventMap;
+        private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn address;
+        private System.Windows.Forms.DataGridViewTextBoxColumn occuredTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ambulTime;
     }
 }
 

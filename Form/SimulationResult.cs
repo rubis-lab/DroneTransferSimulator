@@ -67,9 +67,10 @@ namespace DroneTransferSimulator
             DateTime occuredTime = eventList[ind].getOccuredDate();
             DateTime droneTime = eventList[ind].getDroneDate();
             DateTime ambulTime = eventList[ind].getAmbulDate();
+
+            double droneSec = Math.Round((droneTime - occuredTime).TotalSeconds);
+            double ambulSec = (ambulTime - occuredTime).TotalSeconds;
             
-            int droneSec = occuredTime.Subtract(droneTime).Seconds;
-            int ambulSec = occuredTime.Subtract(ambulTime).Seconds;
             string droneGap = "" + (droneSec / 60) + "' " + (droneSec % 60) + "\"";
             string ambulGap = "" + (ambulSec / 60) + "' " + (ambulSec % 60) + "\"";
 

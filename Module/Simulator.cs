@@ -45,11 +45,10 @@ namespace DroneTransferSimulator
                     var line = readFile.ReadLine();
                     var record = line.Split(',');
                     if(record.Length != 6) throw new Exception("Inappropriate CSV format\nCannot be read");
-
-                    
-                    
+              
                     double longitude = System.Convert.ToDouble(record[0]);
                     double latitude = System.Convert.ToDouble(record[1]);
+
                     int yy = System.Convert.ToInt32(record[2]) / 10000;
                     int MM = (System.Convert.ToInt32(record[2]) % 10000) / 100;
                     int dd = System.Convert.ToInt32(record[2]) % 100;

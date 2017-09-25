@@ -27,9 +27,11 @@ namespace DroneTransferSimulator
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
 
+
+
         public SimulatorUI()
         {
-        //    AllocConsole();
+            AllocConsole();
             InitializeComponent();
         }
         
@@ -94,36 +96,13 @@ namespace DroneTransferSimulator
                 {
                     double latitude = eventElement.getCoordinates().Item1;
                     double longitude = eventElement.getCoordinates().Item2;
+                    string address = eventElement.getAddress();
                     string occuredTime = eventElement.getOccuredDate().ToString();
                     string ambulanceTime = eventElement.getAmbulDate().ToString();
-                    eventDataGridView.Rows.Add(latitude, longitude, occuredTime, ambulanceTime);
+                    eventDataGridView.Rows.Add(latitude, longitude, address, occuredTime, ambulanceTime);
                     
                     GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
                     eventOverlay.Markers.Add(eventMarker);
-                    
-                    /*
-                    List<PointLatLng> points = new List<PointLatLng>();
-                    double pNum = 30;
-                    double seg = Math.PI * 2 / pNum;
-
-                    eventOverlay.Polygons.Clear();
-                    eventMap.Overlays.Clear();
-
-                    for (int i = 0; i < pNum; i++)
-                    {
-                        double theta = seg * i;
-                        double y = latitude + Math.Cos(theta) / 0.030828 / 60 / 60 * 0.5;
-                        double x = longitude + Math.Sin(theta) / 0.024697 / 60 / 60 * 0.5;
-
-                        points.Add(new PointLatLng(y, x));
-                    }
-
-                    GMapPolygon gpol = new GMapPolygon(points, "pol");
-                    gpol.Fill = new SolidBrush(Color.FromArgb(20, Color.Red));
-                    //gpol.Stroke = new Pen(Color.DarkCyan, (float)0.5);
-                    eventOverlay.Polygons.Add(gpol);
-
-                 */   
                 }
                 eventMap.Overlays.Add(eventOverlay);
                 
@@ -279,6 +258,9 @@ namespace DroneTransferSimulator
             double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[1].Value;
             eventMap.Position = new PointLatLng(latitude, longitude);
             eventMap.Zoom = 15;
+
+            Address addr = new Address(latitude, longitude);
+            Console.WriteLine(addr.ToString());
         }
 
         private void stationMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)

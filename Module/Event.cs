@@ -12,13 +12,12 @@ namespace DroneTransferSimulator
         public enum eventResult { SUCCESS, COVERAGE_PROBLEM, NO_DRONE };
 
         private double lat, lng;
+        private Address addr;
         private DateTime occuredDate, ambulDate, droneDate;
         private int droneIndex;
         private eventType type;
         private eventResult result;
         private DroneStation station;
-
-        
 
         public int CompareTo(Event obj)
         {
@@ -31,6 +30,7 @@ namespace DroneTransferSimulator
         {
             lat = _lat;
             lng = _lng;
+
             occuredDate = _oDate;
             ambulDate = _ambulDate;
             droneDate = new DateTime();
@@ -62,6 +62,12 @@ namespace DroneTransferSimulator
         public eventType getEventType()
         {
             return type;
+        }
+
+        public string getAddress()
+        {
+            addr = new Address(lat, lng);
+            return addr.ToString();
         }
 
         public Tuple<double, double> getCoordinates()
