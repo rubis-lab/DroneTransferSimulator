@@ -118,7 +118,7 @@ namespace DroneTransferSimulator
 
         private void saveAddress()
         {
-            int ver = 2;
+            int ver = 3;
             String path1 = "../../EventAddress" + ver + ".csv";
             String path2 = "../../EventAddress" + (ver+1) + ".csv";
             List<string> addrList = new List<string>();

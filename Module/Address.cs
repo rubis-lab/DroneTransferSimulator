@@ -27,7 +27,7 @@ namespace DroneTransferSimulator
         private string requestJson(double latitude, double longitude)
         {
             string result = null;
-            string url = String.Format("http://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&language=ko&key=AIzaSyCXv_k-Y5-bCKdYM2dDqbe4lS1DHLGeiKo", latitude, longitude);
+            string url = String.Format("http://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&language=ko", latitude, longitude);
 
             try
             {
