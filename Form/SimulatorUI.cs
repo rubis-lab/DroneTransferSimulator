@@ -90,6 +90,8 @@ namespace DroneTransferSimulator
                     return;
                 }
 
+                saveAddress();
+                /*
                 List<Event> eventList = simulator.getEventList();
 
                 foreach(Event eventElement in eventList)
@@ -99,17 +101,60 @@ namespace DroneTransferSimulator
                     string address = eventElement.getAddress();
                     string occuredTime = eventElement.getOccuredDate().ToString();
                     string ambulanceTime = eventElement.getAmbulDate().ToString();
-                    eventDataGridView.Rows.Add(latitude, longitude, address, occuredTime, ambulanceTime);
-                    
-                    GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
-                    eventOverlay.Markers.Add(eventMarker);
+
+
+                        eventDataGridView.Rows.Add(latitude, longitude, address, occuredTime, ambulanceTime);
+
+                        GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
+                        eventOverlay.Markers.Add(eventMarker);
                 }
                 eventMap.Overlays.Add(eventOverlay);
                 
                 eventDataGridView.ClearSelection();
                 eventMap.Zoom = 9;
-                eventMap.SetPositionByKeywords("Seoul, Korea");
+                eventMap.SetPositionByKeywords("Seoul, Korea");*/
             }
+        }
+
+        private void saveAddress()
+        {
+            int ver = 2;
+            String path1 = "../../EventAddress" + ver + ".csv";
+            String path2 = "../../EventAddress" + (ver+1) + ".csv";
+            List<string> addrList = new List<string>();
+            System.IO.StreamReader readFile = new System.IO.StreamReader(path1);
+            while(!readFile.EndOfStream)
+            {
+                string addr = readFile.ReadLine();
+                addrList.Add(addr);
+            }
+            readFile.Close();
+            
+            List<Event> eventList = simulator.getEventList();
+
+            System.IO.StreamWriter csvFileWriter = new System.IO.StreamWriter(path2, false);
+            int cnt = 0;
+            foreach(Event eventElement in eventList)
+            {
+                string address = "";
+                double latitude = eventElement.getCoordinates().Item1;
+                double longitude = eventElement.getCoordinates().Item2;
+
+                if(addrList[cnt] != "NA")
+                    address = addrList[cnt];
+                else
+                {
+                    Address addr = new Address(latitude, longitude);
+                    address = addr.ToString();
+                    Console.WriteLine(cnt + ": " + latitude + ", " + longitude + ", " + address);
+                }
+
+                cnt++;
+                csvFileWriter.WriteLine(address);
+            }
+            csvFileWriter.Flush();
+            csvFileWriter.Close();
+            
         }
 
         public void updateStationDict()
@@ -258,9 +303,6 @@ namespace DroneTransferSimulator
             double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[1].Value;
             eventMap.Position = new PointLatLng(latitude, longitude);
             eventMap.Zoom = 15;
-
-            Address addr = new Address(latitude, longitude);
-            Console.WriteLine(addr.ToString());
         }
 
         private void stationMap_OnMarkerClick(GMapMarker item, MouseEventArgs e)
