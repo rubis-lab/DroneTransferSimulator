@@ -118,14 +118,15 @@ namespace DroneTransferSimulator
 
         private void saveAddress()
         {
-            int ver = 3;
+            int ver = 4;
             String path1 = "../../EventAddress" + ver + ".csv";
             String path2 = "../../EventAddress" + (ver+1) + ".csv";
             List<string> addrList = new List<string>();
-            System.IO.StreamReader readFile = new System.IO.StreamReader(path1);
+            System.IO.StreamReader readFile = new System.IO.StreamReader(path1, Encoding.Default, true);
+            
             while(!readFile.EndOfStream)
             {
-                string addr = readFile.ReadLine();
+                String addr = readFile.ReadLine();
                 addrList.Add(addr);
             }
             readFile.Close();
@@ -141,7 +142,9 @@ namespace DroneTransferSimulator
                 double longitude = eventElement.getCoordinates().Item2;
 
                 if(addrList[cnt] != "NA")
+                {
                     address = addrList[cnt];
+                }
                 else
                 {
                     Address addr = new Address(latitude, longitude);
