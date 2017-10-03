@@ -89,75 +89,28 @@ namespace DroneTransferSimulator
                     eventCSVTextbox.Text = "";
                     return;
                 }
-
-                saveAddress();
-                /*
+                
                 List<Event> eventList = simulator.getEventList();
-
+                
                 foreach(Event eventElement in eventList)
                 {
                     double latitude = eventElement.getCoordinates().Item1;
                     double longitude = eventElement.getCoordinates().Item2;
-                    string address = eventElement.getAddress();
+                    string address = eventElement.getAddress().ToString();
                     string occuredTime = eventElement.getOccuredDate().ToString();
                     string ambulanceTime = eventElement.getAmbulDate().ToString();
 
+                    eventDataGridView.Rows.Add(address, occuredTime, ambulanceTime, latitude, longitude);
 
-                        eventDataGridView.Rows.Add(latitude, longitude, address, occuredTime, ambulanceTime);
-
-                        GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
-                        eventOverlay.Markers.Add(eventMarker);
+                    GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
+                    eventOverlay.Markers.Add(eventMarker);
                 }
                 eventMap.Overlays.Add(eventOverlay);
                 
                 eventDataGridView.ClearSelection();
                 eventMap.Zoom = 9;
-                eventMap.SetPositionByKeywords("Seoul, Korea");*/
+                eventMap.SetPositionByKeywords("Seoul, Korea");
             }
-        }
-
-        private void saveAddress()
-        {
-            int ver = 6;
-            String path1 = "../../EventAddress" + ver + ".csv";
-            String path2 = "../../EventAddress" + (ver+1) + ".csv";
-            List<string> addrList = new List<string>();
-            System.IO.StreamReader readFile = new System.IO.StreamReader(path1, Encoding.Default, true);
-            
-            while(!readFile.EndOfStream)
-            {
-                String addr = readFile.ReadLine();
-                addrList.Add(addr);
-            }
-            readFile.Close();
-            
-            List<Event> eventList = simulator.getEventList();
-
-            System.IO.StreamWriter csvFileWriter = new System.IO.StreamWriter(path2, false);
-            int cnt = 0;
-            foreach(Event eventElement in eventList)
-            {
-                string address = "";
-                double latitude = eventElement.getCoordinates().Item1;
-                double longitude = eventElement.getCoordinates().Item2;
-
-                if(addrList[cnt] != "NA")
-                {
-                    address = addrList[cnt];
-                }
-                else
-                {
-                    Address addr = new Address(latitude, longitude);
-                    address = addr.ToString();
-                    Console.WriteLine(cnt + ": " + latitude + ", " + longitude + ", " + address);
-                }
-
-                cnt++;
-                csvFileWriter.WriteLine(address);
-            }
-            csvFileWriter.Flush();
-            csvFileWriter.Close();
-            
         }
 
         public void updateStationDict()
@@ -185,7 +138,6 @@ namespace DroneTransferSimulator
         private void stationLoadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            // dialog.InitialDirectory = Application.StartupPath;
             dialog.Filter = "CSV files | *.csv";
             dialog.Multiselect = false;
             if(dialog.ShowDialog() == DialogResult.OK)
@@ -302,8 +254,8 @@ namespace DroneTransferSimulator
         
         private void eventDataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
-            double latitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[0].Value;
-            double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[1].Value;
+            double latitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[3].Value;
+            double longitude = (double)eventDataGridView.Rows[e.RowIndex].Cells[4].Value;
             eventMap.Position = new PointLatLng(latitude, longitude);
             eventMap.Zoom = 15;
         }

@@ -39,10 +39,10 @@ namespace DroneTransferSimulator
             {
                 if(events.Count != 0) events.Clear();
 
-                System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
-                while(!readFile.EndOfStream)
+                System.IO.StreamReader readEventFile = new System.IO.StreamReader(fpath);
+                while(!readEventFile.EndOfStream)
                 {
-                    var line = readFile.ReadLine();
+                    var line = readEventFile.ReadLine();
                     var record = line.Split(',');
                     if(record.Length != 6) throw new Exception("Inappropriate CSV format\nCannot be read");
               
@@ -67,7 +67,25 @@ namespace DroneTransferSimulator
                     e = Event.eventType.E_EVENT_OCCURED;
                     events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e));
                 }
-                readFile.Close();
+                readEventFile.Close();
+                
+                String path = "../../EventAddress.csv";
+                System.IO.StreamReader readAddressFile = new System.IO.StreamReader(path);
+
+                foreach(Event e in events)
+                {
+                    var line = readAddressFile.ReadLine();
+                    var record = line.Split(',');
+                    if(record.Length < 4) throw new Exception("Too Short Address");
+
+                    string premise = "";
+                    for(int i = 4; i < record.Length; i++) premise += record[i] + " ";
+                    
+                    Address addr = new Address(record[0], record[1], record[2], record[3], premise);
+                    e.setAddress(addr);
+                }
+                readAddressFile.Close();
+
             }
             catch(Exception e)
             {
@@ -167,6 +185,7 @@ namespace DroneTransferSimulator
                 isDone = true;
             }
         }
+
         public void eventOccured(Event ev)
         {
             Tuple<double, double> coordinates = ev.getCoordinates();

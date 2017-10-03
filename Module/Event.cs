@@ -64,10 +64,14 @@ namespace DroneTransferSimulator
             return type;
         }
 
-        public string getAddress()
+        public Address getAddress()
         {
-            addr = new Address(lat, lng);
-            return addr.ToString();
+            return addr;
+        }
+
+        public void setAddress(Address _addr)
+        {
+            addr = _addr;
         }
 
         public Tuple<double, double> getCoordinates()
