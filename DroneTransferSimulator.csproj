@@ -43,7 +43,7 @@
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\FileLoading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\FileLoading.Designer.cs">
+      <DependentUpon>FileLoading.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\Analysis.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,9 +99,11 @@
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Module\Simulator.cs" />
-    <Compile Include="Module\Time.cs" />
     <EmbeddedResource Include="Form\Analysis.resx">
       <DependentUpon>Analysis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\FileLoading.resx">
+      <DependentUpon>FileLoading.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\SimulatorUI.resx">
       <DependentUpon>SimulatorUI.cs</DependentUpon>

@@ -12,6 +12,7 @@ namespace DroneTransferSimulator
         public double coverRange;
         public double stationLng, stationLat;
         public string name;
+        private Address addr;
 
         public DroneStation(string _name, double _stationLat, double _stationLng, double _coverRange)
         {
@@ -43,6 +44,11 @@ namespace DroneTransferSimulator
                     }
                 }
             }
+        }
+
+        public Address getStationAddress()
+        {
+            return addr;
         }
     }
 }

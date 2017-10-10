@@ -29,9 +29,10 @@ namespace DroneTransferSimulator
         {
             InitializeComponent();
             simulatorUIForm = _form;
-
-            if(simulatorUIForm.stationCSVTextbox.TextLength == 0) this.Text = "Drone Station Editor";
-            else this.Text = simulatorUIForm.stationCSVTextbox.Text;
+            
+            if(simulatorUIForm.fileLoadingForm.stationCSVTextbox.TextLength == 0) this.Text = "Drone Station Editor";
+            else this.Text = simulatorUIForm.fileLoadingForm.stationCSVTextbox.Text;
+            
         }
 
         private void PopulateDataGridView()
@@ -312,7 +313,7 @@ namespace DroneTransferSimulator
                 csvFileWriter.Close();
                 this.Close();
                 
-                simulatorUIForm.stationCSVTextbox.Text = path;
+                simulatorUIForm.fileLoadingForm.stationCSVTextbox.Text = path;
                 simulatorUIForm.updateStationDict();
             }
         }

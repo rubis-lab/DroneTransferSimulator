@@ -23,6 +23,11 @@ namespace DroneTransferSimulator
         private double latitude = 0;
         private double longitude = 0;
 
+        public string getSubLocal1()
+        {
+            return subLocal1;
+        }
+
         public Address(double _latitude, double _longitude)
         {
             latitude = _latitude;

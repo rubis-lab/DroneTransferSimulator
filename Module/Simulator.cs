@@ -15,8 +15,6 @@ namespace DroneTransferSimulator
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
-        public int successEventNum=0;
-        public List<double> droneElapsedTime = new List<double>();
         
         public List<Event> getEventList()
         {
@@ -201,7 +199,6 @@ namespace DroneTransferSimulator
             Drone drone = s.drones[stationDroneIdx.Item2];
 
             ev.setStationDroneIdx(s, stationDroneIdx.Item2);
-            successEventNum += 1;
 
             double distance = finder.getDistanceFromRecentEvent(s.stationLat, s.stationLng);
 
@@ -209,7 +206,6 @@ namespace DroneTransferSimulator
             PathPlanner pathPlanner = PathPlanner.getInstance();
             double calculatedTime;
             calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2);
-            droneElapsedTime.Add(calculatedTime);
 
             DateTime droneArrivalTime = ev.getOccuredDate().AddSeconds(calculatedTime);
 
