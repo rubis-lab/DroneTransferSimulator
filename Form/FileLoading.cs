@@ -77,7 +77,6 @@ namespace DroneTransferSimulator
         private void eventLoadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            // dialog.InitialDirectory = Application.StartupPath;
             dialog.Filter = "CSV files | *.csv";
             dialog.Multiselect = false;
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -91,8 +90,6 @@ namespace DroneTransferSimulator
                     eventCSVTextbox.Text = "";
                     return;
                 }
-
-                
             }
         }
 
@@ -100,9 +97,13 @@ namespace DroneTransferSimulator
         {
             try
             {
+                /*
                 if (eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV files uploaded");
                 if (stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
-
+                */
+                simulator.getEventsFromCSV("../../EventList.csv");
+                simulator.getStationsFromCSV("../../DroneStationList.csv");
+                simulator.getDronesFromCSV("../../DroneList.csv");
                 formUI.eventOverlay.Markers.Clear();
                 formUI.eventDataGridView.Rows.Clear();
 
@@ -120,7 +121,9 @@ namespace DroneTransferSimulator
 
                     GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
                     formUI.eventOverlay.Markers.Add(eventMarker);
+                    
                 }
+
                 formUI.eventMap.Overlays.Add(formUI.eventOverlay);
 
                 formUI.eventDataGridView.ClearSelection();
@@ -131,7 +134,7 @@ namespace DroneTransferSimulator
                 formUI.stationOverlay.Markers.Clear();
                 formUI.stationOverlay.Polygons.Clear();
                 formUI.updateStationDict();
-
+                this.Close();
 
 
             }

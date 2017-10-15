@@ -270,6 +270,7 @@
             this.property.TabIndex = 28;
             this.property.Text = "Simulation Property";
             this.property.UseVisualStyleBackColor = true;
+            this.property.Click += new System.EventHandler(this.property_Click);
             // 
             // SimulatorUI
             // 

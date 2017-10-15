@@ -34,7 +34,7 @@
             this.ambulance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.drone = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.applyButton = new System.Windows.Forms.Button();
             this.regionRestriction = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -99,15 +99,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Analysis Item";
             // 
-            // button1
+            // applyButton
             // 
-            this.button1.Location = new System.Drawing.Point(126, 238);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "↓";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.applyButton.Location = new System.Drawing.Point(126, 238);
+            this.applyButton.Name = "applyButton";
+            this.applyButton.Size = new System.Drawing.Size(133, 23);
+            this.applyButton.TabIndex = 3;
+            this.applyButton.Text = "↓";
+            this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
             // regionRestriction
             // 
@@ -143,34 +143,6 @@
             // eventRestriction
             // 
             this.eventRestriction.FormattingEnabled = true;
-            this.eventRestriction.Items.AddRange(new object[] {
-            "None",
-            "강남구",
-            "광진구",
-            "강북구",
-            "강서구",
-            "구로구",
-            "금천구",
-            "관악구",
-            "강남구",
-            "강동구",
-            "노원구",
-            "동대문구",
-            "중랑구",
-            "도봉구",
-            "마포구",
-            "서초구",
-            "서대문구",
-            "송파구",
-            "성북구",
-            "성동구",
-            "은평구",
-            "용산구",
-            "영등포구",
-            "양천구",
-            "종로구",
-            "중구",
-            "중랑구"});
             this.eventRestriction.Location = new System.Drawing.Point(137, 62);
             this.eventRestriction.Name = "eventRestriction";
             this.eventRestriction.Size = new System.Drawing.Size(121, 20);
@@ -179,34 +151,6 @@
             // stationRestriction
             // 
             this.stationRestriction.FormattingEnabled = true;
-            this.stationRestriction.Items.AddRange(new object[] {
-            "None",
-            "강남구",
-            "광진구",
-            "강북구",
-            "강서구",
-            "구로구",
-            "금천구",
-            "관악구",
-            "강남구",
-            "강동구",
-            "노원구",
-            "동대문구",
-            "중랑구",
-            "도봉구",
-            "마포구",
-            "서초구",
-            "서대문구",
-            "송파구",
-            "성북구",
-            "성동구",
-            "은평구",
-            "용산구",
-            "영등포구",
-            "양천구",
-            "종로구",
-            "중구",
-            "중랑구"});
             this.stationRestriction.Location = new System.Drawing.Point(137, 36);
             this.stationRestriction.Name = "stationRestriction";
             this.stationRestriction.Size = new System.Drawing.Size(121, 20);
@@ -218,7 +162,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(386, 494);
             this.Controls.Add(this.regionRestriction);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.applyButton);
             this.Controls.Add(this.analyzeResultTable);
             this.Controls.Add(this.groupBox1);
             this.Name = "Analysis";
@@ -239,7 +183,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn anallysisItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ambulance;
         private System.Windows.Forms.DataGridViewTextBoxColumn drone;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.GroupBox regionRestriction;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;

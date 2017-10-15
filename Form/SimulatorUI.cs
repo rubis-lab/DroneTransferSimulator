@@ -20,6 +20,7 @@ namespace DroneTransferSimulator
     {
         static public Simulator simulator = Simulator.getInstance();
         public FileLoading fileLoadingForm;
+        public SimulationProperty simulationPropertyForm;
         static Dictionary<string, DroneStation> stationDict = simulator.getStationDict();
 
         public GMapOverlay eventOverlay = new GMapOverlay("Event");
@@ -27,9 +28,7 @@ namespace DroneTransferSimulator
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
-
-
-
+        
         public SimulatorUI()
         {
             AllocConsole();
@@ -157,6 +156,7 @@ namespace DroneTransferSimulator
             {
                 MessageBox.Show(ex.Message);
             }
+            
 
             SimulationResult frm = new SimulationResult(this);
             frm.Show();
@@ -196,6 +196,12 @@ namespace DroneTransferSimulator
             frm.Show();
             fileLoadingForm = frm;
         }
-        
+
+        private void property_Click(object sender, EventArgs e)
+        {
+            SimulationProperty frm = new SimulationProperty(this);
+            frm.Show();
+            simulationPropertyForm = frm;
+        }
     }
 }

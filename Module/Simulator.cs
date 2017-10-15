@@ -15,6 +15,7 @@ namespace DroneTransferSimulator
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
+        private double goldenTime = 480;
         
         public List<Event> getEventList()
         {
@@ -35,7 +36,7 @@ namespace DroneTransferSimulator
         {
             try
             {
-                if(events.Count != 0) events.Clear();
+                if (events.Count != 0) events.Clear();
 
                 System.IO.StreamReader readEventFile = new System.IO.StreamReader(fpath);
                 while(!readEventFile.EndOfStream)
@@ -83,7 +84,6 @@ namespace DroneTransferSimulator
                     e.setAddress(addr);
                 }
                 readAddressFile.Close();
-
             }
             catch(Exception e)
             {
@@ -270,6 +270,11 @@ namespace DroneTransferSimulator
         {
             if(instance == null) instance = new Simulator();
             return instance;
+        }
+
+        public void setGoldenTime(double _goldenTime)
+        {
+            goldenTime = _goldenTime;
         }
     }
 }

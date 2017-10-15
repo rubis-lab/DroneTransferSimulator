@@ -99,11 +99,20 @@
       <DependentUpon>SimulationResult.cs</DependentUpon>
     </Compile>
     <Compile Include="Module\Simulator.cs" />
+    <Compile Include="Form\SimulationProperty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\SimulationProperty.Designer.cs">
+      <DependentUpon>SimulationProperty.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form\Analysis.resx">
       <DependentUpon>Analysis.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\FileLoading.resx">
       <DependentUpon>FileLoading.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\SimulationProperty.resx">
+      <DependentUpon>SimulationProperty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\SimulatorUI.resx">
       <DependentUpon>SimulatorUI.cs</DependentUpon>
