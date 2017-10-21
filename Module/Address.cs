@@ -77,7 +77,7 @@ namespace DroneTransferSimulator
                 JObject obj = JObject.Parse(requestJson(latitude, longitude));
                 address = obj["results"][0]["formatted_address"].ToString();
             }
-            catch(Exception e)
+            catch
             {
                 address = "NA";
             }

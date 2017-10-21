@@ -280,8 +280,9 @@ namespace DroneTransferSimulator
                 double latitude = (double)stationTable.Rows[i].Cells[1].Value;
                 double longitude = (double)stationTable.Rows[i].Cells[2].Value;
                 double coverRange = (double)stationTable.Rows[i].Cells[3].Value;
+                Address addr = new Address(latitude, longitude);
 
-                stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange));
+                stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange, addr));
             }
             
             stationTable.Rows.Clear();

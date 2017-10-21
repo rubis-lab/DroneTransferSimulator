@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DroneTransferSimulator
@@ -97,9 +98,12 @@ namespace DroneTransferSimulator
             try
             {
                 if(stationDict.Count != 0) stationDict.Clear();
-
                 System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
-                while(!readFile.EndOfStream)
+                /*
+                string filePath = @"../../StationAddress.csv";
+                StringBuilder sb = new StringBuilder();
+                */
+                while (!readFile.EndOfStream)
                 {
                     var line = readFile.ReadLine();
                     var record = line.Split(',');
@@ -109,10 +113,36 @@ namespace DroneTransferSimulator
                     double latitude = System.Convert.ToDouble(record[1]);
                     double longitude = System.Convert.ToDouble(record[2]);
                     double coverRange = System.Convert.ToDouble(record[3]);
-                    
                     stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange));
+                    /*
+                    Address addr = new Address(latitude, longitude);
+                    string[] rec = addr.ToString().Split(new string[] { " " }, StringSplitOptions.None);
+                    Console.WriteLine(addr.ToString());
+                    stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange, addr));
+                    
+                    sb.AppendLine(string.Join(",", rec));
+                    */
                 }
+
+                //File.WriteAllText(filePath, sb.ToString(), Encoding.Default);
                 readFile.Close();
+
+                String path = "../../StationAddress.csv";
+                System.IO.StreamReader readStationAddressFile = new System.IO.StreamReader(path);
+
+                foreach (DroneStation s in stationDict.Values)
+                {
+                    var line = readStationAddressFile.ReadLine();
+                    var record = line.Split(',');
+                    if (record.Length < 4) throw new Exception("Too Short Address");
+
+                    string premise = "";
+                    for (int i = 4; i < record.Length; i++) premise += record[i] + " ";
+
+                    Address addr = new Address(record[0], record[1], record[2], record[3], premise);
+                    s.setStationAddress(addr);
+                }
+                readStationAddressFile.Close();
             }
             catch(Exception e)
             {
