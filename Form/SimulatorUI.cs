@@ -141,6 +141,11 @@ namespace DroneTransferSimulator
         {
             try
             {
+                if(eventDataGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No CSV Loaded");
+                    return;
+                }
                 DateTime startTimePicked = startTimePicker.Value;
                 DateTime startTime = new DateTime(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
 

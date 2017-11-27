@@ -16,7 +16,7 @@ namespace DroneTransferSimulator
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
-        private double goldenTime = 480;
+        private Tuple<double,double> goldenTime = new Tuple<double, double>(300,480);
         
         public List<Event> getEventList()
         {
@@ -37,7 +37,7 @@ namespace DroneTransferSimulator
         {
             try
             {
-                if (events.Count != 0) events.Clear();
+                if(events.Count != 0) events.Clear();
 
                 System.IO.StreamReader readEventFile = new System.IO.StreamReader(fpath);
                 while(!readEventFile.EndOfStream)
@@ -85,6 +85,8 @@ namespace DroneTransferSimulator
                     e.setAddress(addr);
                 }
                 readAddressFile.Close();
+
+                
             }
             catch(Exception e)
             {
@@ -98,6 +100,7 @@ namespace DroneTransferSimulator
             try
             {
                 if(stationDict.Count != 0) stationDict.Clear();
+                Encoding encode = System.Text.Encoding.GetEncoding("ks_c_5601-1987");
                 System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
                 /*
                 string filePath = @"../../StationAddress.csv";
@@ -113,7 +116,10 @@ namespace DroneTransferSimulator
                     double latitude = System.Convert.ToDouble(record[1]);
                     double longitude = System.Convert.ToDouble(record[2]);
                     double coverRange = System.Convert.ToDouble(record[3]);
-                    stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange));
+                    
+                    DroneStation s = new DroneStation(name, latitude, longitude, coverRange);
+                    stationDict.Add(name, s);
+
                     /*
                     Address addr = new Address(latitude, longitude);
                     string[] rec = addr.ToString().Split(new string[] { " " }, StringSplitOptions.None);
@@ -123,26 +129,28 @@ namespace DroneTransferSimulator
                     sb.AppendLine(string.Join(",", rec));
                     */
                 }
-
-                //File.WriteAllText(filePath, sb.ToString(), Encoding.Default);
+                /*
+                File.WriteAllText(filePath, sb.ToString(), Encoding.Default);
+                */
                 readFile.Close();
 
                 String path = "../../StationAddress.csv";
-                System.IO.StreamReader readStationAddressFile = new System.IO.StreamReader(path);
+                System.IO.StreamReader readStationAddressFile = new System.IO.StreamReader(path, encode);
 
-                foreach (DroneStation s in stationDict.Values)
+                foreach(DroneStation s in stationDict.Values)
                 {
                     var line = readStationAddressFile.ReadLine();
                     var record = line.Split(',');
-                    if (record.Length < 4) throw new Exception("Too Short Address");
+                    if(record.Length < 4) throw new Exception("Too Short Address");
 
                     string premise = "";
-                    for (int i = 4; i < record.Length; i++) premise += record[i] + " ";
+                    for(int i = 4; i < record.Length; i++) premise += record[i] + " ";
 
                     Address addr = new Address(record[0], record[1], record[2], record[3], premise);
                     s.setStationAddress(addr);
                 }
                 readStationAddressFile.Close();
+                
             }
             catch(Exception e)
             {
@@ -228,8 +236,6 @@ namespace DroneTransferSimulator
             DroneStation s = stationDict[stationDroneIdx.Item1];
             Drone drone = s.drones[stationDroneIdx.Item2];
 
-            ev.setStationDroneIdx(s, stationDroneIdx.Item2);
-
             double distance = finder.getDistanceFromRecentEvent(s.stationLat, s.stationLng);
 
             //calculate time
@@ -302,9 +308,14 @@ namespace DroneTransferSimulator
             return instance;
         }
 
-        public void setGoldenTime(double _goldenTime)
+        public void setGoldenTime(double _goldenTime1, double _goldenTime2)
         {
-            goldenTime = _goldenTime;
+            goldenTime = new Tuple<double, double>(_goldenTime1, _goldenTime2);
+        }
+
+        public Tuple<double,double> getGoldenTime()
+        {
+            return goldenTime;
         }
     }
 }

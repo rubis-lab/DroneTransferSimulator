@@ -59,7 +59,6 @@ namespace DroneTransferSimulator
             string msg = "";
             for(int i = 0; i < 6; i++)
                 msg += eventTable.Rows[ind].Cells[i].Value.ToString() + " / ";
-            Console.WriteLine(msg);
 
             double lat = eventList[ind].getCoordinates().Item1;
             double lng = eventList[ind].getCoordinates().Item2;
@@ -78,7 +77,6 @@ namespace DroneTransferSimulator
 
             eventDetailTable.Rows.Clear();
             eventDetailTable.Rows.Add(station.name, station.stationLat, station.stationLng, droneGap, ambulGap);
-
             stationOverlay.Markers.Clear();
             eventMap.Overlays.Clear();
 
@@ -124,7 +122,7 @@ namespace DroneTransferSimulator
             stationOverlay.Polygons.Clear();
             eventMap.Overlays.Clear();
 
-            for (int i = 0; i < pNum; i++)
+            for(int i = 0; i < pNum; i++)
             {
                 double theta = seg * i;
                 double y = p.Lat + Math.Cos(theta) / 0.030828 / 60 / 60 * coverRange;
@@ -143,17 +141,28 @@ namespace DroneTransferSimulator
         {
             eventTable.Rows.Clear();
             eventList = simulator.getEventList();
+
             for(int i = 0; i < eventList.Count; i++)
             {
                 Event e = eventList[i];
                 double latitude = e.getCoordinates().Item1;
                 double longitude = e.getCoordinates().Item2;
                 string occuredTime = e.getOccuredDate().ToString();
-                string droneArrivalTime = e.getDroneDate().ToString();
+                string droneArrivalTime = "N/A";
                 string result = "Coverage Problem";
-                if(e.getResult() == Event.eventResult.SUCCESS) result = e.getStation().name;
+                if(e.getResult() == Event.eventResult.SUCCESS)
+                {
+                    result = e.getStation().name;
+                    droneArrivalTime = e.getDroneDate().ToString();
+                }
                 else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No available drone";
                 eventTable.Rows.Add(i, latitude, longitude, occuredTime, droneArrivalTime, result);
+
+                double droneSec= Math.Round((e.getDroneDate() - e.getOccuredDate()).TotalSeconds);
+
+                if(e.getResult() != Event.eventResult.SUCCESS) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Red;
+                else if(droneSec < simulator.getGoldenTime().Item1) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Green;
+                else if(droneSec < simulator.getGoldenTime().Item2) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
             }
         }
         
