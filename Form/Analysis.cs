@@ -63,10 +63,7 @@ namespace DroneTransferSimulator
         private double getCoverageRate(List<Event> events)
         {
             double num = 0;
-            foreach(Event e in events)
-            {
-                if(e.getAddress().getSubLocal1() == e.getStation().getStationAddress().getSubLocal1()) num += 1;
-            }
+            foreach(Event e in events) if(e.getResult()==Event.eventResult.SUCCESS) if(e.getAddress().getSubLocal1() == e.getStation().getStationAddress().getSubLocal1()) num += 1;
             return Math.Round(num / events.Count, 3);
         }
 
@@ -134,7 +131,10 @@ namespace DroneTransferSimulator
             ambulTimeList.Clear();
             events = simulator.getEventList();
             List<Event> localEvents = new List<Event>();
-            if(eventRestriction.SelectedItem != null) localEvents = restrictEvent(events, eventRestriction.SelectedItem.ToString());
+            if (eventRestriction.SelectedItem != null)
+            {
+                localEvents = restrictEvent(events, eventRestriction.SelectedItem.ToString());
+            }
             else localEvents = events;
             
             foreach(Event _event in localEvents)
@@ -147,10 +147,13 @@ namespace DroneTransferSimulator
 
             foreach(Event _event in localEvents)
             {
-                DateTime droneTime = _event.getDroneDate();
-                DateTime occuredTime = _event.getOccuredDate();
-                double droneElapsedTime = (droneTime - occuredTime).TotalSeconds;
-                droneTimeList.Add(droneElapsedTime);
+                if(_event.getResult()==Event.eventResult.SUCCESS)
+                {
+                    DateTime droneTime = _event.getDroneDate();
+                    DateTime occuredTime = _event.getOccuredDate();
+                    double droneElapsedTime = (droneTime - occuredTime).TotalSeconds;
+                    droneTimeList.Add(droneElapsedTime);
+                }
             }
 
             analyzeResultTable.Rows.Clear();

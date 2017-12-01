@@ -38,6 +38,8 @@
             this.regionRestriction = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.eventRestriction = new System.Windows.Forms.ComboBox();
+            this.drone2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.drone3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.analyzeResultTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.regionRestriction.SuspendLayout();
@@ -59,11 +61,13 @@
             this.analyzeResultTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.anallysisItem,
             this.ambulance,
-            this.drone});
-            this.analyzeResultTable.Location = new System.Drawing.Point(12, 245);
+            this.drone,
+            this.drone2,
+            this.drone3});
+            this.analyzeResultTable.Location = new System.Drawing.Point(397, 19);
             this.analyzeResultTable.Name = "analyzeResultTable";
             this.analyzeResultTable.RowTemplate.Height = 23;
-            this.analyzeResultTable.Size = new System.Drawing.Size(362, 220);
+            this.analyzeResultTable.Size = new System.Drawing.Size(543, 220);
             this.analyzeResultTable.TabIndex = 1;
             this.analyzeResultTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.analyzeResultTable_CellContentClick);
             // 
@@ -94,11 +98,11 @@
             // 
             // applyButton
             // 
-            this.applyButton.Location = new System.Drawing.Point(129, 216);
+            this.applyButton.Location = new System.Drawing.Point(247, 216);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(133, 23);
             this.applyButton.TabIndex = 3;
-            this.applyButton.Text = "↓";
+            this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
@@ -130,11 +134,21 @@
             this.eventRestriction.Size = new System.Drawing.Size(121, 20);
             this.eventRestriction.TabIndex = 1;
             // 
+            // drone2
+            // 
+            this.drone2.HeaderText = "Drone2";
+            this.drone2.Name = "drone2";
+            // 
+            // drone3
+            // 
+            this.drone3.HeaderText = "Drone3";
+            this.drone3.Name = "drone3";
+            // 
             // Analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(386, 494);
+            this.ClientSize = new System.Drawing.Size(944, 253);
             this.Controls.Add(this.regionRestriction);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.analyzeResultTable);
@@ -161,5 +175,7 @@
         private System.Windows.Forms.GroupBox regionRestriction;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox eventRestriction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn drone2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn drone3;
     }
 }
