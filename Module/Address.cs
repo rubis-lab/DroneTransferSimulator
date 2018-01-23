@@ -23,6 +23,11 @@ namespace DroneTransferSimulator
         private double latitude = 0;
         private double longitude = 0;
 
+        public string getSubLocal1()
+        {
+            return subLocal1;
+        }
+
         public Address(double _latitude, double _longitude)
         {
             latitude = _latitude;
@@ -72,7 +77,7 @@ namespace DroneTransferSimulator
                 JObject obj = JObject.Parse(requestJson(latitude, longitude));
                 address = obj["results"][0]["formatted_address"].ToString();
             }
-            catch(Exception e)
+            catch
             {
                 address = "NA";
             }

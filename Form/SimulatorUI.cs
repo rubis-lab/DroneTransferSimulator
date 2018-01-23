@@ -19,16 +19,16 @@ namespace DroneTransferSimulator
     public partial class SimulatorUI : Form
     {
         static public Simulator simulator = Simulator.getInstance();
+        public FileLoading fileLoadingForm;
+        public SimulationProperty simulationPropertyForm;
         static Dictionary<string, DroneStation> stationDict = simulator.getStationDict();
 
-        GMapOverlay eventOverlay = new GMapOverlay("Event");
-        GMapOverlay stationOverlay = new GMapOverlay("Station");
+        public GMapOverlay eventOverlay = new GMapOverlay("Event");
+        public GMapOverlay stationOverlay = new GMapOverlay("Station");
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern bool AllocConsole();
-
-
-
+        
         public SimulatorUI()
         {
             AllocConsole();
@@ -69,50 +69,6 @@ namespace DroneTransferSimulator
             stationMap.AutoScroll = true;
         }
 
-        private void eventLoadButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            // dialog.InitialDirectory = Application.StartupPath;
-            dialog.Filter = "CSV files | *.csv";
-            dialog.Multiselect = false;
-            if(dialog.ShowDialog() == DialogResult.OK)
-            {
-                eventOverlay.Markers.Clear();
-                eventDataGridView.Rows.Clear();
-                
-                String path = dialog.FileName;
-                eventCSVTextbox.Text = path;
-                string msg = simulator.getEventsFromCSV(path);
-                if(msg != null)
-                {
-                    MessageBox.Show(msg);
-                    eventCSVTextbox.Text = "";
-                    return;
-                }
-                
-                List<Event> eventList = simulator.getEventList();
-                
-                foreach(Event eventElement in eventList)
-                {
-                    double latitude = eventElement.getCoordinates().Item1;
-                    double longitude = eventElement.getCoordinates().Item2;
-                    string address = eventElement.getAddress().ToString();
-                    string occuredTime = eventElement.getOccuredDate().ToString();
-                    string ambulanceTime = eventElement.getAmbulDate().ToString();
-
-                    eventDataGridView.Rows.Add(address, occuredTime, ambulanceTime, latitude, longitude);
-
-                    GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
-                    eventOverlay.Markers.Add(eventMarker);
-                }
-                eventMap.Overlays.Add(eventOverlay);
-                
-                eventDataGridView.ClearSelection();
-                eventMap.Zoom = 9;
-                eventMap.SetPositionByKeywords("Seoul, Korea");
-            }
-        }
-
         public void updateStationDict()
         {
             stationOverlay.Markers.Clear();
@@ -134,51 +90,7 @@ namespace DroneTransferSimulator
             stationMap.Zoom = 9;
             stationMap.SetPositionByKeywords("Seoul, Korea");
         }
-
-        private void stationLoadButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "CSV files | *.csv";
-            dialog.Multiselect = false;
-            if(dialog.ShowDialog() == DialogResult.OK)
-            {
-                stationOverlay.Markers.Clear();
-                stationOverlay.Polygons.Clear();
-
-                String path = dialog.FileName;
-                stationCSVTextbox.Text = path;
-
-                string msg = simulator.getStationsFromCSV(path);
-                if(msg != null)
-                {
-                    MessageBox.Show(msg);
-                    stationCSVTextbox.Text = "";
-                    return;
-                }
-                updateStationDict();
-                droneLoadButton.Enabled = true;
-            }
-        }
-
-        private void droneLoadButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "CSV files | *.csv";
-            dialog.Multiselect = false;
-            if(dialog.ShowDialog() == DialogResult.OK)
-            {
-                String path = dialog.FileName;
-                droneCSVTextbox.Text = path;
-
-                string msg = simulator.getDronesFromCSV(path);
-                if(msg != null)
-                {
-                    MessageBox.Show(msg);
-                    droneCSVTextbox.Text = "";
-                    return;
-                }
-            }
-        }
+        
 
         private void drawCircle(PointLatLng p, double coverRange)
         {
@@ -229,9 +141,11 @@ namespace DroneTransferSimulator
         {
             try
             {
-                if(eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV files uploaded");
-                if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
-
+                if(eventDataGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No CSV Loaded");
+                    return;
+                }
                 DateTime startTimePicked = startTimePicker.Value;
                 DateTime startTime = new DateTime(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
 
@@ -247,6 +161,7 @@ namespace DroneTransferSimulator
             {
                 MessageBox.Show(ex.Message);
             }
+            
 
             SimulationResult frm = new SimulationResult(this);
             frm.Show();
@@ -273,6 +188,25 @@ namespace DroneTransferSimulator
         {
             eventMap.Position = item.Position;
             eventMap.Zoom = 15;
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void fileLoading_Click(object sender, EventArgs e)
+        {
+            FileLoading frm = new FileLoading(this);
+            frm.Show();
+            fileLoadingForm = frm;
+        }
+
+        private void property_Click(object sender, EventArgs e)
+        {
+            SimulationProperty frm = new SimulationProperty(this);
+            frm.Show();
+            simulationPropertyForm = frm;
         }
     }
 }

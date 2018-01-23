@@ -10,7 +10,7 @@ namespace DroneTransferSimulator
     {
         Dictionary<string, DroneStation> stationDict = Simulator.getInstance().getStationDict();
         private double eventLng, eventLat;
-        Event e;
+        private Event e;
 
         public DroneStationFinder(Event _e)
         {
@@ -65,9 +65,9 @@ namespace DroneTransferSimulator
             else
             {   
                 availableStations = availableStations.OrderBy(n => n.distance).ToList();
-                foreach(availableStation e in availableStations)
+                foreach(availableStation ast in availableStations)
                 {
-                    DroneStation s = stationDict[e.name];
+                    DroneStation s = stationDict[ast.name];
                                         
                     s.updateChargingDrones(currentTime);
                     if(s.drones.Count == 0) continue;

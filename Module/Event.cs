@@ -88,17 +88,12 @@ namespace DroneTransferSimulator
         {
             result = _result;
         }
-
-        public void setStation(DroneStation _station)
-        {
-            station = _station;
-        }
-
+        
         public DroneStation getStation()
         {
             return station;
         }
-
+        
         public int getDroneIndex()
         {
             return droneIndex;
@@ -109,6 +104,6 @@ namespace DroneTransferSimulator
             station = _station;
             droneIndex = _droneIndex;
         }
-
+        
     }
 }

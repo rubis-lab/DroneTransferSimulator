@@ -29,12 +29,11 @@
         private void InitializeComponent()
         {
             this.eventDataGridView = new System.Windows.Forms.DataGridView();
-            this.stationLoadButton = new System.Windows.Forms.Button();
-            this.eventLoadButton = new System.Windows.Forms.Button();
-            this.stationCSVTextbox = new System.Windows.Forms.TextBox();
-            this.eventCSVTextbox = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ambulTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.stationEditButton = new System.Windows.Forms.Button();
             this.stationMapLabel = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,14 +45,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.eventMapLabel = new System.Windows.Forms.Label();
             this.eventMap = new GMap.NET.WindowsForms.GMapControl();
-            this.droneLoadButton = new System.Windows.Forms.Button();
-            this.droneCSVTextbox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ambulTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fileLoading = new System.Windows.Forms.Button();
+            this.property = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -80,59 +73,40 @@
             this.eventDataGridView.TabIndex = 13;
             this.eventDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventDataGridView_RowEnter);
             // 
-            // stationLoadButton
+            // address
             // 
-            this.stationLoadButton.Location = new System.Drawing.Point(476, 57);
-            this.stationLoadButton.Name = "stationLoadButton";
-            this.stationLoadButton.Size = new System.Drawing.Size(26, 24);
-            this.stationLoadButton.TabIndex = 12;
-            this.stationLoadButton.Text = "...";
-            this.stationLoadButton.UseVisualStyleBackColor = true;
-            this.stationLoadButton.Click += new System.EventHandler(this.stationLoadButton_Click);
+            this.address.HeaderText = "Address";
+            this.address.Name = "address";
+            this.address.ReadOnly = true;
+            this.address.Width = 130;
             // 
-            // eventLoadButton
+            // occuredTime
             // 
-            this.eventLoadButton.Location = new System.Drawing.Point(476, 19);
-            this.eventLoadButton.Name = "eventLoadButton";
-            this.eventLoadButton.Size = new System.Drawing.Size(26, 24);
-            this.eventLoadButton.TabIndex = 11;
-            this.eventLoadButton.Text = "...";
-            this.eventLoadButton.UseVisualStyleBackColor = true;
-            this.eventLoadButton.Click += new System.EventHandler(this.eventLoadButton_Click);
+            this.occuredTime.HeaderText = "Occured Time";
+            this.occuredTime.Name = "occuredTime";
+            this.occuredTime.ReadOnly = true;
+            this.occuredTime.Width = 142;
             // 
-            // stationCSVTextbox
+            // ambulTime
             // 
-            this.stationCSVTextbox.Location = new System.Drawing.Point(12, 58);
-            this.stationCSVTextbox.Name = "stationCSVTextbox";
-            this.stationCSVTextbox.ReadOnly = true;
-            this.stationCSVTextbox.Size = new System.Drawing.Size(458, 21);
-            this.stationCSVTextbox.TabIndex = 10;
+            this.ambulTime.HeaderText = "Ambulance Time";
+            this.ambulTime.Name = "ambulTime";
+            this.ambulTime.ReadOnly = true;
+            this.ambulTime.Width = 142;
             // 
-            // eventCSVTextbox
+            // latitude
             // 
-            this.eventCSVTextbox.Location = new System.Drawing.Point(12, 20);
-            this.eventCSVTextbox.Name = "eventCSVTextbox";
-            this.eventCSVTextbox.ReadOnly = true;
-            this.eventCSVTextbox.Size = new System.Drawing.Size(458, 21);
-            this.eventCSVTextbox.TabIndex = 9;
+            this.latitude.HeaderText = "Latitude";
+            this.latitude.Name = "latitude";
+            this.latitude.ReadOnly = true;
+            this.latitude.Width = 60;
             // 
-            // label2
+            // longitude
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 44);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(109, 12);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Drone Station CSV";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 5);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(65, 12);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Event CSV";
+            this.longitude.HeaderText = "Longitude";
+            this.longitude.Name = "longitude";
+            this.longitude.ReadOnly = true;
+            this.longitude.Width = 60;
             // 
             // stationEditButton
             // 
@@ -278,77 +252,33 @@
             this.eventMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.eventMap_OnMarkerClick);
             this.eventMap.Load += new System.EventHandler(this.eventMap_Load);
             // 
-            // droneLoadButton
+            // fileLoading
             // 
-            this.droneLoadButton.Enabled = false;
-            this.droneLoadButton.Location = new System.Drawing.Point(476, 95);
-            this.droneLoadButton.Name = "droneLoadButton";
-            this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
-            this.droneLoadButton.TabIndex = 26;
-            this.droneLoadButton.Text = "...";
-            this.droneLoadButton.UseVisualStyleBackColor = true;
-            this.droneLoadButton.Click += new System.EventHandler(this.droneLoadButton_Click);
+            this.fileLoading.Location = new System.Drawing.Point(23, 31);
+            this.fileLoading.Name = "fileLoading";
+            this.fileLoading.Size = new System.Drawing.Size(226, 27);
+            this.fileLoading.TabIndex = 27;
+            this.fileLoading.Text = "File Loading";
+            this.fileLoading.UseVisualStyleBackColor = true;
+            this.fileLoading.Click += new System.EventHandler(this.fileLoading_Click);
             // 
-            // droneCSVTextbox
+            // property
             // 
-            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 96);
-            this.droneCSVTextbox.Name = "droneCSVTextbox";
-            this.droneCSVTextbox.ReadOnly = true;
-            this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
-            this.droneCSVTextbox.TabIndex = 25;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 82);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 12);
-            this.label3.TabIndex = 24;
-            this.label3.Text = "Drone CSV";
-            // 
-            // address
-            // 
-            this.address.HeaderText = "Address";
-            this.address.Name = "address";
-            this.address.ReadOnly = true;
-            this.address.Width = 130;
-            // 
-            // occuredTime
-            // 
-            this.occuredTime.HeaderText = "Occured Time";
-            this.occuredTime.Name = "occuredTime";
-            this.occuredTime.ReadOnly = true;
-            this.occuredTime.Width = 142;
-            // 
-            // ambulTime
-            // 
-            this.ambulTime.HeaderText = "Ambulance Time";
-            this.ambulTime.Name = "ambulTime";
-            this.ambulTime.ReadOnly = true;
-            this.ambulTime.Width = 142;
-            // 
-            // latitude
-            // 
-            this.latitude.HeaderText = "Latitude";
-            this.latitude.Name = "latitude";
-            this.latitude.ReadOnly = true;
-            this.latitude.Width = 60;
-            // 
-            // longitude
-            // 
-            this.longitude.HeaderText = "Longitude";
-            this.longitude.Name = "longitude";
-            this.longitude.ReadOnly = true;
-            this.longitude.Width = 60;
+            this.property.Location = new System.Drawing.Point(23, 73);
+            this.property.Name = "property";
+            this.property.Size = new System.Drawing.Size(226, 27);
+            this.property.TabIndex = 28;
+            this.property.Text = "Simulation Property";
+            this.property.UseVisualStyleBackColor = true;
+            this.property.Click += new System.EventHandler(this.property_Click);
             // 
             // SimulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 481);
-            this.Controls.Add(this.droneLoadButton);
-            this.Controls.Add(this.droneCSVTextbox);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.property);
+            this.Controls.Add(this.fileLoading);
             this.Controls.Add(this.startSimButton);
             this.Controls.Add(this.endTimePicker);
             this.Controls.Add(this.label5);
@@ -356,12 +286,6 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.stationEditButton);
             this.Controls.Add(this.eventDataGridView);
-            this.Controls.Add(this.stationLoadButton);
-            this.Controls.Add(this.eventLoadButton);
-            this.Controls.Add(this.stationCSVTextbox);
-            this.Controls.Add(this.eventCSVTextbox);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Name = "SimulatorUI";
             this.Text = "Drone Transfer Simulator";
@@ -376,12 +300,6 @@
 
         #endregion
         public System.Windows.Forms.DataGridView eventDataGridView;
-        private System.Windows.Forms.Button stationLoadButton;
-        private System.Windows.Forms.Button eventLoadButton;
-        public System.Windows.Forms.TextBox stationCSVTextbox;
-        public System.Windows.Forms.TextBox eventCSVTextbox;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button stationEditButton;
         private System.Windows.Forms.Label stationMapLabel;
         private System.Windows.Forms.Label label4;
@@ -391,16 +309,15 @@
         private System.Windows.Forms.Button startSimButton;
         private GMap.NET.WindowsForms.GMapControl stationMap;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button droneLoadButton;
-        public System.Windows.Forms.TextBox droneCSVTextbox;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label eventMapLabel;
-        private GMap.NET.WindowsForms.GMapControl eventMap;
+        public GMap.NET.WindowsForms.GMapControl eventMap;
         private System.Windows.Forms.DataGridViewTextBoxColumn address;
         private System.Windows.Forms.DataGridViewTextBoxColumn occuredTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ambulTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
+        private System.Windows.Forms.Button fileLoading;
+        private System.Windows.Forms.Button property;
     }
 }
 
