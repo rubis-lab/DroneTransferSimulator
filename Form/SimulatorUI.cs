@@ -20,7 +20,6 @@ namespace DroneTransferSimulator
     {
         static public Simulator simulator = Simulator.getInstance();
         public FileLoading fileLoadingForm;
-        public SimulationProperty simulationPropertyForm;
         static Dictionary<string, DroneStation> stationDict = simulator.getStationDict();
 
         public GMapOverlay eventOverlay = new GMapOverlay("Event");
@@ -153,7 +152,8 @@ namespace DroneTransferSimulator
                 DateTime endTime = new DateTime(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
 
                 if( DateTime.Compare(endTime, startTime) <=0 ) throw new Exception("Start should be earlier than end");
-
+                
+                simulator.setGoldenTime(Convert.ToDouble(goldenTimeText1.Text), Convert.ToDouble(goldenTimeText2.Text));
                 simulator.updateEventsBtwRange(startTime, endTime);
                 simulator.start();
             }
@@ -202,11 +202,100 @@ namespace DroneTransferSimulator
             fileLoadingForm = frm;
         }
 
-        private void property_Click(object sender, EventArgs e)
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            SimulationProperty frm = new SimulationProperty(this);
-            frm.Show();
-            simulationPropertyForm = frm;
+
+        }
+
+        private void radioButton1_MouseHover(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
+            toolTip1.SetToolTip(this.radioButton1, "Advanced Model\n - 환경 요인에 상관없이 출동한다 가정\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - Coverage 는 최대 20km\n");
+        }
+
+        private void radioButton2_MouseHover(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
+            toolTip1.SetToolTip(this.radioButton2, "Intermediate model – 1(High spec model for environment)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 온도 / 우천 / 낙뢰 / 풍속 에도 출동 가능\n - Coverage 10km");
+        }
+
+        private void radioButton3_MouseHover(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
+            toolTip1.SetToolTip(this.radioButton3, "Intermediate model – 2 (GPS base control model)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 시정 / 주야간 에도 출동 가능\n – Coverage 10km");
+        }
+
+        private void radioButton4_MouseHover(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
+            toolTip1.SetToolTip(this.radioButton4, "Intermediate model – 3 (Long flight time)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 온도 / 우천 / 낙뢰 / 시정 / 풍속 에도 출동 불가 하나\n - Coverage 20km");
+        }
+
+        private void radioButton5_MouseHover(object sender, EventArgs e)
+        {
+            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
+            toolTip1.SetToolTip(this.radioButton5, "Basic model\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 모든 환경적 요인에 출동 불가\n - Coverage 10km");
+        }
+
+        private void autoLoadButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string msg = "";
+                msg = simulator.getEventsFromCSV("../../EventList.csv");
+                if(msg != null) throw new Exception(msg);
+                simulator.getStationsFromCSV("../../DroneStationList.csv");
+                if(msg != null) throw new Exception(msg);
+                simulator.getDronesFromCSV("../../DroneList.csv");
+                if(msg != null) throw new Exception(msg);
+
+                eventOverlay.Markers.Clear();
+                eventDataGridView.Rows.Clear();
+
+                List<Event> eventList = simulator.getEventList();
+
+                foreach(Event eventElement in eventList)
+                {
+                    double latitude = eventElement.getCoordinates().Item1;
+                    double longitude = eventElement.getCoordinates().Item2;
+                    string address = eventElement.getAddress().ToString();
+                    string occuredTime = eventElement.getOccuredDate().ToString();
+                    string ambulanceTime = eventElement.getAmbulDate().ToString();
+
+                    eventDataGridView.Rows.Add(address, occuredTime, ambulanceTime, latitude, longitude);
+
+                    GMarkerGoogle eventMarker = new GMarkerGoogle(new PointLatLng(latitude, longitude), GMarkerGoogleType.red_small);
+                    eventOverlay.Markers.Add(eventMarker);
+
+                }
+
+                eventMap.Overlays.Add(eventOverlay);
+
+                eventDataGridView.ClearSelection();
+                eventMap.Zoom = 9;
+                eventMap.SetPositionByKeywords("Seoul, Korea");
+
+
+                stationOverlay.Markers.Clear();
+                stationOverlay.Polygons.Clear();
+                updateStationDict();
+                textBox1.Text = simulator.getEventList().Count.ToString();
+                textBox2.Text = stationDict.Count.ToString();
+
+                int droneCnt = 0;
+                foreach(KeyValuePair<string, DroneStation> dict in stationDict)
+                {
+                    DroneStation stationElement = dict.Value;
+                    droneCnt += stationElement.drones.Count;
+                }
+
+                textBox3.Text = droneCnt.ToString();
+
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

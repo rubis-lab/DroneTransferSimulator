@@ -38,6 +38,7 @@ namespace DroneTransferSimulator
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "CSV files | *.csv";
             dialog.Multiselect = false;
+            dialog.Title = "Drone CSV";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 String path = dialog.FileName;
@@ -58,6 +59,7 @@ namespace DroneTransferSimulator
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "CSV files | *.csv";
             dialog.Multiselect = false;
+            dialog.Title = "Station CSV";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 String path = dialog.FileName;
@@ -79,6 +81,7 @@ namespace DroneTransferSimulator
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "CSV files | *.csv";
             dialog.Multiselect = false;
+            dialog.Title = "Event CSV";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 String path = dialog.FileName;
@@ -97,19 +100,16 @@ namespace DroneTransferSimulator
         {
             try
             {
-                /*
-                if (eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV files uploaded");
-                if (stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV files uploaded");
-                */
-                simulator.getEventsFromCSV("../../EventList.csv");
-                simulator.getStationsFromCSV("../../DroneStationList.csv");
-                simulator.getDronesFromCSV("../../DroneList.csv");
+                if(eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV uploaded");
+                if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV uploaded");
+                if(droneCSVTextbox.TextLength == 0) throw new Exception("No drone CSV uploaded");
+
                 formUI.eventOverlay.Markers.Clear();
                 formUI.eventDataGridView.Rows.Clear();
 
                 List<Event> eventList = simulator.getEventList();
 
-                foreach (Event eventElement in eventList)
+                foreach(Event eventElement in eventList)
                 {
                     double latitude = eventElement.getCoordinates().Item1;
                     double longitude = eventElement.getCoordinates().Item2;
@@ -138,7 +138,7 @@ namespace DroneTransferSimulator
 
 
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
