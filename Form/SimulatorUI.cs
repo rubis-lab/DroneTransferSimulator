@@ -297,5 +297,10 @@ namespace DroneTransferSimulator
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void droneProperty_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

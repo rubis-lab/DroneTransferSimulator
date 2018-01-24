@@ -59,6 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form\DroneProperty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form\DroneProperty.Designer.cs">
+      <DependentUpon>DroneProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form\FileLoading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     <Compile Include="Module\Simulator.cs" />
     <EmbeddedResource Include="Form\Analysis.resx">
       <DependentUpon>Analysis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form\DroneProperty.resx">
+      <DependentUpon>DroneProperty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form\FileLoading.resx">
       <DependentUpon>FileLoading.cs</DependentUpon>

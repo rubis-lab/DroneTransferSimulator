@@ -65,6 +65,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.droneProperty = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.eventDataGridView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -471,11 +472,22 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "CSV Load";
             // 
+            // droneProperty
+            // 
+            this.droneProperty.Location = new System.Drawing.Point(278, 19);
+            this.droneProperty.Name = "droneProperty";
+            this.droneProperty.Size = new System.Drawing.Size(215, 28);
+            this.droneProperty.TabIndex = 49;
+            this.droneProperty.Text = "Drone Property";
+            this.droneProperty.UseVisualStyleBackColor = true;
+            this.droneProperty.Click += new System.EventHandler(this.droneProperty_Click);
+            // 
             // SimulatorUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1044, 481);
+            this.Controls.Add(this.droneProperty);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -553,6 +565,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button droneProperty;
     }
 }
 
