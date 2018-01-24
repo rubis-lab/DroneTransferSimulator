@@ -70,8 +70,8 @@ namespace DroneTransferSimulator
             double droneSec = Math.Round((droneTime - occuredTime).TotalSeconds);
             double ambulSec = (ambulTime - occuredTime).TotalSeconds;
             
-            string droneGap = "" + (droneSec / 60) + "' " + (droneSec % 60) + "\"";
-            string ambulGap = "" + (ambulSec / 60) + "' " + (ambulSec % 60) + "\"";
+            string droneGap = "" + (int)(droneSec / 60) + "' " + (droneSec % 60) + "\"";
+            string ambulGap = "" + (int)(ambulSec / 60) + "' " + (ambulSec % 60) + "\"";
 
             DroneStation station = eventList[ind].getStation();
 
@@ -145,6 +145,7 @@ namespace DroneTransferSimulator
             for(int i = 0; i < eventList.Count; i++)
             {
                 Event e = eventList[i];
+                string address = e.getAddress().ToString();
                 double latitude = e.getCoordinates().Item1;
                 double longitude = e.getCoordinates().Item2;
                 string occuredTime = e.getOccuredDate().ToString();
@@ -155,14 +156,14 @@ namespace DroneTransferSimulator
                     result = e.getStation().name;
                     droneArrivalTime = e.getDroneDate().ToString();
                 }
-                else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No available drone";
-                eventTable.Rows.Add(i, latitude, longitude, occuredTime, droneArrivalTime, result);
+                else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No Available Drones";
+                eventTable.Rows.Add(i, address, occuredTime, droneArrivalTime, result, latitude, longitude);
 
-                double droneSec= Math.Round((e.getDroneDate() - e.getOccuredDate()).TotalSeconds);
+                double droneSec = Math.Round((e.getDroneDate() - e.getOccuredDate()).TotalSeconds);
 
-                if(e.getResult() != Event.eventResult.SUCCESS) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Red;
-                else if(droneSec < simulator.getGoldenTime().Item1) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Green;
-                else if(droneSec < simulator.getGoldenTime().Item2) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
+                if(e.getResult() != Event.eventResult.SUCCESS) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.OrangeRed;
+                else if(droneSec < simulator.getGoldenTime().Item1) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.LightGreen;
+                else if(droneSec < simulator.getGoldenTime().Item2) eventTable.Rows[i].DefaultCellStyle.BackColor = Color.Gold;
             }
         }
         
