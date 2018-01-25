@@ -29,15 +29,11 @@
         private void InitializeComponent()
         {
             this.stationTable = new System.Windows.Forms.DataGridView();
-            this.stationName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.coverage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.addDroneStation = new System.Windows.Forms.Button();
             this.deleteDroneStation = new System.Windows.Forms.Button();
             this.stationMap = new GMap.NET.WindowsForms.GMapControl();
-            this.coverageInput = new System.Windows.Forms.TextBox();
+            this.droneCntInput = new System.Windows.Forms.TextBox();
             this.longitudeInput = new System.Windows.Forms.TextBox();
             this.latitudeInput = new System.Windows.Forms.TextBox();
             this.stationNameInput = new System.Windows.Forms.TextBox();
@@ -48,6 +44,10 @@
             this.applyButton = new System.Windows.Forms.Button();
             this.initButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.stationName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.droneCnt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.stationTable)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +61,7 @@
             this.stationName,
             this.latitude,
             this.longitude,
-            this.coverage});
+            this.droneCnt});
             this.stationTable.Location = new System.Drawing.Point(12, 50);
             this.stationTable.Name = "stationTable";
             this.stationTable.ReadOnly = true;
@@ -71,34 +71,6 @@
             this.stationTable.TabIndex = 0;
             this.stationTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.stationTable_CellClick);
             this.stationTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.stationTable_RowEnter);
-            // 
-            // stationName
-            // 
-            this.stationName.FillWeight = 121.8274F;
-            this.stationName.HeaderText = "Station Name";
-            this.stationName.Name = "stationName";
-            this.stationName.ReadOnly = true;
-            // 
-            // latitude
-            // 
-            this.latitude.FillWeight = 88.50465F;
-            this.latitude.HeaderText = "Latitude";
-            this.latitude.Name = "latitude";
-            this.latitude.ReadOnly = true;
-            // 
-            // longitude
-            // 
-            this.longitude.FillWeight = 90.8583F;
-            this.longitude.HeaderText = "Longitude";
-            this.longitude.Name = "longitude";
-            this.longitude.ReadOnly = true;
-            // 
-            // coverage
-            // 
-            this.coverage.FillWeight = 98.80966F;
-            this.coverage.HeaderText = "Coverage";
-            this.coverage.Name = "coverage";
-            this.coverage.ReadOnly = true;
             // 
             // label1
             // 
@@ -115,7 +87,7 @@
             this.addDroneStation.Name = "addDroneStation";
             this.addDroneStation.Size = new System.Drawing.Size(38, 23);
             this.addDroneStation.TabIndex = 2;
-            this.addDroneStation.Text = "ADD";
+            this.addDroneStation.Text = "Add";
             this.addDroneStation.UseVisualStyleBackColor = true;
             this.addDroneStation.Click += new System.EventHandler(this.addDroneStation_Click);
             // 
@@ -125,7 +97,7 @@
             this.deleteDroneStation.Name = "deleteDroneStation";
             this.deleteDroneStation.Size = new System.Drawing.Size(38, 23);
             this.deleteDroneStation.TabIndex = 3;
-            this.deleteDroneStation.Text = "DEL";
+            this.deleteDroneStation.Text = "Del";
             this.deleteDroneStation.UseVisualStyleBackColor = true;
             this.deleteDroneStation.Click += new System.EventHandler(this.deleteDroneStation_Click);
             // 
@@ -158,12 +130,12 @@
             this.stationMap.OnMarkerClick += new GMap.NET.WindowsForms.MarkerClick(this.stationMap_OnMarkerClick);
             this.stationMap.Load += new System.EventHandler(this.stationMap_Load);
             // 
-            // coverageInput
+            // droneCntInput
             // 
-            this.coverageInput.Location = new System.Drawing.Point(267, 23);
-            this.coverageInput.Name = "coverageInput";
-            this.coverageInput.Size = new System.Drawing.Size(69, 21);
-            this.coverageInput.TabIndex = 15;
+            this.droneCntInput.Location = new System.Drawing.Point(267, 23);
+            this.droneCntInput.Name = "droneCntInput";
+            this.droneCntInput.Size = new System.Drawing.Size(69, 21);
+            this.droneCntInput.TabIndex = 15;
             // 
             // longitudeInput
             // 
@@ -193,9 +165,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(265, 8);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.Size = new System.Drawing.Size(75, 12);
             this.label2.TabIndex = 11;
-            this.label2.Text = "Coverage";
+            this.label2.Text = "Drone Count";
             // 
             // label3
             // 
@@ -230,7 +202,7 @@
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 16;
-            this.applyButton.Text = "APPLY";
+            this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
@@ -240,7 +212,7 @@
             this.initButton.Name = "initButton";
             this.initButton.Size = new System.Drawing.Size(75, 23);
             this.initButton.TabIndex = 17;
-            this.initButton.Text = "INIT";
+            this.initButton.Text = "Init";
             this.initButton.UseVisualStyleBackColor = true;
             this.initButton.Click += new System.EventHandler(this.initButton_Click);
             // 
@@ -250,9 +222,37 @@
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 18;
-            this.saveButton.Text = "SAVE";
+            this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // stationName
+            // 
+            this.stationName.FillWeight = 101.5228F;
+            this.stationName.HeaderText = "Station Name";
+            this.stationName.Name = "stationName";
+            this.stationName.ReadOnly = true;
+            // 
+            // latitude
+            // 
+            this.latitude.FillWeight = 94.96483F;
+            this.latitude.HeaderText = "Latitude";
+            this.latitude.Name = "latitude";
+            this.latitude.ReadOnly = true;
+            // 
+            // longitude
+            // 
+            this.longitude.FillWeight = 97.4903F;
+            this.longitude.HeaderText = "Longitude";
+            this.longitude.Name = "longitude";
+            this.longitude.ReadOnly = true;
+            // 
+            // droneCnt
+            // 
+            this.droneCnt.FillWeight = 106.022F;
+            this.droneCnt.HeaderText = "Drone Count";
+            this.droneCnt.Name = "droneCnt";
+            this.droneCnt.ReadOnly = true;
             // 
             // DroneStationEditor
             // 
@@ -262,7 +262,7 @@
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.initButton);
             this.Controls.Add(this.applyButton);
-            this.Controls.Add(this.coverageInput);
+            this.Controls.Add(this.droneCntInput);
             this.Controls.Add(this.longitudeInput);
             this.Controls.Add(this.latitudeInput);
             this.Controls.Add(this.stationNameInput);
@@ -291,7 +291,7 @@
         private System.Windows.Forms.Button addDroneStation;
         private System.Windows.Forms.Button deleteDroneStation;
         private GMap.NET.WindowsForms.GMapControl stationMap;
-        private System.Windows.Forms.TextBox coverageInput;
+        private System.Windows.Forms.TextBox droneCntInput;
         private System.Windows.Forms.TextBox longitudeInput;
         private System.Windows.Forms.TextBox latitudeInput;
         private System.Windows.Forms.TextBox stationNameInput;
@@ -301,11 +301,11 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.Button initButton;
+        private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.DataGridViewTextBoxColumn stationName;
         private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
-        private System.Windows.Forms.DataGridViewTextBoxColumn coverage;
-        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn droneCnt;
     }
 }
 

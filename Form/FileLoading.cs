@@ -109,6 +109,7 @@ namespace DroneTransferSimulator
                 formUI.stationOverlay.Markers.Clear();
                 formUI.stationOverlay.Polygons.Clear();
                 formUI.updateStationDict();
+
                 this.Close();
 
 

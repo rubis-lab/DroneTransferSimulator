@@ -12,6 +12,7 @@ namespace DroneTransferSimulator
         public double coverRange;
         public double stationLng, stationLat;
         public string name;
+        public int droneCnt;
         public Address addr;    
 
         public DroneStation(string _name, double _stationLat, double _stationLng, double _coverRange, Address _addr)
@@ -21,6 +22,15 @@ namespace DroneTransferSimulator
             stationLat = _stationLat;
             stationLng = _stationLng;
             addr = _addr;
+        }
+
+        public DroneStation(string _name, double _stationLat, double _stationLng, double _coverRange, int _droneCnt)
+        {
+            name = _name;
+            coverRange = _coverRange;
+            stationLat = _stationLat;
+            stationLng = _stationLng;
+            droneCnt = _droneCnt;
         }
 
         public DroneStation(string _name, double _stationLat, double _stationLng, double _coverRange)

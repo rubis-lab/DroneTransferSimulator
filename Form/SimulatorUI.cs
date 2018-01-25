@@ -88,6 +88,19 @@ namespace DroneTransferSimulator
             stationMap.Overlays.Add(stationOverlay);
             stationMap.Zoom = 9;
             stationMap.SetPositionByKeywords("Seoul, Korea");
+
+
+            textBox1.Text = simulator.getEventList().Count.ToString();
+            textBox2.Text = stationDict.Count.ToString();
+
+            int droneCnt = 0;
+            foreach(KeyValuePair<string, DroneStation> dict in stationDict)
+            {
+                DroneStation stationElement = dict.Value;
+                droneCnt += stationElement.drones.Count;
+            }
+
+            textBox3.Text = droneCnt.ToString();
         }
         
 
@@ -277,17 +290,6 @@ namespace DroneTransferSimulator
                 stationOverlay.Markers.Clear();
                 stationOverlay.Polygons.Clear();
                 updateStationDict();
-                textBox1.Text = simulator.getEventList().Count.ToString();
-                textBox2.Text = stationDict.Count.ToString();
-
-                int droneCnt = 0;
-                foreach(KeyValuePair<string, DroneStation> dict in stationDict)
-                {
-                    DroneStation stationElement = dict.Value;
-                    droneCnt += stationElement.drones.Count;
-                }
-
-                textBox3.Text = droneCnt.ToString();
 
             }
             catch(Exception ex)

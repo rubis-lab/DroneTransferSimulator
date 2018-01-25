@@ -133,7 +133,7 @@ namespace DroneTransferSimulator
                     int droneCnt = System.Convert.ToInt32(record[3]);
                     double coverRange = maxDistance / 2;
                     
-                    DroneStation s = new DroneStation(name, latitude, longitude, coverRange);
+                    DroneStation s = new DroneStation(name, latitude, longitude, coverRange, droneCnt);
                     for(int i = 0; i < droneCnt; i++)
                     {
                         s.drones.Add(new Drone(maxDistance, 20));
