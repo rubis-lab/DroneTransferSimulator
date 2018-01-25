@@ -98,7 +98,6 @@ namespace DroneTransferSimulator
                     e.setAddress(addr);
                 }
                 readAddressFile.Close();
-
                 
             }
             catch(Exception e)

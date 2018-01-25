@@ -33,12 +33,11 @@ namespace DroneTransferSimulator
             dataGridView1.Rows[index].Cells["w_snow"].Value = simulator.w_snow;
             dataGridView1.Rows[index].Cells["w_sight"].Value = simulator.w_sight;
 
-            index = dataGridView2.Rows.Add(); 
-            dataGridView2.Rows[index].Cells["p_subzero"].Value = simulator.p_subzero ? 1 : 0;
-            dataGridView2.Rows[index].Cells["p_rain"].Value = simulator.p_rain ? 1 : 0;
-            dataGridView2.Rows[index].Cells["p_light"].Value = simulator.p_light ? 1 : 0;
-            dataGridView2.Rows[index].Cells["p_snow"].Value = simulator.p_snow ? 1 : 0;
-            dataGridView2.Rows[index].Cells["p_sight"].Value = simulator.p_sight ? 1 : 0;
+            subzeroCheckBox.Checked = simulator.p_subzero;
+            rainCheckBox.Checked = simulator.p_rain;
+            lightCheckBox.Checked = simulator.p_light;
+            snowCheckBox.Checked = simulator.p_snow;
+            sightCheckBox.Checked = simulator.p_sight;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -51,12 +50,6 @@ namespace DroneTransferSimulator
                 simulator.w_winds = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_winds"].Value);
                 simulator.w_snow = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_snow"].Value);
                 simulator.w_sight = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_sight"].Value);
-
-                simulator.p_subzero = Convert.ToInt32(dataGridView2.Rows[0].Cells["p_subzero"].Value) == 0 ? false : true;
-                simulator.p_rain = Convert.ToInt32(dataGridView2.Rows[0].Cells["p_rain"].Value) == 0 ? false : true;
-                simulator.p_light = Convert.ToInt32(dataGridView2.Rows[0].Cells["p_light"].Value) == 0 ? false : true;
-                simulator.p_snow = Convert.ToInt32(dataGridView2.Rows[0].Cells["p_snow"].Value) == 0 ? false : true;
-                simulator.p_sight = Convert.ToInt32(dataGridView2.Rows[0].Cells["p_sight"].Value) == 0 ? false : true;
                 this.Close();
             } 
             catch(Exception ex)
@@ -77,19 +70,29 @@ namespace DroneTransferSimulator
             }
         }
 
-        private void dataGridView2_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void subzeroCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            try
-            {
-                if(Convert.ToInt32(dataGridView2[e.ColumnIndex, e.RowIndex].Value) != 1 && Convert.ToInt32(dataGridView2[e.ColumnIndex, e.RowIndex].Value) != 0)
-                {
-                    throw new Exception();
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("1 또는 0을 입력해주십시오.");
-            }
+            simulator.p_subzero = subzeroCheckBox.Checked;
+        }
+
+        private void rainCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            simulator.p_rain = rainCheckBox.Checked;
+        }
+
+        private void lightCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            simulator.p_light = lightCheckBox.Checked;
+        }
+
+        private void snowCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            simulator.p_snow = snowCheckBox.Checked;
+        }
+
+        private void sightCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            simulator.p_sight = sightCheckBox.Checked;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace DroneTransferSimulator
             {
                 if(droneElement.returnStatus() == Drone.droneType.D_CHARGING)
                 {
-                    droneElement.charge(droneElement.getChargeStartTime(), currentTime); //battery charged from centerArrivalTime
+                    droneElement.charge(droneElement.getChargeStartTime(), currentTime); // battery charged from centerArrivalTime
 
                     if(droneElement.returnBattery() >= 100)
                     {
