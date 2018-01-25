@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.droneLoadButton = new System.Windows.Forms.Button();
-            this.droneCSVTextbox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.stationLoadButton = new System.Windows.Forms.Button();
             this.eventLoadButton = new System.Windows.Forms.Button();
             this.stationCSVTextbox = new System.Windows.Forms.TextBox();
@@ -39,34 +36,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.apply = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // droneLoadButton
-            // 
-            this.droneLoadButton.Enabled = false;
-            this.droneLoadButton.Location = new System.Drawing.Point(476, 107);
-            this.droneLoadButton.Name = "droneLoadButton";
-            this.droneLoadButton.Size = new System.Drawing.Size(26, 24);
-            this.droneLoadButton.TabIndex = 35;
-            this.droneLoadButton.Text = "...";
-            this.droneLoadButton.UseVisualStyleBackColor = true;
-            this.droneLoadButton.Click += new System.EventHandler(this.droneLoadButton_Click);
-            // 
-            // droneCSVTextbox
-            // 
-            this.droneCSVTextbox.Location = new System.Drawing.Point(12, 108);
-            this.droneCSVTextbox.Name = "droneCSVTextbox";
-            this.droneCSVTextbox.ReadOnly = true;
-            this.droneCSVTextbox.Size = new System.Drawing.Size(458, 21);
-            this.droneCSVTextbox.TabIndex = 34;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 94);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 12);
-            this.label3.TabIndex = 33;
-            this.label3.Text = "Drone CSV";
             // 
             // stationLoadButton
             // 
@@ -124,7 +93,7 @@
             // 
             // apply
             // 
-            this.apply.Location = new System.Drawing.Point(349, 142);
+            this.apply.Location = new System.Drawing.Point(349, 99);
             this.apply.Name = "apply";
             this.apply.Size = new System.Drawing.Size(153, 23);
             this.apply.TabIndex = 36;
@@ -136,11 +105,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(523, 177);
+            this.ClientSize = new System.Drawing.Size(513, 131);
             this.Controls.Add(this.apply);
-            this.Controls.Add(this.droneLoadButton);
-            this.Controls.Add(this.droneCSVTextbox);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.stationLoadButton);
             this.Controls.Add(this.eventLoadButton);
             this.Controls.Add(this.stationCSVTextbox);
@@ -155,10 +121,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button droneLoadButton;
-        public System.Windows.Forms.TextBox droneCSVTextbox;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button stationLoadButton;
         private System.Windows.Forms.Button eventLoadButton;
         public System.Windows.Forms.TextBox stationCSVTextbox;

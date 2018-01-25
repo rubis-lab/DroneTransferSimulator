@@ -26,6 +26,9 @@ namespace DroneTransferSimulator
         public bool p_snow = true;
         public bool p_sight = true;
 
+        public double maxDistance = 10;
+        public double maxSpeed = 60.0;
+
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
@@ -118,7 +121,7 @@ namespace DroneTransferSimulator
                 string filePath = @"../../StationAddress.csv";
                 StringBuilder sb = new StringBuilder();
                 */
-                while (!readFile.EndOfStream)
+                while(!readFile.EndOfStream)
                 {
                     var line = readFile.ReadLine();
                     var record = line.Split(',');
@@ -127,9 +130,14 @@ namespace DroneTransferSimulator
                     string name = record[0];
                     double latitude = System.Convert.ToDouble(record[1]);
                     double longitude = System.Convert.ToDouble(record[2]);
-                    double coverRange = System.Convert.ToDouble(record[3]);
+                    int droneCnt = System.Convert.ToInt32(record[3]);
+                    double coverRange = maxDistance / 2;
                     
                     DroneStation s = new DroneStation(name, latitude, longitude, coverRange);
+                    for(int i = 0; i < droneCnt; i++)
+                    {
+                        s.drones.Add(new Drone(maxDistance, 20));
+                    }
                     stationDict.Add(name, s);
 
                     /*
@@ -173,22 +181,6 @@ namespace DroneTransferSimulator
 
         public string getDronesFromCSV(string fpath)
         {
-            try
-            {
-                System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
-                while(!readFile.EndOfStream)
-                {
-                    var line = readFile.ReadLine();
-                    var record = line.Split(',');
-                    if(record.Length != 3) throw new Exception("Inappropriate CSV format\nCannot be read");
-                    Drone d = new Drone(System.Convert.ToDouble(record[1]), System.Convert.ToDouble(record[2]));
-                    stationDict[record[0]].drones.Add(d);
-                }
-            }
-            catch(Exception e)
-            {
-                return e.Message;
-            }
             return null;
         }
 

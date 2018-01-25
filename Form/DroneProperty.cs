@@ -38,12 +38,18 @@ namespace DroneTransferSimulator
             lightCheckBox.Checked = simulator.p_light;
             snowCheckBox.Checked = simulator.p_snow;
             sightCheckBox.Checked = simulator.p_sight;
+
+            maxSpeedTextBox.Text = simulator.maxSpeed.ToString();
+            maxDistanceTextBox.Text = simulator.maxDistance.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             try
             {
+                simulator.maxSpeed = Convert.ToDouble(maxSpeedTextBox.Text);
+                simulator.maxDistance = Convert.ToDouble(maxDistanceTextBox.Text);
+
                 simulator.w_temp_low = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_temp_low"].Value);
                 simulator.w_temp_high = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_temp_high"].Value);
                 simulator.w_rain = Convert.ToDouble(dataGridView1.Rows[0].Cells["w_rain"].Value);

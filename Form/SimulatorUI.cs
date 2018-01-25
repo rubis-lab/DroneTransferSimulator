@@ -246,8 +246,6 @@ namespace DroneTransferSimulator
                 if(msg != null) throw new Exception(msg);
                 simulator.getStationsFromCSV("../../DroneStationList.csv");
                 if(msg != null) throw new Exception(msg);
-                simulator.getDronesFromCSV("../../DroneList.csv");
-                if(msg != null) throw new Exception(msg);
 
                 eventOverlay.Markers.Clear();
                 eventDataGridView.Rows.Clear();
