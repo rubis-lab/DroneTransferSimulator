@@ -300,7 +300,8 @@ namespace DroneTransferSimulator
 
         private void droneProperty_Click(object sender, EventArgs e)
         {
-
+            DroneProperty frm = new DroneProperty(this);
+            frm.Show();
         }
     }
 }

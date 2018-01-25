@@ -13,6 +13,19 @@ namespace DroneTransferSimulator
         private static Simulator instance;
         public bool isDone = false;
 
+        public double w_temp_low = 0.0;
+        public double w_temp_high = 0.0;
+        public double w_rain = 0.0;
+        public double w_winds = 0.0;
+        public double w_snow = 0.0;
+        public double w_sight = 0.0;
+
+        public bool p_subzero = true;
+        public bool p_rain = true;
+        public bool p_light = true;
+        public bool p_snow = true;
+        public bool p_sight = true;
+
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
         private Dictionary<string, DroneStation> stationDict = new Dictionary<string, DroneStation>();
