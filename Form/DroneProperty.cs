@@ -70,7 +70,7 @@ namespace DroneTransferSimulator
             {
                 Convert.ToDouble(dataGridView1[e.ColumnIndex, e.RowIndex].Value);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 MessageBox.Show("올바른 입력값이 아닙니다.");
             }

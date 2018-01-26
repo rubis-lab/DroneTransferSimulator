@@ -29,7 +29,7 @@ namespace DroneTransferSimulator
             return 1;
         }
 
-        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type, Address _addr, bool[] _b_weather)
+        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type, Address _addr, double[] _weather, bool[] _b_weather)
         {
             lat = _lat;
             lng = _lng;
@@ -41,7 +41,7 @@ namespace DroneTransferSimulator
             result = 0;
             station = null;
             addr = _addr;
-            //weather = _weather;
+            weather = _weather;
             b_weather = _b_weather;
         }
 

@@ -170,10 +170,11 @@ namespace DroneTransferSimulator
                         
                         Event.eventType e = new Event.eventType();
                         e = Event.eventType.E_EVENT_OCCURED;
-                        events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, eb_weather));
+                        events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, e_weather, eb_weather));
                     }
                     wb.Close(0);
                     excelApp.Quit();
+                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excelApp);
                 }
                 catch (Exception ex)
                 {
@@ -296,10 +297,13 @@ namespace DroneTransferSimulator
             while(eventSet.Count != 0)
             {
                 Event e = eventSet.ElementAt(0).Value;
+                double[] weather = e.getWeather();
+
                 eventSet.RemoveAt(0);
                 switch(e.getEventType())
                 {
                     case Event.eventType.E_EVENT_OCCURED:
+                        Console.WriteLine(weather[0] + ", " + weather[1] + ", " + weather[2]);
                         Console.WriteLine("\n" + e.getOccuredDate().ToString() + " OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventOccured(e);
                         events.Add(e);
@@ -341,7 +345,7 @@ namespace DroneTransferSimulator
             //calculate time
             PathPlanner pathPlanner = PathPlanner.getInstance();
             double calculatedTime;
-            calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2);
+            calculatedTime = pathPlanner.calcTravelTime(s.stationLat, s.stationLng, coordinates.Item1, coordinates.Item2, maxSpeed, weather);
 
             DateTime droneArrivalTime = ev.getOccuredDate().AddSeconds(calculatedTime);
 
@@ -355,7 +359,7 @@ namespace DroneTransferSimulator
 
             //declare coming event
             Event.eventType type = Event.eventType.E_EVENT_ARRIVAL;
-            Event e = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type);
+            Event e = new Event(coordinates.Item1, coordinates.Item2, droneArrivalTime, droneArrivalTime, type, ev.getAddress(), weather, b_weather);
             e.setStationDroneIdx(s, stationDroneIdx.Item2);
 
             eventSet.Add(e, e);
@@ -376,7 +380,7 @@ namespace DroneTransferSimulator
             Drone drone = station.drones[droneIndex];
             double stationLat = station.stationLat;
             double stationLng = station.stationLng;
-            calculatedTime = pathPlanner.calcTravelTime(eventLat, eventLng, stationLat, stationLng);
+            calculatedTime = pathPlanner.calcTravelTime(eventLat, eventLng, stationLat, stationLng, maxSpeed, weather);
 
             //time when drone reach the station
             DateTime droneArrivalTime = ev.getOccuredDate().AddSeconds(calculatedTime);

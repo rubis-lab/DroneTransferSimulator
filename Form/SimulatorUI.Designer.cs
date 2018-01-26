@@ -46,11 +46,6 @@
             this.eventMapLabel = new System.Windows.Forms.Label();
             this.eventMap = new GMap.NET.WindowsForms.GMapControl();
             this.fileLoading = new System.Windows.Forms.Button();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
             this.goldenTimeText2 = new System.Windows.Forms.TextBox();
             this.goldenTimeText1 = new System.Windows.Forms.TextBox();
@@ -83,12 +78,12 @@
             this.ambulTime,
             this.latitude,
             this.longitude});
-            this.eventDataGridView.Location = new System.Drawing.Point(12, 123);
+            this.eventDataGridView.Location = new System.Drawing.Point(12, 99);
             this.eventDataGridView.Name = "eventDataGridView";
             this.eventDataGridView.ReadOnly = true;
             this.eventDataGridView.RowTemplate.Height = 23;
             this.eventDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.eventDataGridView.Size = new System.Drawing.Size(490, 270);
+            this.eventDataGridView.Size = new System.Drawing.Size(490, 300);
             this.eventDataGridView.TabIndex = 13;
             this.eventDataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventDataGridView_RowEnter);
             // 
@@ -281,67 +276,6 @@
             this.fileLoading.UseVisualStyleBackColor = true;
             this.fileLoading.Click += new System.EventHandler(this.fileLoading_Click);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(12, 101);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(79, 16);
-            this.radioButton1.TabIndex = 29;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Advanced";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
-            this.radioButton1.MouseHover += new System.EventHandler(this.radioButton1_MouseHover);
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(97, 101);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(98, 16);
-            this.radioButton2.TabIndex = 30;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Intermediate1";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.MouseHover += new System.EventHandler(this.radioButton2_MouseHover);
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(201, 101);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(98, 16);
-            this.radioButton3.TabIndex = 31;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Intermediate2";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.MouseHover += new System.EventHandler(this.radioButton3_MouseHover);
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(305, 101);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(98, 16);
-            this.radioButton4.TabIndex = 32;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Intermediate3";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.MouseHover += new System.EventHandler(this.radioButton4_MouseHover);
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(409, 101);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(55, 16);
-            this.radioButton5.TabIndex = 33;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Basic";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            this.radioButton5.MouseHover += new System.EventHandler(this.radioButton5_MouseHover);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -501,11 +435,6 @@
             this.Controls.Add(this.goldenTimeText2);
             this.Controls.Add(this.goldenTimeText1);
             this.Controls.Add(this.goldenTimeLabel);
-            this.Controls.Add(this.radioButton5);
-            this.Controls.Add(this.radioButton4);
-            this.Controls.Add(this.radioButton3);
-            this.Controls.Add(this.radioButton2);
-            this.Controls.Add(this.radioButton1);
             this.Controls.Add(this.fileLoading);
             this.Controls.Add(this.startSimButton);
             this.Controls.Add(this.endTimePicker);
@@ -546,11 +475,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
         private System.Windows.Forms.Button fileLoading;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox goldenTimeText2;
         private System.Windows.Forms.TextBox goldenTimeText1;
