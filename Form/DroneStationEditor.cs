@@ -30,8 +30,7 @@ namespace DroneTransferSimulator
             InitializeComponent();
             simulatorUIForm = _form;
             
-            if(simulatorUIForm.fileLoadingForm.stationCSVTextbox.TextLength == 0) this.Text = "Drone Station Editor";
-            else this.Text = simulatorUIForm.fileLoadingForm.stationCSVTextbox.Text;
+            this.Text = "Drone Station Editor";
             
         }
 
@@ -45,8 +44,8 @@ namespace DroneTransferSimulator
                     string name = stationElement.name;
                     double latitude = stationElement.stationLat;
                     double longitude = stationElement.stationLng;
-                    double coverRange = stationElement.coverRange;
-                    stationName.DataGridView.Rows.Add(name, latitude, longitude, coverRange);
+                    int droneCnt = stationElement.droneCnt;
+                    stationName.DataGridView.Rows.Add(name, latitude, longitude, droneCnt);
                 }
             }
             catch(Exception ex)
@@ -125,12 +124,12 @@ namespace DroneTransferSimulator
             string nameText = stationTable.Rows[e.RowIndex].Cells[0].Value.ToString();
             string latText = stationTable.Rows[e.RowIndex].Cells[1].Value.ToString();
             string lngText = stationTable.Rows[e.RowIndex].Cells[2].Value.ToString();
-            string coverText = stationTable.Rows[e.RowIndex].Cells[3].Value.ToString();
+            string droneCntText = stationTable.Rows[e.RowIndex].Cells[3].Value.ToString();
 
             stationNameInput.Text = nameText;
             latitudeInput.Text = latText;
             longitudeInput.Text = lngText;
-            coverageInput.Text = coverText;
+            droneCntInput.Text = droneCntText;
         }
         
         private void drawCircle(PointLatLng p, double coverRange)
@@ -166,10 +165,9 @@ namespace DroneTransferSimulator
             string nameText = stationTable.Rows[selected].Cells[0].Value.ToString();
             string latText = stationTable.Rows[selected].Cells[1].Value.ToString();
             string lngText = stationTable.Rows[selected].Cells[2].Value.ToString();
-            string coverText = stationTable.Rows[selected].Cells[3].Value.ToString();
 
             PointLatLng p = new PointLatLng(Convert.ToDouble(latText), Convert.ToDouble(lngText));
-            drawCircle(p, Convert.ToDouble(coverText));
+            drawCircle(p, simulator.maxDistance / 2);
 
             stationMap.Position = p;
             stationMap.Zoom = 11;
@@ -209,20 +207,20 @@ namespace DroneTransferSimulator
                 if(longitudeInput.TextLength == 0) throw new Exception("This input should not be empty");
                 double longitude = Convert.ToDouble(longitudeInput.Text);
 
-                if(coverageInput.TextLength == 0) throw new Exception("This input should not be empty");
-                double coverRange = Convert.ToDouble(coverageInput.Text);
+                if(droneCntInput.TextLength == 0) throw new Exception("This input should not be empty");
+                int droneCnt = Convert.ToInt32(droneCntInput.Text);
 
                 int stationRow = getStationRow(name);
                 if(stationRow == -1)
                 {
-                    stationName.DataGridView.Rows.Add(name, latitude, longitude, coverRange);
+                    stationName.DataGridView.Rows.Add(name, latitude, longitude, droneCnt);
                     selectStation(stationTable.RowCount - 1);
                 }
                 else
                 {
                     stationTable.Rows[stationRow].Cells[1].Value = latitude;
                     stationTable.Rows[stationRow].Cells[2].Value = longitude;
-                    stationTable.Rows[stationRow].Cells[3].Value = coverRange;
+                    stationTable.Rows[stationRow].Cells[3].Value = droneCnt;
                     selectStation(stationRow);
                 }
                 clearTextBox();
@@ -268,7 +266,7 @@ namespace DroneTransferSimulator
             stationNameInput.Clear();
             latitudeInput.Clear();
             longitudeInput.Clear();
-            coverageInput.Clear();
+            droneCntInput.Clear();
         }
 
         private void applyButton_Click(object sender, EventArgs e)
@@ -279,10 +277,11 @@ namespace DroneTransferSimulator
                 string name = (string)stationTable.Rows[i].Cells[0].Value;
                 double latitude = (double)stationTable.Rows[i].Cells[1].Value;
                 double longitude = (double)stationTable.Rows[i].Cells[2].Value;
-                double coverRange = (double)stationTable.Rows[i].Cells[3].Value;
+                int droneCnt = (int)stationTable.Rows[i].Cells[3].Value;
                 Address addr = new Address(latitude, longitude);
-
-                stationDict.Add(name, new DroneStation(name, latitude, longitude, coverRange, addr));
+                DroneStation droneStation = new DroneStation(name, latitude, longitude, simulator.maxDistance / 2, addr);
+                droneStation.droneCnt = droneCnt;
+                stationDict.Add(name, droneStation);
             }
             
             stationTable.Rows.Clear();

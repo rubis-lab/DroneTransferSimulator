@@ -24,34 +24,11 @@ namespace DroneTransferSimulator
         {
             InitializeComponent();
         }
-
-
-
+        
         public FileLoading(SimulatorUI _frm)
         {
             InitializeComponent();
             formUI = _frm;
-        }
-
-        private void droneLoadButton_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "CSV files | *.csv";
-            dialog.Multiselect = false;
-            dialog.Title = "Drone CSV";
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                String path = dialog.FileName;
-                droneCSVTextbox.Text = path;
-
-                string msg = simulator.getDronesFromCSV(path);
-                if (msg != null)
-                {
-                    MessageBox.Show(msg);
-                    droneCSVTextbox.Text = "";
-                    return;
-                }
-            }
         }
 
         private void stationLoadButton_Click(object sender, EventArgs e)
@@ -72,7 +49,6 @@ namespace DroneTransferSimulator
                     stationCSVTextbox.Text = "";
                     return;
                 }
-                droneLoadButton.Enabled = true;
             }
         }
 
@@ -102,7 +78,6 @@ namespace DroneTransferSimulator
             {
                 if(eventCSVTextbox.TextLength == 0) throw new Exception("No event CSV uploaded");
                 if(stationCSVTextbox.TextLength == 0) throw new Exception("No station CSV uploaded");
-                if(droneCSVTextbox.TextLength == 0) throw new Exception("No drone CSV uploaded");
 
                 formUI.eventOverlay.Markers.Clear();
                 formUI.eventDataGridView.Rows.Clear();
@@ -134,6 +109,7 @@ namespace DroneTransferSimulator
                 formUI.stationOverlay.Markers.Clear();
                 formUI.stationOverlay.Polygons.Clear();
                 formUI.updateStationDict();
+
                 this.Close();
 
 

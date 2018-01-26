@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using Excel = Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
@@ -16,6 +16,22 @@ namespace DroneTransferSimulator
         /* singleton instance for Simulator */
         private static Simulator instance;
         public bool isDone = false;
+
+        public double w_temp_low = 0.0;
+        public double w_temp_high = 0.0;
+        public double w_rain = 0.0;
+        public double w_winds = 0.0;
+        public double w_snow = 0.0;
+        public double w_sight = 0.0;
+
+        public bool p_subzero = true;
+        public bool p_rain = true;
+        public bool p_light = true;
+        public bool p_snow = true;
+        public bool p_sight = true;
+
+        public double maxDistance = 10;
+        public double maxSpeed = 60.0;
 
         private List<Event> events = new List<Event>();
         private SortedList<Event, Event> eventSet = new SortedList<Event, Event>();
@@ -134,27 +150,27 @@ namespace DroneTransferSimulator
                         string _addr = data7[r,1].ToString();
                         Address addr = new Address(_addr);
                         
-                        double w_temp = System.Convert.ToDouble(data4[r,1]);
-                        double w_rain = 0;
-                        if(data4[r,2]!=null) w_rain = System.Convert.ToDouble(data4[r,2]);
-                        double w_winds = System.Convert.ToDouble(data4[r,3]);
-                        double w_windd = System.Convert.ToDouble(data4[r,4]);
-                        double w_snow = 0;
-                        if(data4[r,5]!=null) w_snow = System.Convert.ToDouble(data4[r,5]);
-                        double w_sight = -10;
-                        if(data4[r,6]!=null) w_sight = System.Convert.ToDouble(data4[r,6]);
-                        double[] weather = { w_temp, w_rain, w_winds, w_windd, w_snow, w_sight};
+                        double e_temp = System.Convert.ToDouble(data4[r,1]);
+                        double e_rain = 0;
+                        if(data4[r,2]!=null) e_rain = System.Convert.ToDouble(data4[r,2]);
+                        double e_winds = System.Convert.ToDouble(data4[r,3]);
+                        double e_windd = System.Convert.ToDouble(data4[r,4]);
+                        double e_snow = 0;
+                        if(data4[r,5]!=null) e_snow = System.Convert.ToDouble(data4[r,5]);
+                        double e_sight = -10;
+                        if(data4[r,6]!=null) e_sight = System.Convert.ToDouble(data4[r,6]);
+                        double[] e_weather = { e_temp, e_rain, e_winds, e_windd, e_snow, e_sight};
                         
-                        bool p_subzero = System.Convert.ToBoolean(data5[r,1]);
-                        bool p_rain = System.Convert.ToBoolean(data5[r,2]);
-                        bool p_light = System.Convert.ToBoolean(data5[r,3]);
-                        bool p_snow = System.Convert.ToBoolean(data5[r,4]);
-                        bool p_sight = System.Convert.ToBoolean(data5[r,5]);
-                        bool[] b_weather = { p_subzero, p_rain, p_light, p_snow, p_sight };
+                        bool ep_subzero = System.Convert.ToBoolean(data5[r,1]);
+                        bool ep_rain = System.Convert.ToBoolean(data5[r,2]);
+                        bool ep_light = System.Convert.ToBoolean(data5[r,3]);
+                        bool ep_snow = System.Convert.ToBoolean(data5[r,4]);
+                        bool ep_sight = System.Convert.ToBoolean(data5[r,5]);
+                        bool[] eb_weather = { ep_subzero, ep_rain, ep_light, ep_snow, ep_sight };
                         
                         Event.eventType e = new Event.eventType();
                         e = Event.eventType.E_EVENT_OCCURED;
-                        events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, b_weather));
+                        events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, eb_weather));
                                             }
                     Console.WriteLine("Done!");
                 }
@@ -179,7 +195,6 @@ namespace DroneTransferSimulator
                 }
                 readAddressFile.Close();
                 */
-                
             }
             catch(Exception e)
             {
@@ -199,7 +214,7 @@ namespace DroneTransferSimulator
                 string filePath = @"../../StationAddress.csv";
                 StringBuilder sb = new StringBuilder();
                 */
-                while (!readFile.EndOfStream)
+                while(!readFile.EndOfStream)
                 {
                     var line = readFile.ReadLine();
                     var record = line.Split(',');
@@ -208,9 +223,14 @@ namespace DroneTransferSimulator
                     string name = record[0];
                     double latitude = System.Convert.ToDouble(record[1]);
                     double longitude = System.Convert.ToDouble(record[2]);
-                    double coverRange = System.Convert.ToDouble(record[3]);
+                    int droneCnt = System.Convert.ToInt32(record[3]);
+                    double coverRange = maxDistance / 2;
                     
-                    DroneStation s = new DroneStation(name, latitude, longitude, coverRange);
+                    DroneStation s = new DroneStation(name, latitude, longitude, coverRange, droneCnt);
+                    for(int i = 0; i < droneCnt; i++)
+                    {
+                        s.drones.Add(new Drone(maxDistance, 20));
+                    }
                     stationDict.Add(name, s);
 
                     /*
@@ -254,22 +274,6 @@ namespace DroneTransferSimulator
 
         public string getDronesFromCSV(string fpath)
         {
-            try
-            {
-                System.IO.StreamReader readFile = new System.IO.StreamReader(fpath);
-                while(!readFile.EndOfStream)
-                {
-                    var line = readFile.ReadLine();
-                    var record = line.Split(',');
-                    if(record.Length != 3) throw new Exception("Inappropriate CSV format\nCannot be read");
-                    Drone d = new Drone(System.Convert.ToDouble(record[1]), System.Convert.ToDouble(record[2]));
-                    stationDict[record[0]].drones.Add(d);
-                }
-            }
-            catch(Exception e)
-            {
-                return e.Message;
-            }
             return null;
         }
 
