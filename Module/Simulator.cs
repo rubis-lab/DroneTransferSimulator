@@ -171,8 +171,9 @@ namespace DroneTransferSimulator
                         Event.eventType e = new Event.eventType();
                         e = Event.eventType.E_EVENT_OCCURED;
                         events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, eb_weather));
-                                            }
-                    Console.WriteLine("Done!");
+                    }
+                    wb.Close(0);
+                    excelApp.Quit();
                 }
                 catch (Exception ex)
                 {
