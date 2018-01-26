@@ -12,6 +12,8 @@ namespace DroneTransferSimulator
         public enum eventResult { SUCCESS, COVERAGE_PROBLEM, NO_DRONE };
 
         private double lat, lng;
+        private double[] weather;
+        private bool[] b_weather;
         private Address addr;
         private DateTime occuredDate, ambulDate, droneDate;
         private int droneIndex;
@@ -19,11 +21,28 @@ namespace DroneTransferSimulator
         private eventResult result;
         private DroneStation station;
 
+
         public int CompareTo(Event obj)
         {
             if(this.getOccuredDate() > obj.getOccuredDate()) return 1;
             if(obj.getOccuredDate() > this.getOccuredDate()) return -1;
             return 1;
+        }
+
+        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type, Address _addr, bool[] _b_weather)
+        {
+            lat = _lat;
+            lng = _lng;
+
+            occuredDate = _oDate;
+            ambulDate = _ambulDate;
+            droneDate = new DateTime();
+            type = _type;
+            result = 0;
+            station = null;
+            addr = _addr;
+            //weather = _weather;
+            b_weather = _b_weather;
         }
 
         public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type)
@@ -79,6 +98,16 @@ namespace DroneTransferSimulator
             return new Tuple<double, double>(lat, lng);
         }
 
+        public double[] getWeather()
+        {
+            return weather;
+        }
+        
+        public bool[] get_b_weather()
+        {
+            return b_weather;
+        }
+
         public void setDroneDate(DateTime _droneDate)
         {
             droneDate = _droneDate;
@@ -92,7 +121,7 @@ namespace DroneTransferSimulator
         public DroneStation getStation()
         {
             return station;
-        }
+        } 
         
         public int getDroneIndex()
         {

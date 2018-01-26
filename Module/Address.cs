@@ -36,6 +36,15 @@ namespace DroneTransferSimulator
             parseAddress(latitude, longitude);
         }
 
+        public Address(string _address)
+        {
+            address = _address;
+            char delimiter = ' ';
+            string[] words = address.Split(delimiter);
+            local = words[0];
+            subLocal1 = words[1];
+        }
+
         public Address(string _country, string _local, string _subLocal1, string _subLocal2, string _premise)
         {
             country = _country;

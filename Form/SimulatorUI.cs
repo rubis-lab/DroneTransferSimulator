@@ -255,7 +255,7 @@ namespace DroneTransferSimulator
             try
             {
                 string msg = "";
-                msg = simulator.getEventsFromCSV("../../EventList.csv");
+                msg = simulator.getEventsFromCSV(@"C:\Users\이민지\Documents\DroneTransferSimulator\data2016.xls");
                 if(msg != null) throw new Exception(msg);
                 simulator.getStationsFromCSV("../../DroneStationList.csv");
                 if(msg != null) throw new Exception(msg);

@@ -1,9 +1,13 @@
-﻿using System;
+using System.Runtime.InteropServices;
+using Excel = Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+
 
 namespace DroneTransferSimulator
 {
@@ -55,39 +59,128 @@ namespace DroneTransferSimulator
             {
                 if(events.Count != 0) events.Clear();
 
-                System.IO.StreamReader readEventFile = new System.IO.StreamReader(fpath);
-                while(!readEventFile.EndOfStream)
+                //System.IO.StreamReader readEventFile = new System.IO.StreamReader(fpath);
+                /*
+                while (!readEventFile.EndOfStream)
                 {
+
                     var line = readEventFile.ReadLine();
                     var record = line.Split(',');
-                    if(record.Length != 6) throw new Exception("Inappropriate CSV format\nCannot be read");
-              
-                    double longitude = System.Convert.ToDouble(record[0]);
-                    double latitude = System.Convert.ToDouble(record[1]);
+                    Console.WriteLine(record.Length);
+                    //if (record.Length != 66) throw new Exception("Inappropriate CSV format\nCannot be read");
+                    if (record.Length != 66) continue;
+                    double rec;
+                    if (!Double.TryParse(record[43], out rec) || !Double.TryParse(record[43],out rec)) continue;
 
-                    int yy = System.Convert.ToInt32(record[2]) / 10000;
-                    int MM = (System.Convert.ToInt32(record[2]) % 10000) / 100;
-                    int dd = System.Convert.ToInt32(record[2]) % 100;
-                    int hh = System.Convert.ToInt32(record[3]) / 100;
-                    int mm = System.Convert.ToInt32(record[3]) % 100;
-                    DateTime occuredDate = new DateTime(yy, MM, dd, hh, mm, 0);
+                    double longitude = System.Convert.ToDouble(record[43]);
+                    double latitude = System.Convert.ToDouble(record[44]);
 
-                    yy = System.Convert.ToInt32(record[4]) / 10000;
-                    MM = (System.Convert.ToInt32(record[4]) % 10000) / 100;
-                    dd = System.Convert.ToInt32(record[4]) % 100;
-                    hh = System.Convert.ToInt32(record[5]) / 100;
-                    mm = System.Convert.ToInt32(record[5]) % 100;
-                    DateTime ambulDate = new DateTime(yy, MM, dd, hh, mm, 0);
+                    DateTime date = DateTime.Parse(record[17].ToString()); //date
+                    DateTime time = DateTime.Parse(record[8].ToString());
+                    DateTime occuredDate = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Month, 0);
+
+                    DateTime a_date = DateTime.Parse(record[18].ToString());
+                    DateTime a_time = DateTime.Parse(record[11].ToString());
+                    DateTime ambulDate = new DateTime(a_date.Year, a_date.Month, a_date.Day, a_time.Hour, a_time.Month, 0);
+
+                    double w_temp = System.Convert.ToDouble(record[46]);
+                    double w_rain = System.Convert.ToDouble(record[47]);
+                    double w_winds = System.Convert.ToDouble(record[48]);
+                    double w_windd = System.Convert.ToDouble(record[49]);
+                    double w_snow = System.Convert.ToDouble(record[50]);
+                    double w_sight = System.Convert.ToDouble(record[51]);
+                    double w_floor = System.Convert.ToDouble(record[52]);
+                    double[] weather = { w_temp, w_rain, w_winds, w_windd, w_snow, w_sight, w_floor };
+                    
+                    bool p_subzero = System.Convert.ToBoolean(record[62]);
+                    bool p_rain = System.Convert.ToBoolean(record[63]);
+                    bool p_light = System.Convert.ToBoolean(record[64]);
+                    bool p_snow = System.Convert.ToBoolean(record[65]);
+                    bool p_sight = System.Convert.ToBoolean(record[66]);
+                    bool[] b_weather = { p_subzero, p_rain, p_light, p_snow, p_sight };
 
                     Event.eventType e = new Event.eventType();
                     e = Event.eventType.E_EVENT_OCCURED;
-                    events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e));
+                    events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, weather, b_weather));
                 }
-                readEventFile.Close();
-                
+                */
+
+                Excel.Application excelApp = null;
+                Excel.Workbook wb = null;
+                Excel.Worksheet ws = null;
+                try
+                {
+                    excelApp = new Excel.Application();
+                    wb = excelApp.Workbooks.Open(fpath);
+                    ws = wb.Worksheets.get_Item(1) as Excel.Worksheet;
+                    Excel.Range rng1 = ws.get_Range("I2","I16799"); //time
+                    Excel.Range rng2 = ws.get_Range("L2", "L16799"); //time
+                    Excel.Range rng3 = ws.get_Range("R2", "S16799"); //date
+                    Excel.Range rng4 = ws.get_Range("AU2", "AZ16799"); //weather
+                    Excel.Range rng6 = ws.get_Range("AR2", "AS16799"); //coordinates
+                    Excel.Range rng5 = ws.get_Range("BJ2", "BN16799"); //boolean weather
+                    Excel.Range rng7 = ws.get_Range("AP2", "AP16799"); //korean address
+                    
+
+                    object[,] data1 = rng1.Value;
+                    object[,] data2 = rng2.Value;
+                    object[,] data3 = rng3.Value;
+                    object[,] data4 = rng4.Value;
+                    object[,] data5 = rng5.Value;
+                    object[,] data6 = rng6.Value;
+                    object[,] data7 = rng7.Value;
+
+                    for (int r = 1; r <= data1.GetLength(0); r++)
+                    {
+                        if (data6[r, 1] == null || data6[r, 2] == null || data3[r, 1] == null
+                            || data1[r, 1] == null || data3[r, 2] == null || data2[r, 1] == null || data5[r, 1] == null
+                            || data5[r, 2] == null || data5[r, 3] == null || data5[r, 5] == null || data7[r, 1] == null
+                            || data4[r, 1] == null || data4[r,3] == null || data4[r,4] == null) continue;
+                        double longitude = System.Convert.ToDouble(data6[r, 1]);
+                        double latitude = System.Convert.ToDouble(data6[r, 2]);
+                        
+                        DateTime date = DateTime.Parse(data3[r,1].ToString());
+                        DateTime time = DateTime.Parse(data1[r,1].ToString());
+                        DateTime occuredDate = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, 0);
+                        
+                        DateTime a_date = DateTime.Parse(data3[r, 2].ToString());
+                        DateTime a_time = DateTime.Parse(data2[r,1].ToString());
+                        DateTime ambulDate = new DateTime(a_date.Year, a_date.Month, a_date.Day, a_time.Hour, a_time.Minute, 0);
+
+                        string _addr = data7[r,1].ToString();
+                        Address addr = new Address(_addr);
+                        
+                        double e_temp = System.Convert.ToDouble(data4[r,1]);
+                        double e_rain = 0;
+                        if(data4[r,2]!=null) e_rain = System.Convert.ToDouble(data4[r,2]);
+                        double e_winds = System.Convert.ToDouble(data4[r,3]);
+                        double e_windd = System.Convert.ToDouble(data4[r,4]);
+                        double e_snow = 0;
+                        if(data4[r,5]!=null) e_snow = System.Convert.ToDouble(data4[r,5]);
+                        double e_sight = -10;
+                        if(data4[r,6]!=null) e_sight = System.Convert.ToDouble(data4[r,6]);
+                        double[] e_weather = { e_temp, e_rain, e_winds, e_windd, e_snow, e_sight};
+                        
+                        bool ep_subzero = System.Convert.ToBoolean(data5[r,1]);
+                        bool ep_rain = System.Convert.ToBoolean(data5[r,2]);
+                        bool ep_light = System.Convert.ToBoolean(data5[r,3]);
+                        bool ep_snow = System.Convert.ToBoolean(data5[r,4]);
+                        bool ep_sight = System.Convert.ToBoolean(data5[r,5]);
+                        bool[] eb_weather = { ep_subzero, ep_rain, ep_light, ep_snow, ep_sight };
+                        
+                        Event.eventType e = new Event.eventType();
+                        e = Event.eventType.E_EVENT_OCCURED;
+                        events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, eb_weather));
+                                            }
+                    Console.WriteLine("Done!");
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                /*
                 String path = "../../EventAddress.csv";
                 System.IO.StreamReader readAddressFile = new System.IO.StreamReader(path);
-
                 foreach(Event e in events)
                 {
                     var line = readAddressFile.ReadLine();
@@ -101,7 +194,7 @@ namespace DroneTransferSimulator
                     e.setAddress(addr);
                 }
                 readAddressFile.Close();
-                
+                */
             }
             catch(Exception e)
             {
@@ -230,6 +323,8 @@ namespace DroneTransferSimulator
         {
             Tuple<double, double> coordinates = ev.getCoordinates();
             DateTime occuredTime = ev.getOccuredDate();
+            double[] weather = ev.getWeather();
+            bool[] b_weather = ev.get_b_weather();
 
             //find stations and drone
             DroneStationFinder finder = new DroneStationFinder(ev);
@@ -272,6 +367,8 @@ namespace DroneTransferSimulator
             double calculatedTime;
             double eventLat = ev.getCoordinates().Item1;
             double eventLng = ev.getCoordinates().Item2;
+            double[] weather = ev.getWeather();
+            bool[] b_weather = ev.get_b_weather();
 
             DroneStation station = ev.getStation();
             int droneIndex = ev.getDroneIndex();
