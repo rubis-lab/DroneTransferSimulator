@@ -100,7 +100,7 @@ namespace DroneTransferSimulator
                     Excel.Range rng1 = ws.get_Range("I2","I16799"); //time
                     Excel.Range rng2 = ws.get_Range("L2", "L16799"); //time
                     Excel.Range rng3 = ws.get_Range("R2", "S16799"); //date
-                    //Excel.Range rng4 = ws.get_Range("AU2", "BA16799"); //weather
+                    Excel.Range rng4 = ws.get_Range("AU2", "AZ16799"); //weather
                     Excel.Range rng6 = ws.get_Range("AR2", "AS16799"); //coordinates
                     Excel.Range rng5 = ws.get_Range("BJ2", "BN16799"); //boolean weather
                     Excel.Range rng7 = ws.get_Range("AP2", "AP16799"); //korean address
@@ -109,17 +109,17 @@ namespace DroneTransferSimulator
                     object[,] data1 = rng1.Value;
                     object[,] data2 = rng2.Value;
                     object[,] data3 = rng3.Value;
-                    //object[,] data4 = rng4.Value;
+                    object[,] data4 = rng4.Value;
                     object[,] data5 = rng5.Value;
                     object[,] data6 = rng6.Value;
                     object[,] data7 = rng7.Value;
 
                     for (int r = 1; r <= data1.GetLength(0); r++)
                     {
-                        if (data6[r, 1] == null || data6[r, 2] == null|| data3[r, 1] == null 
-                            || data1[r, 1] == null ||data3[r, 2] == null 
-                            || data2[r, 1] == null ||data5[r,1]==null || data5[r,2]==null
-                            || data5[r,3] ==null || data5[r,5] ==null || data7[r,1]==null) continue;
+                        if (data6[r, 1] == null || data6[r, 2] == null || data3[r, 1] == null
+                            || data1[r, 1] == null || data3[r, 2] == null || data2[r, 1] == null || data5[r, 1] == null
+                            || data5[r, 2] == null || data5[r, 3] == null || data5[r, 5] == null || data7[r, 1] == null
+                            || data4[r, 1] == null || data4[r,3] == null || data4[r,4] == null) continue;
                         double longitude = System.Convert.ToDouble(data6[r, 1]);
                         double latitude = System.Convert.ToDouble(data6[r, 2]);
                         
@@ -134,16 +134,17 @@ namespace DroneTransferSimulator
                         string _addr = data7[r,1].ToString();
                         Address addr = new Address(_addr);
                         
-                        /*
-                        double w_temp = System.Convert.ToDouble(data[r,46]);
-                        double w_rain = System.Convert.ToDouble(data[r,47]);
-                        double w_winds = System.Convert.ToDouble(data[r,48]);
-                        double w_windd = System.Convert.ToDouble(data[r,49]);
-                        double w_snow = System.Convert.ToDouble(data[r,50]);
-                        double w_sight = System.Convert.ToDouble(data[r,51]);
-                        double w_floor = System.Convert.ToDouble(data[r,52]);
-                        double[] weather = { w_temp, w_rain, w_winds, w_windd, w_snow, w_sight, w_floor };
-                        */
+                        double w_temp = System.Convert.ToDouble(data4[r,1]);
+                        double w_rain = 0;
+                        if(data4[r,2]!=null) w_rain = System.Convert.ToDouble(data4[r,2]);
+                        double w_winds = System.Convert.ToDouble(data4[r,3]);
+                        double w_windd = System.Convert.ToDouble(data4[r,4]);
+                        double w_snow = 0;
+                        if(data4[r,5]!=null) w_snow = System.Convert.ToDouble(data4[r,5]);
+                        double w_sight = -10;
+                        if(data4[r,6]!=null) w_sight = System.Convert.ToDouble(data4[r,6]);
+                        double[] weather = { w_temp, w_rain, w_winds, w_windd, w_snow, w_sight};
+                        
                         bool p_subzero = System.Convert.ToBoolean(data5[r,1]);
                         bool p_rain = System.Convert.ToBoolean(data5[r,2]);
                         bool p_light = System.Convert.ToBoolean(data5[r,3]);
@@ -154,8 +155,7 @@ namespace DroneTransferSimulator
                         Event.eventType e = new Event.eventType();
                         e = Event.eventType.E_EVENT_OCCURED;
                         events.Add(new Event(latitude, longitude, occuredDate, ambulDate, e, addr, b_weather));
-                        Console.WriteLine("룰루");
-                    }
+                                            }
                     Console.WriteLine("Done!");
                 }
                 catch (Exception ex)
