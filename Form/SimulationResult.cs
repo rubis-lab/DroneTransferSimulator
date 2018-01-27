@@ -150,13 +150,20 @@ namespace DroneTransferSimulator
                 double longitude = e.getCoordinates().Item2;
                 string occuredTime = e.getOccuredDate().ToString();
                 string droneArrivalTime = "N/A";
-                string result = "Coverage Problem";
-                if(e.getResult() == Event.eventResult.SUCCESS)
+                string result = "N/A";
+                if (e.getResult() == Event.eventResult.SUCCESS)
                 {
                     result = e.getStation().name;
                     droneArrivalTime = e.getDroneDate().ToString();
                 }
-                else if(e.getResult() == Event.eventResult.NO_DRONE) result = "No Available Drones";
+                else if (e.getReason() == Event.failReason.NO_DRONE) result = "No Available Drones";
+                else if (e.getReason() == Event.failReason.COVERAGE_PROBLEM) result = "Coverage Problem";
+                else if (e.getReason() == Event.failReason.LIGHT) result = "Light";
+                else if (e.getReason() == Event.failReason.RAIN) result = "Rain";
+                else if (e.getReason() == Event.failReason.SIGHT) result = "Sight";
+                else if (e.getReason() == Event.failReason.SNOW) result = "Snow";
+                else if (e.getReason() == Event.failReason.TEMP) result = "Temperature";
+                else if (e.getReason() == Event.failReason.WIND) result = "wind";
                 eventTable.Rows.Add(i, address, occuredTime, droneArrivalTime, result, latitude, longitude);
 
                 double droneSec = Math.Round((e.getDroneDate() - e.getOccuredDate()).TotalSeconds);

@@ -30,6 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.eventTable = new System.Windows.Forms.DataGridView();
+            this.index = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.droneArrivalTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.analyzeButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -43,13 +50,7 @@
             this.ambulanceElapsedTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.index = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.occuredTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.droneArrivalTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.result = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.note = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.eventTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -73,7 +74,8 @@
             this.droneArrivalTime,
             this.result,
             this.latitude,
-            this.longitude});
+            this.longitude,
+            this.note});
             this.eventTable.Location = new System.Drawing.Point(12, 20);
             this.eventTable.Name = "eventTable";
             this.eventTable.ReadOnly = true;
@@ -83,6 +85,56 @@
             this.eventTable.Size = new System.Drawing.Size(560, 418);
             this.eventTable.TabIndex = 0;
             this.eventTable.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.eventTable_RowEnter);
+            // 
+            // index
+            // 
+            this.index.HeaderText = "Index";
+            this.index.Name = "index";
+            this.index.ReadOnly = true;
+            this.index.Visible = false;
+            // 
+            // Address
+            // 
+            this.Address.HeaderText = "Address";
+            this.Address.Name = "Address";
+            this.Address.ReadOnly = true;
+            this.Address.Width = 130;
+            // 
+            // occuredTime
+            // 
+            this.occuredTime.HeaderText = "Occured Time";
+            this.occuredTime.Name = "occuredTime";
+            this.occuredTime.ReadOnly = true;
+            this.occuredTime.Width = 125;
+            // 
+            // droneArrivalTime
+            // 
+            this.droneArrivalTime.HeaderText = "Drone Arrival Time";
+            this.droneArrivalTime.Name = "droneArrivalTime";
+            this.droneArrivalTime.ReadOnly = true;
+            this.droneArrivalTime.Width = 135;
+            // 
+            // result
+            // 
+            this.result.HeaderText = "Result";
+            this.result.Name = "result";
+            this.result.ReadOnly = true;
+            this.result.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.result.Width = 105;
+            // 
+            // latitude
+            // 
+            this.latitude.HeaderText = "Latitude";
+            this.latitude.Name = "latitude";
+            this.latitude.ReadOnly = true;
+            this.latitude.Width = 65;
+            // 
+            // longitude
+            // 
+            this.longitude.HeaderText = "Longitude";
+            this.longitude.Name = "longitude";
+            this.longitude.ReadOnly = true;
+            this.longitude.Width = 70;
             // 
             // analyzeButton
             // 
@@ -237,55 +289,11 @@
             this.timer1.Interval = 10;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // index
+            // note
             // 
-            this.index.HeaderText = "Index";
-            this.index.Name = "index";
-            this.index.ReadOnly = true;
-            this.index.Visible = false;
-            // 
-            // Address
-            // 
-            this.Address.HeaderText = "Address";
-            this.Address.Name = "Address";
-            this.Address.ReadOnly = true;
-            this.Address.Width = 130;
-            // 
-            // occuredTime
-            // 
-            this.occuredTime.HeaderText = "Occured Time";
-            this.occuredTime.Name = "occuredTime";
-            this.occuredTime.ReadOnly = true;
-            this.occuredTime.Width = 125;
-            // 
-            // droneArrivalTime
-            // 
-            this.droneArrivalTime.HeaderText = "Drone Arrival Time";
-            this.droneArrivalTime.Name = "droneArrivalTime";
-            this.droneArrivalTime.ReadOnly = true;
-            this.droneArrivalTime.Width = 135;
-            // 
-            // result
-            // 
-            this.result.HeaderText = "Result";
-            this.result.Name = "result";
-            this.result.ReadOnly = true;
-            this.result.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.result.Width = 105;
-            // 
-            // latitude
-            // 
-            this.latitude.HeaderText = "Latitude";
-            this.latitude.Name = "latitude";
-            this.latitude.ReadOnly = true;
-            this.latitude.Width = 65;
-            // 
-            // longitude
-            // 
-            this.longitude.HeaderText = "Longitude";
-            this.longitude.Name = "longitude";
-            this.longitude.ReadOnly = true;
-            this.longitude.Width = 70;
+            this.note.HeaderText = "note";
+            this.note.Name = "note";
+            this.note.ReadOnly = true;
             // 
             // SimulationResult
             // 
@@ -334,6 +342,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn result;
         private System.Windows.Forms.DataGridViewTextBoxColumn latitude;
         private System.Windows.Forms.DataGridViewTextBoxColumn longitude;
+        private System.Windows.Forms.DataGridViewTextBoxColumn note;
     }
 }
 

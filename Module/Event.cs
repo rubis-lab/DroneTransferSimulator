@@ -9,7 +9,8 @@ namespace DroneTransferSimulator
     public class Event :IComparable<Event>
     {
         public enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
-        public enum eventResult { SUCCESS, COVERAGE_PROBLEM, NO_DRONE };
+        public enum eventResult { SUCCESS, FAILURE };
+        public enum failReason { COVERAGE_PROBLEM, NO_DRONE, TEMP, RAIN, WIND, SNOW, SIGHT, LIGHT};
 
         private double lat, lng;
         private double[] weather;
@@ -19,6 +20,7 @@ namespace DroneTransferSimulator
         private int droneIndex;
         private eventType type;
         private eventResult result;
+        private failReason reason;
         private DroneStation station;
 
 
@@ -29,7 +31,7 @@ namespace DroneTransferSimulator
             return 1;
         }
 
-        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type, Address _addr, bool[] _b_weather)
+        public Event(double _lat, double _lng, DateTime _oDate, DateTime _ambulDate, eventType _type, Address _addr, double[] _weather,  bool[] _b_weather)
         {
             lat = _lat;
             lng = _lng;
@@ -41,7 +43,7 @@ namespace DroneTransferSimulator
             result = 0;
             station = null;
             addr = _addr;
-            //weather = _weather;
+            weather = _weather;
             b_weather = _b_weather;
         }
 
@@ -102,7 +104,12 @@ namespace DroneTransferSimulator
         {
             return weather;
         }
-        
+
+        public failReason getReason()
+        {
+            return reason;
+        }
+       
         public bool[] get_b_weather()
         {
             return b_weather;
@@ -116,6 +123,11 @@ namespace DroneTransferSimulator
         public void setResult(eventResult _result)
         {
             result = _result;
+        }
+
+        public void setReason(failReason _reason)
+        {
+            reason = _reason;
         }
         
         public DroneStation getStation()

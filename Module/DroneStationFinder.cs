@@ -59,7 +59,8 @@ namespace DroneTransferSimulator
             if(availableStations.Count == 0)
             {
                 Console.WriteLine("No available stations (coverage problem)");
-                e.setResult(Event.eventResult.COVERAGE_PROBLEM);
+                e.setResult(Event.eventResult.FAILURE);
+                e.setReason(Event.failReason.COVERAGE_PROBLEM);
                 return new Tuple<string, int>("", -1);
             }
             else
@@ -86,7 +87,8 @@ namespace DroneTransferSimulator
                     }
                 }
                 Console.WriteLine("No available drones in available stations");
-                e.setResult(Event.eventResult.NO_DRONE);
+                e.setResult(Event.eventResult.FAILURE);
+                e.setReason(Event.failReason.NO_DRONE);
                 return new Tuple<string, int>("", -1);
             }
         }
