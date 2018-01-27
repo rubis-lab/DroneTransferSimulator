@@ -36,6 +36,7 @@ namespace DroneTransferSimulator
         
         private void SimulatorUI_Load(object sender, EventArgs e)
         {
+      //      PathPlanner.getInstance().getDroneDynamicDBFromVREP(Application.StartupPath + @"\VrepDroneSim.csv");
         }
 
         private void eventMap_Load(object sender, EventArgs e)
@@ -162,7 +163,7 @@ namespace DroneTransferSimulator
                 DateTime startTime = new DateTime(startTimePicked.Year, startTimePicked.Month, startTimePicked.Day, 0, 0, 0);
 
                 DateTime endTimePicked = endTimePicker.Value;
-                DateTime endTime = new DateTime(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 0, 0, 0);
+                DateTime endTime = new DateTime(endTimePicked.Year, endTimePicked.Month, endTimePicked.Day, 23, 59, 0);
 
                 if( DateTime.Compare(endTime, startTime) <=0 ) throw new Exception("Start should be earlier than end");
                 
@@ -214,50 +215,15 @@ namespace DroneTransferSimulator
             frm.Show();
             fileLoadingForm = frm;
         }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radioButton1_MouseHover(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
-            toolTip1.SetToolTip(this.radioButton1, "Advanced Model\n - 환경 요인에 상관없이 출동한다 가정\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - Coverage 는 최대 20km\n");
-        }
-
-        private void radioButton2_MouseHover(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
-            toolTip1.SetToolTip(this.radioButton2, "Intermediate model – 1(High spec model for environment)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 온도 / 우천 / 낙뢰 / 풍속 에도 출동 가능\n - Coverage 10km");
-        }
-
-        private void radioButton3_MouseHover(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
-            toolTip1.SetToolTip(this.radioButton3, "Intermediate model – 2 (GPS base control model)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 시정 / 주야간 에도 출동 가능\n – Coverage 10km");
-        }
-
-        private void radioButton4_MouseHover(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
-            toolTip1.SetToolTip(this.radioButton4, "Intermediate model – 3 (Long flight time)\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 환경 요인 중 온도 / 우천 / 낙뢰 / 시정 / 풍속 에도 출동 불가 하나\n - Coverage 20km");
-        }
-
-        private void radioButton5_MouseHover(object sender, EventArgs e)
-        {
-            System.Windows.Forms.ToolTip toolTip1 = new System.Windows.Forms.ToolTip();
-            toolTip1.SetToolTip(this.radioButton5, "Basic model\n - \"전화 도움 심폐소생술\" 을 안내 받은 경우 출동\n - 모든 환경적 요인에 출동 불가\n - Coverage 10km");
-        }
-
+        
         private void autoLoadButton_Click(object sender, EventArgs e)
         {
             try
             {
                 string msg = "";
-                msg = simulator.getEventsFromCSV(@"C:\Users\이민지\Documents\DroneTransferSimulator\data2016.xls");
+                msg = simulator.getEventsFromCSV(Application.StartupPath + @"\EventList.xls");
                 if(msg != null) throw new Exception(msg);
-                simulator.getStationsFromCSV("../../DroneStationList.csv");
+                simulator.getStationsFromCSV(Application.StartupPath + @"\DroneStationList.csv");
                 if(msg != null) throw new Exception(msg);
 
                 eventOverlay.Markers.Clear();

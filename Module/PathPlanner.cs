@@ -57,7 +57,7 @@ namespace DroneTransferSimulator
 
         private void getDroneDynamicDBFromVREP()
         {
-            System.IO.StreamReader readFile = new System.IO.StreamReader("..//..//VrepDroneSim.csv");
+            System.IO.StreamReader readFile = new System.IO.StreamReader("VrepDroneSim.csv");
             string line;
             string[] row;
             readFile.ReadLine();
@@ -94,7 +94,12 @@ namespace DroneTransferSimulator
             }
         }
 
-        public double calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng)
+        public double calcMaxSpeed(double windSpeed, double windDirection, double direction, double maxSpeed)
+        {
+            return Math.Min(maxSpeed + windSpeed * Math.Cos(windDirection - direction), maxSpeed); 
+        }
+
+        public double calcTravelTime(double srcLat, double srcLng, double dstLat, double dstLng, double maxSpeed, double[] weather)
         {
             List<Cube> cubes = makeNaivePath(srcLat, srcLng, dstLat, dstLng);
 
@@ -106,6 +111,12 @@ namespace DroneTransferSimulator
             for(int i = 0; i <= cubes.Count; i++) minTime.Add(new Dictionary<int, double>());
 
             minTime[0].Add(0, 0.0);
+
+            double kmLat = 0, kmLng = 0;
+            convertWGStoKm(dstLat - srcLat, dstLng - srcLng, ref kmLat, ref kmLng);
+            double direction = Math.Atan2(kmLat, kmLng);
+            maxSpeed = calcMaxSpeed(weather[2], (90 - weather[3])/180.0 * Math.PI, direction, maxSpeed);
+            Console.WriteLine(weather[2] + " " + maxSpeed);
 
             for(int i = 0; i < cubes.Count; i++)
             {
@@ -119,7 +130,7 @@ namespace DroneTransferSimulator
                 foreach(KeyValuePair<int, double> e in minTime[i])
                 {
                     int inVelocity = e.Key;
-                    for(int outVelocity = 0; outVelocity <= 60; outVelocity += 10)
+                    for(int outVelocity = 0; outVelocity <= maxSpeed; outVelocity += 10)
                     {
                         Tuple<int, int> velocity = new Tuple<int, int>(inVelocity, outVelocity);
                         if(velMap.ContainsKey(velocity))

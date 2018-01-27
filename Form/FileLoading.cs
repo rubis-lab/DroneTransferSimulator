@@ -34,7 +34,7 @@ namespace DroneTransferSimulator
         private void stationLoadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "CSV files | *.csv";
+            dialog.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
             dialog.Multiselect = false;
             dialog.Title = "Station CSV";
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -55,7 +55,7 @@ namespace DroneTransferSimulator
         private void eventLoadButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "CSV files | *.csv";
+            dialog.Filter = "CSV files (*.csv)|*.csv|All Files (*.*)|*.*";
             dialog.Multiselect = false;
             dialog.Title = "Event CSV";
             if (dialog.ShowDialog() == DialogResult.OK)
