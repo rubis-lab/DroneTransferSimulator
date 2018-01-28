@@ -10,18 +10,19 @@ namespace DroneTransferSimulator
     {
         public enum eventType { E_EVENT_OCCURED, E_EVENT_ARRIVAL, E_STATION_ARRIVAL };
         public enum eventResult { SUCCESS, FAILURE };
-        public enum failReason { COVERAGE_PROBLEM, NO_DRONE, TEMP, RAIN, WIND, SNOW, SIGHT, LIGHT};
-
+        public enum failReason { COVERAGE_PROBLEM, NO_DRONE, WEAHTER};
+        
         private double lat, lng;
         private double[] weather;
         private bool[] b_weather;
         private Address addr;
+        private DroneStation station;
         private DateTime occuredDate, ambulDate, droneDate;
         private int droneIndex;
         private eventType type;
-        private eventResult result;
-        private failReason reason;
-        private DroneStation station;
+        private eventResult result=eventResult.FAILURE;
+        private failReason reason=failReason.NO_DRONE;
+        private bool[] wthFailRsn= { false, false, false, false, false, false }; // temp, rain, wind, snow, sight, light
 
 
         public int CompareTo(Event obj)
@@ -144,6 +145,16 @@ namespace DroneTransferSimulator
         {
             station = _station;
             droneIndex = _droneIndex;
+        }
+
+        public void setWthFailRsn(int i)
+        {
+            wthFailRsn[i] = true;
+        }
+
+        public bool getWthFailRsn(int i)
+        {
+            return wthFailRsn[i];
         }
         
     }

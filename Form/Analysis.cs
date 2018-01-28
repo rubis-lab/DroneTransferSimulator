@@ -23,7 +23,7 @@ namespace DroneTransferSimulator
         {
             InitializeComponent();
 
-            itemListBox.Items.AddRange(new object[] {"Number of Events", "Coverage Rate", "Rescue Success Rate", "Drone Arrival Rate","Mean of Elapsed Time","Standard Deviation of Elapsed Time"});
+            itemListBox.Items.AddRange(new object[] {"Number of Events", "Coverage Rate", "Rescue Success Rate", "Drone Arrival Rate","Mean of Elapsed Time","Standard Deviation of Elapsed Time", "Weather Problem"});
             resultForm = _form;
             addCombobox();
             
@@ -63,7 +63,11 @@ namespace DroneTransferSimulator
         private double getCoverageRate(List<Event> events)
         {
             double num = 0;
-            foreach(Event e in events) if(e.getResult()==Event.eventResult.SUCCESS) if(e.getAddress().getSubLocal1() == e.getStation().getStationAddress().getSubLocal1()) num += 1;
+
+            foreach (Event e in events) if (e.getResult() == Event.eventResult.SUCCESS)
+                {
+                    if (e.getAddress().getSubLocal1() == e.getStation().getStationAddress().getSubLocal1()) num += 1;
+                }
             return Math.Round(num / events.Count, 3);
         }
 
@@ -74,6 +78,12 @@ namespace DroneTransferSimulator
             return Math.Round(coverEventNum / events.Count, 3);
         }
 
+        public double getWthProbRate(List<Event> events)
+        {
+            double probNum = 0;
+            foreach (Event _event in events) if (_event.getReason() == Event.failReason.WEAHTER) probNum += 1;
+            return Math.Round(probNum / events.Count, 3);
+        }
         public double getAmbulSuccessRate(List<Event> events)
         {
             double ambulSuccessNum = 0;
@@ -165,13 +175,15 @@ namespace DroneTransferSimulator
                 string[] row3 = { "Arrival Rate", "1", getArrivalRate(localEvents).ToString() };
                 string[] row4 = { "Mean of Elapsed Time", getAmbulMean(localEvents).ToString(), getDroneMean(localEvents).ToString() };
                 string[] row5 = { "Standard Deviation of Elapsed Time", getAmbulStdev(localEvents).ToString(), getDroneStdev(localEvents).ToString() };
-
+                string[] row6 = { "Weather Problem", "N/A", getWthProbRate(localEvents).ToString()};
+                
                 if(itemListBox.GetItemCheckState(0) == CheckState.Checked) analyzeResultTable.Rows.Add(row0);
                 if(itemListBox.GetItemCheckState(1) == CheckState.Checked) analyzeResultTable.Rows.Add(row1);
                 if(itemListBox.GetItemCheckState(2) == CheckState.Checked) analyzeResultTable.Rows.Add(row2);
                 if(itemListBox.GetItemCheckState(3) == CheckState.Checked) analyzeResultTable.Rows.Add(row3);
                 if(itemListBox.GetItemCheckState(4) == CheckState.Checked) analyzeResultTable.Rows.Add(row4);
                 if(itemListBox.GetItemCheckState(5) == CheckState.Checked) analyzeResultTable.Rows.Add(row5);
+                if (itemListBox.GetItemCheckState(6) == CheckState.Checked) analyzeResultTable.Rows.Add(row6);
             }
             
             return;

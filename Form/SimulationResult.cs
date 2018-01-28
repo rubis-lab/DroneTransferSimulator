@@ -150,21 +150,27 @@ namespace DroneTransferSimulator
                 double longitude = e.getCoordinates().Item2;
                 string occuredTime = e.getOccuredDate().ToString();
                 string droneArrivalTime = "N/A";
-                string result = "N/A";
+                string result = "Failure";
+                string note = " ";
                 if (e.getResult() == Event.eventResult.SUCCESS)
                 {
                     result = e.getStation().name;
                     droneArrivalTime = e.getDroneDate().ToString();
                 }
-                else if (e.getReason() == Event.failReason.NO_DRONE) result = "No Available Drones";
-                else if (e.getReason() == Event.failReason.COVERAGE_PROBLEM) result = "Coverage Problem";
-                else if (e.getReason() == Event.failReason.LIGHT) result = "Light";
-                else if (e.getReason() == Event.failReason.RAIN) result = "Rain";
-                else if (e.getReason() == Event.failReason.SIGHT) result = "Sight";
-                else if (e.getReason() == Event.failReason.SNOW) result = "Snow";
-                else if (e.getReason() == Event.failReason.TEMP) result = "Temperature";
-                else if (e.getReason() == Event.failReason.WIND) result = "wind";
-                eventTable.Rows.Add(i, address, occuredTime, droneArrivalTime, result, latitude, longitude);
+                // temp, rain, wind, snow, sight, light
+                else if (e.getReason() == Event.failReason.NO_DRONE) note = "No Available Drones";
+                else if (e.getReason() == Event.failReason.COVERAGE_PROBLEM) note = "Coverage Problem";
+                else if (e.getReason() == Event.failReason.WEAHTER)
+                {
+                    if (e.getWthFailRsn(0) == true) note += " 온도";
+                    if (e.getWthFailRsn(1) == true) note += " 비";
+                    if (e.getWthFailRsn(2) == true) note += " 바람";
+                    if (e.getWthFailRsn(3) == true) note += " 눈";
+                    if (e.getWthFailRsn(4) == true) note += " 시계";
+                    if (e.getWthFailRsn(5) == true) note += " 뇌우";
+                }
+
+                eventTable.Rows.Add(i, address, occuredTime, droneArrivalTime, result, latitude, longitude, note);
 
                 double droneSec = Math.Round((e.getDroneDate() - e.getOccuredDate()).TotalSeconds);
 

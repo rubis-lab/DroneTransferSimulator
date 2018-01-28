@@ -115,8 +115,8 @@ namespace DroneTransferSimulator
             double kmLat = 0, kmLng = 0;
             convertWGStoKm(dstLat - srcLat, dstLng - srcLng, ref kmLat, ref kmLng);
             double direction = Math.Atan2(kmLat, kmLng);
-            maxSpeed = calcMaxSpeed(weather[2], (90 - weather[3])/180.0 * Math.PI, direction, maxSpeed);
-            Console.WriteLine(weather[2] + " " + maxSpeed);
+            //maxSpeed = calcMaxSpeed(weather[2], (90 - weather[3])/180.0 * Math.PI, direction, maxSpeed);
+            maxSpeed = calcMaxSpeed(weather[2] * 3.6, (90 - weather[3]) / 180.0 * Math.PI, direction, maxSpeed);
 
             for(int i = 0; i < cubes.Count; i++)
             {

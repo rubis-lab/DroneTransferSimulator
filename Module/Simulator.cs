@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 
 namespace DroneTransferSimulator
@@ -204,7 +205,7 @@ namespace DroneTransferSimulator
                 */
                 readFile.Close();
 
-                String path = "../../StationAddress.csv";
+                String path = Application.StartupPath + @"\StationAddress.csv";
                 System.IO.StreamReader readStationAddressFile = new System.IO.StreamReader(path, encode);
 
                 foreach(DroneStation s in stationDict.Values)
@@ -224,7 +225,7 @@ namespace DroneTransferSimulator
             }
             catch(Exception e)
             {
-                return e.Message;
+                return e.ToString();
             }
             return null;
         }
@@ -258,7 +259,6 @@ namespace DroneTransferSimulator
                 switch(e.getEventType())
                 {
                     case Event.eventType.E_EVENT_OCCURED:
-                        Console.WriteLine(weather[0] + ", " + weather[1] + ", " + weather[2]);
                         Console.WriteLine("\n" + e.getOccuredDate().ToString() + " OCCURED >> " + e.getCoordinates().Item1 + ", " + e.getCoordinates().Item2);
                         eventOccured(e);
                         events.Add(e);
@@ -287,39 +287,40 @@ namespace DroneTransferSimulator
             bool[] b_weather = ev.get_b_weather();
 
             ev.setResult(Event.eventResult.FAILURE);
-            Console.WriteLine("temp:" + weather[0].ToString() + "  rain:" + weather[1].ToString() + "  wind:" + weather[2].ToString() + "  snow:" + weather[4].ToString() + "  sight:" + weather[5].ToString());
+
+            // temp, rain, wind, snow, sight, light
             if (w_temp_high < weather[0] || weather[0] < w_temp_low || (weather[0]<0 && !p_subzero))
             {
-                ev.setReason(Event.failReason.TEMP);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(0);
             }
-            if(weather[1]>0 && (!p_rain && w_rain < weather[1]))
+            if(b_weather[1] && (!p_rain || w_rain < weather[1]))
             {
-                ev.setReason(Event.failReason.RAIN);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(1);
             }
             if(w_winds<weather[2])
             {
-                ev.setReason(Event.failReason.WIND);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(2);
             }
-            if(weather[4]!=0 && (!p_snow || weather[4]>w_snow))
+            if(b_weather[3] && (!p_snow || weather[4]>w_snow))
             {
-                Console.WriteLine("weather: " + weather[3].ToString());
-                Console.WriteLine("limit:" + w_snow.ToString());
-                ev.setReason(Event.failReason.SNOW);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(3);
             }
             if(weather[5]<w_sight && weather[5]>0)
             {
-                ev.setReason(Event.failReason.SIGHT);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(4);
             }
             if(b_weather[2]&& !p_light)
             {
-                ev.setReason(Event.failReason.LIGHT);
-                return;
+                ev.setReason(Event.failReason.WEAHTER);
+                ev.setWthFailRsn(5);
             }
+
+            if (ev.getReason() == Event.failReason.WEAHTER) return;
             
             //find stations and drone
             DroneStationFinder finder = new DroneStationFinder(ev);
@@ -342,7 +343,6 @@ namespace DroneTransferSimulator
             ev.setDroneDate(droneArrivalTime);
             ev.setResult(Event.eventResult.SUCCESS);
             ev.setStationDroneIdx(s, stationDroneIdx.Item2);
-
             //battery consumption
             drone.fly(distance);
             drone.setStatus(Drone.droneType.D_FLYING);
